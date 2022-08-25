@@ -1,4 +1,3 @@
-from uuid import UUID
 from pydantic import BaseModel, Field
 
 class AddressIn(BaseModel):
@@ -10,4 +9,4 @@ class AddressIn(BaseModel):
     zipcode:str = Field(max_length=10)
     
 class AddressOut(AddressIn):
-    id:UUID
+    id:int

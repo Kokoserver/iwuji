@@ -1,10 +1,13 @@
-from tortoise import models,Tortoise, fields as f
+import typing as t
+from app.database.document import BaseMeta, DateMixin, Model, fields as f
 
 
-class Permission(models.Model):
-    id = f.UUIDField(auto_generate=True, pk=True)
-    name = f.CharField(max_length=50, required=True)
-    created_at = f.DatetimeField(auto_now=True)
+class Permission(Model, DateMixin):
+    class Meta(BaseMeta):
+       tablename: str = "iw_permission"
+    name:str = f.String(max_length=50, nullable=True)
 
-Tortoise.init_models(["app.src.permission.models"], "models")
+
+
+
     

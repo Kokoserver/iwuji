@@ -137,5 +137,11 @@ dmypy.json
 # Cython debug symbols
 cython_debug/
 
-# Text Editor
-.vscode
+"fastapi>=0.79.1",
+    "uvicorn>=0.18.2",
+    "pydantic[dotenv,email]>=1.9.2",
+    "python-jose[cryptography]>=3.3.0",
+    "passlib[bcrypt]>=1.7.4",
+    "Jinja2>=3.1.2",
+    "python-multipart>=0.0.5",
+    "python-slugify>=6.1.2",

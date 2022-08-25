@@ -1,19 +1,18 @@
 from typing import List
 from fastapi import status, Response, HTTPException
-from uuid import UUID
 from app.src._base.schemas import Message
 from app.src.category.models import Category
 from app.src.category import schemas
 
 async def create_category(new_data:schemas.CategoryIn)->Message:
-   _, created = await Category.get_or_create(name=new_data.name)
+   _, created = await Category.objects.get_or_create(name=new_data.name)
    if  not created:
        raise HTTPException(status_code=status.HTTP_409_CONFLICT, 
                            detail="Category already exists")
    return Message(message="Category created successfully")
 
-async def get_category(id:UUID)->Category:
-    check_category = await Category.filter(id=id).first()
+async def get_category(id:int)->Category:
+    check_category = await Category.objects.get_or_none(id=id)
     if check_category:
         return check_category
     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
@@ -21,16 +20,16 @@ async def get_category(id:UUID)->Category:
     
 
 async def get_all_categories(limit:int = 10, offset:int = 0, filter:str = '')->List[Category]:
-   return await Category.filter(name__icontains=filter).offset(offset).limit(limit)
+   return await Category.objects.filter(name__icontains=filter).offset(offset).limit(limit).all()
        
 
-async def update_category(id:UUID, new_data:schemas.CategoryIn)->Category:
-    check_category = await Category.filter(id=id).first()
+async def update_category(id:int, new_data:schemas.CategoryIn)->Category:
+    check_category = await Category.objects.get_or_none(id=id)
     if not check_category:
        raise HTTPException(
            status_code=status.HTTP_404_NOT_FOUND, 
            detail="Category not found")
-    if await Category.filter(name=new_data.name).first():
+    if check_category.name == new_data.name:
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
             detail="Category already exists")
@@ -41,8 +40,8 @@ async def update_category(id:UUID, new_data:schemas.CategoryIn)->Category:
     return Message(message="Category updated successfully")
     
 
-async def delete_category(id:UUID)->None:
-    check_category = await Category.filter(pk=id).first()
+async def delete_category(id:int)->None:
+    check_category = await Category.objects.get_or_none(id=id)
     if not check_category:
        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Category not found")
     await check_category.delete()

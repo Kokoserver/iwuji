@@ -1,6 +1,5 @@
 from datetime import timedelta
 from typing import List
-from uuid import UUID
 from fastapi import HTTPException, Response, status
 from fastapi.background import BackgroundTasks
 from app.core import security
@@ -10,14 +9,14 @@ from app.src.permission.models import  Permission
 from app.src.user.models import User
 from app.src._base.schemas import Message
 from app.lib.mail.mailer import Mailer
-from tortoise.models import Q
+from ormar import or_
 
 async def create_user(new_user_data: schemas.UserRegisterInput,background_task: BackgroundTasks) -> Message:
-    check_user: User = await User.filter(email=new_user_data.email).first()
+    check_user: User = await User.objects.get_or_none(email=new_user_data.email)
     if check_user:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,detail="Account already exist")
-    get_perm, _ = await Permission.get_or_create(name="customer")
-    new_user:User = await User(**new_user_data.dict(), role=get_perm)
+    get_perm, _ = await Permission.objects.get_or_create(name="customer")
+    new_user:User =  User(**new_user_data.dict(), role=get_perm)
     new_user.hash_password()
     await new_user.save()
     if new_user:
@@ -44,16 +43,15 @@ async def create_user(new_user_data: schemas.UserRegisterInput,background_task: 
 
 async def verify_user_email(user_token: schemas.UserAccountVerifyToken) -> Message:
     data: dict = security.JWTAUTH.data_decoder(encoded_data=user_token.token)
-    id = UUID(data.get("id", None))
+    id = data.get("id", None)
     if data and id:
-        user_obj:User = await User.get_or_none(id=id)
+        user_obj:User = await User.objects.get_or_none(id=int(id))
         if user_obj and user_obj.is_active:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Account has been already verified")
         if user_obj:
-            user_obj.is_active=True
-            await user_obj.save()
+            await user_obj.update(is_active=True)
             return Message(message="Account was verified successfully")
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -65,13 +63,13 @@ async def verify_user_email(user_token: schemas.UserAccountVerifyToken) -> Messa
 
 
 async def reset_password_link(background_task: BackgroundTasks,user_data: schemas.GetPasswordResetLink)->Message:
-    user_obj: User = await User.get_or_none(email=user_data.email)
+    user_obj: User = await User.objects.get_or_none(email=user_data.email)
     if not user_obj:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Account does not exist")
     if user_obj:
-        token = security.JWTAUTH.DataEncoder(data={"id": str(user_obj.id)}, duration=timedelta(days=1))
+        token = security.JWTAUTH.DataEncoder(data={"id": user_obj.id}, duration=timedelta(days=1))
         mail_template_context = {
             "url":f"{config.settings.PROJECT_URL}/user/{token}/password-reset",
             "button_label":"reset password",
@@ -97,9 +95,9 @@ async def update_user_password(user_data: schemas.PasswordResetInput) -> Message
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Password do not match")
     token_data: dict = security.JWTAUTH.data_decoder(encoded_data=user_data.token)
-    id=UUID(token_data.get("id", None))
+    id=token_data.get("id", None)
     if token_data and id:
-        user_obj: User = await User.get_or_none(id = id)
+        user_obj: User = await User.objects.get_or_none(id = int(id))
         if user_obj.check_password(user_data.password):
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
@@ -114,39 +112,28 @@ async def update_user_password(user_data: schemas.PasswordResetInput) -> Message
         )
 
 
-async def get_current_user_data(userId: UUID) -> User:
-    user_data = await User.get_or_none(id=userId)
+async def get_current_user_data(userId:int) -> User:
+    user_data = await User.objects.get_or_none(id=userId)
     if not user_data:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="User does not exist")
     return user_data
 
-async def get_users(limit, offset, filter) -> List[User]:
+async def get_users(limit, offset, filter, id:int, is_active:bool) -> List[User]:
     if isinstance(filter, str):
-        all_user = await User.filter(
-            Q(email__icontains=filter )|
-            Q(firstname__icontains=filter) | 
-            Q(lastname__icontains=filter)|
-            Q(role__name__icontains=filter)            
+        all_user = await User.objects.filter(
+            or_(email__icontains=filter,
+            firstname__icontains=filter,
+            lastname__icontains=filter,
+            role__name__icontains=filter, id=id, is_active=is_active)        
         ).offset(offset).limit(limit)
-    try:
-     if isinstance(bool(filter), bool):
-        all_user = await User.filter(is_active=filter).offset(offset).limit(limit).all()
-    except Exception as e:
-        pass
-    try:
-        uuid = UUID(filter)
-    except Exception:
-        uuid = None
-    if uuid:
-        all_user = await User.filter(id=uuid).offset(offset).limit(limit)
     return all_user
 
 
 
-async def remove_user_data(userId: UUID) -> None:
-    user_to_remove = await User.filter(id=userId).first()
+async def remove_user_data(userId:int) -> None:
+    user_to_remove = await User.objects.get_or_none(id=userId)
     if user_to_remove:
         await user_to_remove.delete()
         return Response(status_code=status.HTTP_204_NO_CONTENT)
@@ -155,8 +142,8 @@ async def remove_user_data(userId: UUID) -> None:
         detail=f"User with id {userId} does not exist",
     )
     
-async def get_user(userId: UUID) -> Message:
-    use_detail:User = await User.filter(id=userId).prefetch_related("role").first()
+async def get_user(userId:int) -> Message:
+    use_detail:User = await User.objects.select_related(["role"]).get_or_none(id=userId)
     if use_detail:
         return use_detail
     raise HTTPException(
@@ -164,8 +151,8 @@ async def get_user(userId: UUID) -> Message:
         detail=f"User with id {userId} does not exist",
     )
     
-async def add_user_role(userId: UUID, role: str) -> User:
-    user_to_update:User = await User.filter(id=userId).prefetch_related("role").first()
+async def add_user_role(userId:int, role: str) -> User:
+    user_to_update:User = await User.objects.select_related(["role"]).get_or_none(id=userId)
     if not user_to_update:
         raise HTTPException(
         status_code=status.HTTP_404_NOT_FOUND,
@@ -177,7 +164,7 @@ async def add_user_role(userId: UUID, role: str) -> User:
         status_code=status.HTTP_400_BAD_REQUEST,
         detail=f"User with id {userId} already has {role} role",
     )
-    check_per:Permission = await Permission.get_or_none(name=role)
+    check_per:Permission = await Permission.objects.get_or_none(name=role)
     if not check_per:
         raise HTTPException(
         status_code=status.HTTP_404_NOT_FOUND,
@@ -189,8 +176,8 @@ async def add_user_role(userId: UUID, role: str) -> User:
     
     
   
-async def remove_user_role(userId: UUID, role: str) -> None:
-    check_user:User = await User.filter(id=userId).prefetch_related("role").first()
+async def remove_user_role(userId:int, role: str) -> None:
+    check_user:User = await User.objects.select_related(["role"]).get_or_none(id=userId)
     if not check_user:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -201,12 +188,12 @@ async def remove_user_role(userId: UUID, role: str) -> None:
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Permission with name {role} does not exist for user with id {userId}",
             )
-    check_user.role = await Permission.filter(name="customer").first()
+    check_user.role = await Permission.objects.get_or_none(name="customer")
     await check_user.save()
     return Message(message="User role was updated successfully")
     
-async def get_user_role(userId: UUID) -> Permission:
-    check_user:User = await User.filter(id=userId).prefetch_related("role").first()
+async def get_user_role(userId:int) -> Permission:
+    check_user:User = await User.objects.select_related(["role"]).get_or_none(id=userId)
     if check_user:
         return check_user.role
     raise HTTPException( status_code=status.HTTP_404_NOT_FOUND,detail="User role does not exist")

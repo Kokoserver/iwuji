@@ -39,7 +39,7 @@ class UserLoginInput(pydantic.BaseModel):
 
 
 class UserDataOut(BaseModel):
-    id: UUID
+    id:int
     email: pydantic.EmailStr
     firstname: str
     lastname: str

@@ -114,7 +114,7 @@ async def update_user_password(user_data: schemas.PasswordResetInput) -> Message
         )
 
 
-async def get_current_user_data(userId: UUID) -> User:
+async def get_current_user_data(userid:int) -> User:
     user_data = await User.get_or_none(id=userId)
     if not user_data:
         raise HTTPException(
@@ -145,7 +145,7 @@ async def get_users(limit, offset, filter) -> List[User]:
 
 
 
-async def remove_user_data(userId: UUID) -> None:
+async def remove_user_data(userid:int) -> None:
     user_to_remove = await User.filter(id=userId).first()
     if user_to_remove:
         await user_to_remove.delete()
@@ -155,8 +155,8 @@ async def remove_user_data(userId: UUID) -> None:
         detail=f"User with id {userId} does not exist",
     )
     
-async def get_user(userId: UUID) -> Message:
-    use_detail:User = await User.filter(id=userId).prefetch_related("role").first()
+async def get_user(userid:int) -> Message:
+    use_detail:User = await User.filter(id=userId).select_related("role").first()
     if use_detail:
         return use_detail
     raise HTTPException(
@@ -164,8 +164,8 @@ async def get_user(userId: UUID) -> Message:
         detail=f"User with id {userId} does not exist",
     )
     
-async def add_user_role(userId: UUID, role: str) -> User:
-    user_to_update:User = await User.filter(id=userId).prefetch_related("role").first()
+async def add_user_role(userid:int, role: str) -> User:
+    user_to_update:User = await User.filter(id=userId).select_related("role").first()
     if not user_to_update:
         raise HTTPException(
         status_code=status.HTTP_404_NOT_FOUND,
@@ -189,8 +189,8 @@ async def add_user_role(userId: UUID, role: str) -> User:
     
     
   
-async def remove_user_role(userId: UUID, role: str) -> None:
-    check_user:User = await User.filter(id=userId).prefetch_related("role").first()
+async def remove_user_role(userid:int, role: str) -> None:
+    check_user:User = await User.filter(id=userId).select_related("role").first()
     if not check_user:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -205,8 +205,8 @@ async def remove_user_role(userId: UUID, role: str) -> None:
     await check_user.save()
     return Message(message="User role was updated successfully")
     
-async def get_user_role(userId: UUID) -> Permission:
-    check_user:User = await User.filter(id=userId).prefetch_related("role").first()
+async def get_user_role(userid:int) -> Permission:
+    check_user:User = await User.filter(id=userId).select_related("role").first()
     if check_user:
         return check_user.role
     raise HTTPException( status_code=status.HTTP_404_NOT_FOUND,detail="User role does not exist")

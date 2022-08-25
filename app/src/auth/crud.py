@@ -12,13 +12,13 @@ from app.src.auth import schemas
 
 async def create_or_update_auth(request: Request, user: User) ->bool:
     ip = request.client.host    
-    get_user_auth:AuthModel = await AuthModel.update_or_create(user=user, ip=ip)
+    get_user_auth:AuthModel = await AuthModel.objects.update_or_create(user=user, ip=ip)
     return True if get_user_auth else False
 
 
 
 async def auth_login(background_task:BackgroundTasks, request:Request, auth_data:OAuth2PasswordRequestForm) ->schemas.TokenData:
-    check_user:User = await User.filter(email=auth_data.username).first()
+    check_user:User = await User.objects.get_or_none(email=auth_data.username)
     if not check_user:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -30,14 +30,14 @@ async def auth_login(background_task:BackgroundTasks, request:Request, auth_data
             detail="incorrect email or password")
     if check_user.is_active:
         get_jwt_data_for_encode = schemas.ToEncode(
-            id=str(check_user.id), 
+            id=check_user.id, 
             firstname=check_user.firstname, 
             is_active=check_user.is_active
             )
         access_token, refresh_token = JWTAUTH.JwtEncoder(data=get_jwt_data_for_encode.dict())
         _ = await create_or_update_auth(request, check_user)
         return  schemas.TokenData(access_token=access_token, refresh_token=refresh_token)
-    token:str = JWTAUTH.DataEncoder(data={"id": str(check_user.id)})
+    token:str = JWTAUTH.DataEncoder(data={"id":check_user.id})
     mail_template_context = {
             "url":f"{settings.PROJECT_URL}/user/{token}/confirmation",
             "button_label": "confirm",
@@ -61,14 +61,14 @@ async def auth_login(background_task:BackgroundTasks, request:Request, auth_data
 
 async def auth_login_token_refresh(user_token: schemas.UserRefreshTokenInput, request:Request) -> schemas.TokenData:
     token_data = JWTAUTH.data_decoder(encoded_data=user_token.refresh_token)
-    id = UUID(token_data.get("id"))
-    check_user: User = await User.filter(id = id)
+    id = token_data.get("id")
+    check_user: User = await User.objects.get_or_none(id = id)
     if not check_user:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Account does not exist",
         )
-    get_user_auth:AuthModel  = await AuthModel.get_or_none(user = check_user)
+    get_user_auth:AuthModel  = await AuthModel.objects.get_or_none(user = check_user)
     if request.client.host != get_user_auth.ip:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -76,12 +76,12 @@ async def auth_login_token_refresh(user_token: schemas.UserRefreshTokenInput, re
         )
     
     _ = await create_or_update_auth(request, check_user)
-    access_token, refresh_token = JWTAUTH.JwtEncoder(data={"id": str(check_user.id)})
+    access_token, refresh_token = JWTAUTH.JwtEncoder(data={"id": check_user.id})
     return schemas.TokenData(access_token=access_token, refresh_token=refresh_token)
 
 
 async def check_user_email(user_data:schemas.CheckUserEmail) -> Message:
-    check_user:User = await User.get_or_none(email=user_data.email)
+    check_user:User = await User.objects.get_or_none(email=user_data.email)
     if not check_user:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,

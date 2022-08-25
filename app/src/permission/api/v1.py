@@ -1,7 +1,7 @@
 from typing import List
 from uuid import UUID
 from fastapi import APIRouter, status
-from ..._base.schemas import Message
+from app.src._base.schemas import Message
 from app.src.permission.schemas import PermissionIn, PermissionOut
 from app.src.permission import crud
 
@@ -16,13 +16,13 @@ async def get_all_permissions(filter:str = '', limit:int = 10, offset:int = 0)->
     return await crud.get_all_permissions(filter=filter, limit=limit, offset=offset)
 
 @perm.get("/{id}", response_model=PermissionOut)
-async def get_permission(id: UUID)->PermissionOut:
+async def get_permission(id:int)->PermissionOut:
     return await crud.get_permission(id=id)
 
 @perm.put("/{id}", response_model=Message)
-async def update_permission(id: UUID, permission: PermissionIn)->Message:
+async def update_permission(id:int, permission: PermissionIn)->Message:
     return await crud.update_permission(id=id, permission=permission)
 
 @perm.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
-async def delete_permission(id: UUID)->None:
+async def delete_permission(id:int)->None:
     return await crud.delete_permission(id=id)

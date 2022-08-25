@@ -6,7 +6,7 @@ from app.src.payment import enum
 class PaymentIn(BaseModel):
     orderId: str
     pay_ref: str = Field(..., max_length=50)
-    amount:condecimal(decimal_places=2, max_digits=5) = Field(...)
+    amount:condecimal(decimal_places=2, max_digits=10) = Field(...)
     currency:enum.PaymentCurrency = enum.PaymentCurrency.NGN
     method:enum.PaymentMethod = enum.PaymentMethod.CARD
 

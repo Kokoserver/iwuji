@@ -17,10 +17,11 @@ class JWTAUTH:
     access_data = data.copy()
     refresh_data = data.copy()
     if duration:
-      access_token_time = datetime.utcnow() + duration
-      refresh_token_time = datetime.utcnow() + base_config.settings.REFRESH_TOKEN_EXPIRATION_DURATION
-      access_data.update({"exp": access_token_time})
-      refresh_data.update({"exp": refresh_token_time})
+      access_data.update({"exp": datetime.utcnow() + duration})
+      refresh_data.update({"exp": datetime.utcnow() + base_config.settings.REFRESH_TOKEN_EXPIRATION_DURATION})
+    else:
+        access_data.update({"exp": datetime.utcnow() + base_config.settings.ACCESS_TOKEN_EXPIRATION_DURATION})
+        refresh_data.update({"exp": datetime.utcnow() + base_config.settings.REFRESH_TOKEN_EXPIRATION_DURATION})
     try:
       encode_jwt_refresh = jwt.encode(
           claims=refresh_data,

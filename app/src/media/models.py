@@ -1,20 +1,21 @@
-from tortoise import Tortoise, models, fields as f
+import typing as t
+from app.database.document import BaseMeta, Model, fields as f
 
 
 
-class Media(models.Model):
+class Media(Model):
       
       """_summary_ = "Media"
          description = "Media model for keeping all the media details"
       """
-      id = f.UUIDField(auto_generate= True, pk=True)
-      alt = f.CharField(max_length=100, required=True)
-      url = f.CharField(max_length=200, required=True, unique=True)
-      content_type = f.CharField(max_length=40, required=True)
+      class Meta(BaseMeta):
+         tablename: str = "iw_media"
+      alt:str = f.String(max_length=100, nullable=True)
+      url:str = f.String(max_length=150, nullable=True, unique=True)
+      content_type:str = f.String(max_length=25, nullable=False)
 
 
       
-Tortoise.init_models(["app.src.media.models"], "models")
       
       
       

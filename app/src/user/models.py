@@ -1,18 +1,26 @@
-from tortoise import models, fields as f
+import typing as t
+from pydantic import EmailStr
+from app.database.document import  BaseMeta, DateMixin, Model, fields as f
+from app.src.permission.models import Permission
 from app.utils.password_hasher import Hasher
 
 
 
-class User(models.Model):
-    id  = f.UUIDField(auto_generate=True, pk=True)
-    firstname = f.CharField(max_length=50, required=True)
-    lastname = f.CharField(max_length=50, required=True)
-    email = f.CharField(max_length=50, required=True, unique=True)
-    password = f.CharField(max_length=100, required=True)
-    is_active = f.BooleanField(default=False)
-    role = f.ForeignKeyField('models.Permission', related_name='users', null=True)
-    created_at = f.DatetimeField(auto_now=True)
-    
+class User(Model, DateMixin):
+    class Meta(BaseMeta):
+       tablename: str = "iw_user"
+    firstname:str = f.String(max_length=50, nullable=True)
+    lastname:str = f.String(max_length=50, nullable=True)
+    email:EmailStr = f.String(max_length=50, nullable=True, unique=True)
+    password:str = f.String(max_length=100, nullable=True)
+    is_active:bool = f.Boolean(default=False)
+    role:t.Optional[Permission] = f.ForeignKey(
+        Permission, 
+        related_name='users',
+        nullable=True,  
+       ondelete="SET NULL", 
+       onupdate="CASCADE")
+
 
     def hash_password(self)->str:
         self.password = Hasher.hash_password(self.password)
@@ -27,10 +35,4 @@ class User(models.Model):
         return False
         
         
-class Publisher(models.Model):
-    id  = f.UUIDField(auto_generate=True, pk=True)
-    title = f.CharField(max_length=10, required=True)
-    description = f.TextField()
-    details = f.ForeignKeyField('models.User', related_name='publisher_details', null=True)
-    profile_img = f.ForeignKeyField('models.Media', related_name='publisher_image', null=True)
-    
+

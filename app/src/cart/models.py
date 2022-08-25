@@ -1,16 +1,31 @@
-from tortoise import models, fields as f
+import typing as t
+from app.database.document import BaseMeta, Model, DateMixin, fields as f
 
-class Cart(models.Model):
+from app.src.product.models import Product
+from app.src.user.models import User
+class Cart(Model, DateMixin):
    """_summary_ = "Cart"
       description = "Cart model for keeping all the cart details"
    """
-   id = f.UUIDField(auto_generate=True, pk=True)
-   pdf = f.BooleanField(default=False)
-   paper_back_qty = f.IntField(default=0)
-   hard_back_qty = f.IntField(default=0)
-   product = f.ForeignKeyField("models.Product", related_name="product_cart", null = True, blank=True)
-   user = f.ForeignKeyField("models.User", related_name="user_cart")
-   created_at = f.DatetimeField(auto_now=True)
+   class Meta(BaseMeta):
+       tablename: str = "iw_cart"
+
+   pdf:bool = f.Boolean(default=False)
+   paper_back_qty:int = f.Integer(default=0)
+   hard_back_qty:int = f.Integer(default=0)
+   product:t.Optional[Product] = f.ForeignKey(
+      Product, 
+      related_name="cart_product",
+      ondelete="CASCADE", 
+      onupdate="CASCADE"
+      )
+   user: t.Optional[User] = f.ForeignKey(
+      User, 
+      related_name="user_cart",
+      ondelete="CASCADE", 
+      onupdate="CASCADE"
+      )
+
    
   
 

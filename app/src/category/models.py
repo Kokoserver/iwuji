@@ -1,18 +1,16 @@
-from tortoise import models, fields as f
+from app.database.document import BaseMeta, Model, fields as f
 
 
 
-class Category(models.Model):
+class Category(Model):
     """_summary_ = "Category"
         description = "Category model for keeping all the base product categories"
     """
-    id = f.UUIDField(auto_generate=True, pk=True)
-    name = f.CharField(max_length=20, required = True)
+    class Meta(BaseMeta):
+       tablename: str = "iw_category"
+    name:str = f.String(max_length=20, nullable=False, unique=True)
     
 
-    
-    def __str__(self):
-        return self.name
    
 
 

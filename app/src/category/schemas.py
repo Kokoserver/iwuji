@@ -1,11 +1,8 @@
-from uuid import UUID
 from pydantic import BaseModel
 
 class CategoryIn(BaseModel):
     name:str 
     
 class CategoryOut(BaseModel):
-    id : UUID
+    id:int
     name:str 
-    class Config:
-        orm_mode = True

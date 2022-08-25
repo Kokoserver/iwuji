@@ -1,15 +1,15 @@
-from uuid import UUID
 from pydantic import BaseModel
 
+
 class CartIn(BaseModel):
-    productId: UUID
+    productId:int
     pdf: bool
     paper_back_qty: int
     hard_back_qty: int
    
    
 class CartOut(BaseModel):
-    id: UUID
+    id:int
     pdf: bool
     paper_back_qty: int
     hard_back_qty: int

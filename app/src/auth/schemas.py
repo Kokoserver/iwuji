@@ -24,10 +24,10 @@ class UserRefreshTokenInput(_Base_type):
 
 
 class UpdateUserInput(BaseModel):
-    userId: str
+    userId:int
 
 class ToEncode(BaseModel):
-    id:str
+    id:int
     firstname:str
     is_active:bool 
     

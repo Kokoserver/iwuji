@@ -1,4 +1,3 @@
-from uuid import UUID
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 import jose
@@ -7,15 +6,15 @@ from app.src.user.models import User
 
 
 
-async def get_user_permission(id:UUID, name:str):
-        check_user_per:User = await User.filter(id=id, role__name__icontains=name).first()
+async def get_user_permission(id:int, name:str):
+        check_user_per:User = await User.objects.get_or_none(id=id, role__name__icontains=name)
         if check_user_per:
-            return check_user_per.user
+            return check_user_per
         return None
 
 
-async def get_user_data(id:UUID)->User:
-    get_user:User = await User.get_or_none(id=id)
+async def get_user_data(id:int)->User:
+    get_user:User = await User.objects.get_or_none(id=id)
     if get_user.is_active:
         return get_user
     return None
@@ -45,7 +44,7 @@ class UserAuth:
 
             if payload is None:
                 raise credentials_exception
-            if not UUID(payload.get("id", None)) and not payload.get("firstname", None):
+            if not payload.get("id", None) and not payload.get("firstname", None):
                 raise credentials_exception
             return payload
         except jose.JWTError:
@@ -60,7 +59,7 @@ class UserWrite:
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Only admin can perform this operation",
         )
-        admin_user = await get_user_permission(id=UUID(user.get("id", None)), name="admin")
+        admin_user = await get_user_permission(id=user.get("id", None), name="admin")
         if  admin_user:
                 return admin_user
         raise exception
@@ -73,7 +72,7 @@ class UserWrite:
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Only super admin can perform this operation",
         )
-        super_user = await get_user_permission(id=UUID(user.get("id", None)), name="super_admin")
+        super_user = await get_user_permission(id=user.get("id", None), name="super_admin")
         if super_user:
             return super_user
         raise exception
@@ -84,15 +83,15 @@ class UserWrite:
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Only super admin can perform this operation",
         )
-        super_user = await get_user_permission(id=UUID(user.get("id", None)), name="super_admin")
-        admin_user = await get_user_permission(id=UUID(user.get("id", None)), name="admin")
+        super_user = await get_user_permission(id=user.get("id", None), name="super_admin")
+        admin_user = await get_user_permission(id=user.get("id", None), name="admin")
         if super_user or admin_user:
             return super_user
         raise exception
 
     @staticmethod
     async def current_user_with_data(user: dict = Depends(UserAuth.authenticate)):
-        active_user = await get_user_data(id=UUID(user.get("id", None)))
+        active_user = await get_user_data(id=user.get("id", None))
         if active_user:
             return active_user
         raise HTTPException(
@@ -101,8 +100,8 @@ class UserWrite:
         
     @staticmethod
     async def current_user(user: dict = Depends(UserAuth.authenticate)):
-        if UUID(user.get("id", None)) and user.get("firstname", None):
-            return UUID(user.get("id", None))
+        if user.get("id", None) and user.get("firstname", None):
+            return user.get("id", None)
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Account is not active")

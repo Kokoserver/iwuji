@@ -4,9 +4,10 @@ from pydantic import BaseModel, Field
         
 class PermissionIn(BaseModel):
     name:str  =  Field(..., description="Name of the permission", max_length=20)
-    class Config:
-        orm_mode = True
+
 
 class PermissionOut(BaseModel):
+    id:int = Field(..., description="Id of the permission")
     name:str  =  Field(..., description="Name of the permission", max_length=20)
-    id:UUID = Field(..., description="Id of the permission")
+
+    

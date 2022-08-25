@@ -19,7 +19,7 @@ class PublisherIn(PublisherBase):
     pass
     
 class PublisherOut(PublisherBase):
-    id : UUID
+    id:int
     details : UserDataOut
     profile_img : Optional[MediaBase]
     

@@ -15,7 +15,7 @@ class Settings(BaseSettings):
     PROJECT_DESCRIPTION: str 
     PROJECT_URL: AnyHttpUrl
     API_VERSION: str  
-    
+    ENVIRONMENT:str
     # email settings
     EMAIL_SERVER: str
     EMAIL_SERVER_PORT: int
@@ -58,7 +58,7 @@ class Settings(BaseSettings):
         if isinstance(v, str):
             return v
         return PostgresDsn.build(
-            scheme="postgres",
+            scheme="postgresql",
             user=values.get("POSTGRES_USER"),
             password=values.get("POSTGRES_PASSWORD"),
             host=values.get("POSTGRES_SERVER"),

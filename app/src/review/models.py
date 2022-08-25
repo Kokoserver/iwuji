@@ -1,10 +1,23 @@
-from tortoise import models, fields as f
+import typing as t
+from app.database.document import  BaseMeta, DateMixin, Model, fields as f
+from app.src.product.models import Product
+from app.src.user.models import User
 
+class Review(Model, DateMixin):
+    class Meta(BaseMeta):
+       tablename: str = "iw_review"
+    comment:str = f.Text(nullable=True)
+    rating:int = f.Integer(nullable=True, default=0)
+    user:t.Optional[User] = f.ForeignKey(
+       User, 
+       related_name='user_reviews',  
+       ondelete="CASCADE", 
+       onupdate="CASCADE"
+       )
+    product:t.Optional[Product] = f.ForeignKey(
+       Product, 
+       related_name="product_review",
+       ondelete="CASCADE",
+       onupdate="CASCADE"
+       )
 
-class Review(models.Model):
-    id = f.UUIDField(auto_generate=True, pk=True)
-    comment = f.TextField(required=True)
-    rating = f.SmallIntField(required=True)
-    user = f.ForeignKeyField('models.User', related_name='user_reviews')
-    product = f.ForeignKeyField('models.Product', related_name='product_reviews')
-    created_at = f.DatetimeField(auto_now=True)

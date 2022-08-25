@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.core.config import settings
-from app.database import init_db, close_db
+from app.database.conf import connect_database, disconnect_database
 from app.src._base.schemas import HealthCheck
 from app.src._base.router import v1  as version_1_router
 def get_application():
@@ -29,11 +29,11 @@ def get_application():
 app = get_application()
 @app.on_event("startup")
 async def startup():
-   init_db(app)
+   await connect_database(app)
 
 @app.on_event("shutdown")
 async def shutdown():
-    await close_db()
+    await disconnect_database(app)
 
 @app.get("/", response_model=HealthCheck, tags=["status"])
 def health_check():
