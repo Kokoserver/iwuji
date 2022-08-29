@@ -41,7 +41,7 @@ async def get_drive(uri: str) -> FileResponse:
 @media.get('/{uri}', name=settings.URL_STATIC_PATH)
 async def get_drive(uri: str) -> FileResponse:
   
-  check_file = await Media.filter(alt=uri).first()
+  check_file = await Media.objects.filter(alt=uri).first()
   if not check_file:
     raise HTTPException(status_code=404, detail='file Not found')
   return StreamingResponse(

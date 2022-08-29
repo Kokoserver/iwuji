@@ -7,49 +7,43 @@ from app.src.user.models import User
 from app.utils.random_string import generate_orderId
 
 
-class Order(Model, DateMixin): 
-      """_summary_ = "Order"
-         description = "Order model for keeping all the orders of the user"
-      """
-      class Meta(BaseMeta):
-         tablename: str = "iw_order"
-      orderId:str = f.String(max_length=12, default=generate_orderId, index=True,unique=True)
-      user:t.Optional[User] = f.ForeignKey(
-         User, 
-         related_name="user_order", 
-         ondelete="CASCADE", 
-         onupdate="CASCADE"
-         )
-      shipping_address:t.Optional[ShippingAddress] = f.ForeignKey(
-       ShippingAddress,
-       related_name="order_address",  
-      ondelete="SET NULL", 
-       onupdate="CASCADE", 
-       nullable=True)
-      status:OrderStatus =  f.String(choices=list(OrderStatus), default=OrderStatus.PENDING)
+class Order(Model, DateMixin):
+    """_summary_ = "Order"
+       description = "Order model for keeping all the orders of the user"
+    """
+    class Meta(BaseMeta):
+        tablename: str = "iw_order"
+    orderId: str = f.String(
+        max_length=12, default=generate_orderId, index=True, unique=True)
+    user: t.Optional[User] = f.ForeignKey(
+        User,
+        related_name="user_order",
+        ondelete="CASCADE",
+        onupdate="CASCADE"
+    )
+    shipping_address: t.Optional[ShippingAddress] = f.ForeignKey(
+        ShippingAddress,
+        related_name="order_address",
+        ondelete="SET NULL",
 
-      
-      
+        nullable=True)
+    status: OrderStatus = f.String(choices=list(
+        OrderStatus), default=OrderStatus.PENDING)
+
+
 class OrderItem(Model):
-      class Meta(BaseMeta):
+    class Meta(BaseMeta):
         pass
-      pdf_qty:int = f.Integer(default=0)
-      paper_back_qty = f.Integer(default=0)
-      hard_back_qty = f.Integer(default=0)
-      product:t.Optional[Product] = f.ForeignKey(
-         Product, 
-         related_name="order_item_product",  
-         ondelete="CASCADE", 
-         onupdate="CASCADE")
-      order:t.Optional[Order]= f.ForeignKey(
-         Order, 
-         related_name="order_item_order", 
-         ondelete="CASCADE", 
-         onupdate="CASCADE")
-   
-      
-
-
-
-  
-   
+    pdf_qty: int = f.Integer(default=0)
+    paper_back_qty = f.Integer(default=0)
+    hard_back_qty = f.Integer(default=0)
+    product: t.Optional[Product] = f.ForeignKey(
+        Product,
+        related_name="order_item_product",
+        ondelete="CASCADE",
+        onupdate="CASCADE")
+    order: t.Optional[Order] = f.ForeignKey(
+        Order,
+        related_name="order_item_order",
+        ondelete="CASCADE",
+        onupdate="CASCADE")
