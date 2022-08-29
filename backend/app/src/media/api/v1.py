@@ -16,7 +16,7 @@ def iterMedia(file_path:str, content_type:str):
   elif content_type.split('/')[0] == 'video':
     path = f"{settings.MEDIA_DIR}/{file_path}"
   elif content_type.split('/')[0] == 'application':
-    path = f"{settings.PDf_MEDIA_DIR}/{file_path}"
+    path = f"{settings.PDF_MEDIA_DIR}/{file_path}"
   else: raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid media type")
   with open(
      path,

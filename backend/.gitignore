@@ -35,6 +35,9 @@ MANIFEST
 # Installer logs
 pip-log.txt
 pip-delete-this-directory.txt
+.pdm.toml
+__pypackages__/
+
 
 # Unit test / coverage reports
 htmlcov/

@@ -6,16 +6,16 @@ from functools import lru_cache
 from pydantic import AnyHttpUrl, BaseSettings, DirectoryPath, EmailStr, PostgresDsn, validator
 from app.utils import os_operation
 
+
 class Settings(BaseSettings):
     PROJECT_NAME: str
     BACKEND_CORS_ORIGINS: t.List[AnyHttpUrl] = []
     DEBUG: bool = False
     API_PREFIX: str
-    PROJECT_NAME: str 
-    PROJECT_DESCRIPTION: str 
+    PROJECT_DESCRIPTION: str
     PROJECT_URL: AnyHttpUrl
-    API_VERSION: str  
-    ENVIRONMENT:str
+    API_VERSION: str
+    ENVIRONMENT: str
     # email settings
     EMAIL_SERVER: str
     EMAIL_SERVER_PORT: int
@@ -25,8 +25,8 @@ class Settings(BaseSettings):
     # locate template folder at the root of the project
     TEMPLATE_DIR: DirectoryPath = Path.joinpath(BASE_DIR, "app/templates")
     MEDIA_DIR: DirectoryPath = Path.joinpath(BASE_DIR, "app/static/media")
-    PDf_MEDIA_DIR: DirectoryPath = Path.joinpath(BASE_DIR, "app/static/pdf")
-    URL_STATIC_PATH:str = "get_media"
+    PDF_MEDIA_DIR: DirectoryPath = Path.joinpath(BASE_DIR, "app/static/pdf")
+    URL_STATIC_PATH: str = "get_media"
     STATIC_DIR: DirectoryPath = Path.joinpath(BASE_DIR, "app/static")
     # database connection
     POSTGRES_SERVER: str
@@ -35,14 +35,13 @@ class Settings(BaseSettings):
     POSTGRES_PORT: int
     POSTGRES_DB: str
     DATABASE_URI: t.Optional[PostgresDsn] = None
-    
+
     # jwt settings
     SECRET_KEY: str
     REFRESH_KEY: str
-    ALGORITHM:str 
-    REFRESH_TOKEN_EXPIRATION_DURATION:timedelta =  timedelta(days=2)
-    ACCESS_TOKEN_EXPIRATION_DURATION: timedelta =  timedelta(minutes=30)
-    
+    ALGORITHM: str
+    REFRESH_TOKEN_EXPIRATION_DURATION: timedelta = timedelta(days=7)
+    ACCESS_TOKEN_EXPIRATION_DURATION: timedelta = timedelta(minutes=30)
 
     """Validate the cores origins."""
     @validator("BACKEND_CORS_ORIGINS", pre=True)
@@ -52,7 +51,7 @@ class Settings(BaseSettings):
         elif isinstance(v, (list, str)):
             return v
         raise ValueError(v)
-    
+
     @validator("DATABASE_URI", pre=True)
     def assemble_db_connection(cls, v: t.Optional[str], values: t.Dict[str, t.Any]) -> t.Any:
         if isinstance(v, str):
@@ -70,12 +69,9 @@ class Settings(BaseSettings):
         env_file = ".env"
 
 
-
 @lru_cache()
 def get_settings():
     return Settings()
 
 
 settings = get_settings()
-
-

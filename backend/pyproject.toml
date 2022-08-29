@@ -1,0 +1,40 @@
+[project]
+name = ""
+version = ""
+description = ""
+authors = [
+    {name = "kokoserver", email = "owonikokoolaoluwa@gmail.com"},
+]
+[project.optional-dependencies]
+
+[tool.pdm.scripts] 
+server = "uvicorn app.main:app --reload"
+dependencies = [
+    "fastapi[all]>=0.81.0",
+    "ormar[postgresql]>=0.11.2",
+    "python-slugify>=6.1.2",
+    "aiosqlite>=0.17.0",
+    "python-jose[cryptography]>=3.3.0",
+    "passlib[bcrypt]>=1.7.4",
+]
+requires-python = ">=3.9"
+license = {text = "MIT"}
+
+[tool.pdm.dev-dependencies]
+test = [
+    "pytest-asyncio>=0.6.0",
+    "pytest>=3.2.5",
+    "pytest-cov>=2.5.1",
+]
+format = [
+    "autoflake>=1.4",
+    "flake8>=3.5.0",
+    "mypy>=0.720",
+    "isort>=4.2.15",
+]
+
+[tool.pdm]
+
+[build-system]
+requires = ["pdm-pep517>=1.0.0"]
+build-backend = "pdm.pep517.api"

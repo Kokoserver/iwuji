@@ -8,15 +8,19 @@
     "**/.hg": true,
     "**/CVS": true,
     "**/.DS_Store": true,
-    "**/Thumbs.db": true,
-    "**/__pycache__": true,
+    "**/**/Thumbs.db": true,
+    "**/**/__pycache__": true,
     "**/__pytest__cache": true,
     "**.pytest_cache": true,
     "**.idea": true
   },
   "python.linting.enabled": true,
-  "python.formatting.provider": "black",
-  "cSpell.words": ["condecimal", "redoc", "sqlmodel"]
-  // "python.autoComplete.extraPaths": ["__pypackages__/<major.minor>/lib"],
-  // "python.analysis.extraPaths": ["__pypackages__/<major.minor>/lib"]
+  "python.formatting.provider": "autopep8",
+  "cSpell.words": ["condecimal", "redoc", "sqlmodel"],
+  "python.analysis.extraPaths": [
+    "${workspaceFolder}\\__pypackages__\\3.9\\lib"
+  ],
+  "python.autoComplete.extraPaths": [
+    "${workspaceFolder}\\__pypackages__\\3.9\\lib"
+  ]
 }

@@ -1,3 +1,10 @@
+# iwaju
+
+This project was generated via [manage-fastapi](https://ycd.github.io/manage-fastapi/)! :tada:
+
+## License
+
+This project is licensed under the terms of the MIT license.
 [tool.poetry]
 name = "iwaju"
 version = "0.1.0"
@@ -15,7 +22,3 @@ python-jose = {extras = ["cryptography"], version = "^3.3.0"}
 passlib = {extras = ["bcrypt"], version = "^1.7.4"}
 
 [tool.poetry.dev-dependencies]
-
-[build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
