@@ -6,9 +6,9 @@ from pydantic import condecimal as dc
 from slugify import slugify
 from app.src.category.models import Category
 from ormar import pre_save
-
+from app.utils.discount_calculator import calculate_discount
 from app.src.media.models import Media
-from app.src.publisher.models import Publisher
+from app.src.author.models import Author
 
 
 class ProductProperty(Model):
@@ -63,13 +63,7 @@ class Product(Model, DateMixin):
 
         nullable=True
     )
-    publisher: t.Optional[Publisher] = f.ForeignKey(
-        Publisher,
-        related_name="publisher",
-        nullable=True,
-        ondelete="SET NULL",
 
-    )
     categories: t.Optional[t.List[Category]] = f.ManyToMany(
         Category,
         related_name="product_category",
@@ -101,8 +95,6 @@ class Product(Model, DateMixin):
         nullable=True
     )
 
-    def make_slug(self):
-        self.slug = slugify(self.name, max_length=50)
 
 ################################### end of product############################################
 
@@ -128,8 +120,23 @@ class Variation(Model, DateMixin):
 
     )
 
-    def make_slug(self):
-        self.slug = slugify(self.name, max_length=50)
+
+@pre_save(ProductProperty)
+async def calculate_discount_price(sender, instance, **kwargs):
+    instance.paper_back_price = calculate_discount(
+        instance.paper_back_price, instance.discount)
+    instance.hard_back_price = calculate_discount(
+        instance.hard_back_price, instance.discount)
+    instance.pdf_price = calculate_discount(instance.pdf_price, instance.discount)
+
+
+@pre_update(ProductProperty)
+async def calculate_discount_price(sender, instance, **kwargs):
+    instance.paper_back_price = calculate_discount(
+        instance.paper_back_price, instance.discount)
+    instance.hard_back_price = calculate_discount(
+        instance.hard_back_price, instance.discount)
+    instance.pdf_price = calculate_discount(instance.pdf_price, instance.discount)
 
 
 @pre_save(Product)

@@ -3,6 +3,7 @@ from fastapi import APIRouter
 
 from app.src.auth.api.v1 import auth
 from app.src.user.api.v1 import user
+from app.src.author.api.v1 import author
 from app.src.permission.api.v1 import perm as permission
 from app.src.cart.api.v1 import cart
 from app.src.product.api.v1 import product, variation
@@ -17,6 +18,7 @@ router = APIRouter()
 router.include_router(permission, prefix="/permissions", tags=["User permission"])
 router.include_router(user, prefix="/users", tags=["Users"])
 router.include_router(auth, prefix="/auth", tags=["Auth"])
+router.include_router(author, prefix="/authors", tags=["Author"])
 router.include_router(addr, prefix="/address", tags=["Shipping Address"])
 router.include_router(cart, prefix="/carts", tags=["Carts"])
 router.include_router(product, prefix="/products", tags=["Products"])

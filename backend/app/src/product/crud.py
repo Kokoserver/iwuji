@@ -162,7 +162,6 @@ async def create_variation(variation: schemas.VariationIn,
         raise HTTPException(status_code=status.HTTP_409_CONFLICT,
                             detail=f"series with name `{variation.name}` already exists, for product this product")
     new_variation: Variation = Variation(**variation.dict())
-    new_variation.make_slug()
     if cover_img:
         new_cover_img = await media_crud.upload(media_objs=[cover_img], request=request)
         new_variation.cover_img = (new_cover_img[0] if new_cover_img else None)

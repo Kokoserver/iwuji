@@ -1,6 +1,7 @@
-import enum 
+import enum
 
-class PublisherTitle(str, enum.Enum):
+
+class AuthorTitle(str, enum.Enum):
     MR = "mr"
     MRS = "mrs"
     DR = "dr"
