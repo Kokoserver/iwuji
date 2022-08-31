@@ -24,6 +24,6 @@ router.include_router(variation, prefix="/variations", tags=["Variations"])
 router.include_router(category, prefix="/products/category", tags=["Product category"])
 router.include_router(order, prefix="/orders", tags=["Orders"])
 router.include_router(payment, prefix="/payments", tags=["Payment"])
-router.include_router(review, prefix="/review", tags=["Review"])
+router.include_router(review, prefix="/reviews", tags=["Review"])
 router.include_router(media, prefix="/static",
                       include_in_schema=False, tags=["Media_drive"])

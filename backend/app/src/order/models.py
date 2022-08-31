@@ -28,7 +28,7 @@ class Order(Model, DateMixin):
 
         nullable=True)
     status: OrderStatus = f.String(choices=list(
-        OrderStatus), default=OrderStatus.PENDING)
+        OrderStatus), default=OrderStatus.PENDING, max_length=20)
 
 
 class OrderItem(Model):
