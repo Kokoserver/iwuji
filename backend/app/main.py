@@ -1,3 +1,4 @@
+from app.lib.middleware.exception_formatter import catch_exceptions_middleware
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -24,6 +25,7 @@ def get_application():
         allow_methods=["*"],
         allow_headers=["*"],
     )
+    _app.middleware("http")(catch_exceptions_middleware)
 
     return _app
 

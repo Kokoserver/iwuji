@@ -11,11 +11,13 @@ from app.src.order.api.v1 import order
 from app.src.payment.api.v1 import pay as payment
 from app.src.review.api.v1 import review
 from app.src.media.api.v1 import media
+from app.src.address.api.v1 import addr
 
 router = APIRouter()
 router.include_router(permission, prefix="/permissions", tags=["User permission"])
 router.include_router(user, prefix="/users", tags=["Users"])
 router.include_router(auth, prefix="/auth", tags=["Auth"])
+router.include_router(addr, prefix="/address", tags=["Shipping Address"])
 router.include_router(cart, prefix="/carts", tags=["Carts"])
 router.include_router(product, prefix="/products", tags=["Products"])
 router.include_router(variation, prefix="/variations", tags=["Variations"])

@@ -1,7 +1,7 @@
 from pydantic import BaseModel, Field
 
 class AddressIn(BaseModel):
-    street:str = Field(max_length=20)
+    street:str = Field(max_length=50)
     state:str = Field(max_length=20)
     city :str = Field(max_length=20)
     country:str = Field(max_length=20)
