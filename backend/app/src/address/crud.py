@@ -6,7 +6,7 @@ from app.src._base.schemas import Message
 from ..user.models import User
 
 
-async def create_address(address: schemas.AddressIn, user: User) -> Message:
+async def create_address(address: schemas.AddressIn, user: User) -> ShippingAddress:
     (address_obj, created) = await ShippingAddress.objects.get_or_create(**address.dict(), user=user)
     if created:
         return address_obj

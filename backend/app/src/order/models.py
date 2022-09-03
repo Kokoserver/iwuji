@@ -25,8 +25,8 @@ class Order(Model, DateMixin):
         ShippingAddress,
         related_name="order_address",
         ondelete="SET NULL",
-
-        nullable=True)
+        nullable=True
+    )
     status: OrderStatus = f.String(choices=list(
         OrderStatus), default=OrderStatus.PENDING, max_length=20)
 
@@ -34,7 +34,7 @@ class Order(Model, DateMixin):
 class OrderItem(Model):
     class Meta(BaseMeta):
         pass
-    pdf_qty: int = f.Integer(default=0)
+    pdf: bool = f.Boolean(default=False)
     paper_back_qty = f.Integer(default=0)
     hard_back_qty = f.Integer(default=0)
     product: t.Optional[Product] = f.ForeignKey(

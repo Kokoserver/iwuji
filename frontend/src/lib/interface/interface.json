@@ -1,0 +1,2799 @@
+{
+	"openapi": "3.0.2",
+	"info": { "title": "Iwaju", "version": "v1" },
+	"paths": {
+		"/": {
+			"get": {
+				"tags": ["status"],
+				"summary": "Health Check",
+				"operationId": "health_check__get",
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HealthCheck" }
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/v1/permissions/": {
+			"get": {
+				"tags": ["User permission"],
+				"summary": "Get All Permissions",
+				"operationId": "get_all_permissions_api_v1_permissions__get",
+				"parameters": [
+					{
+						"required": false,
+						"schema": { "title": "Filter", "type": "string", "default": "" },
+						"name": "filter",
+						"in": "query"
+					},
+					{
+						"required": false,
+						"schema": { "title": "Limit", "type": "integer", "default": 10 },
+						"name": "limit",
+						"in": "query"
+					},
+					{
+						"required": false,
+						"schema": { "title": "Offset", "type": "integer", "default": 0 },
+						"name": "offset",
+						"in": "query"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"title": "Response Get All Permissions Api V1 Permissions  Get",
+									"type": "array",
+									"items": { "$ref": "#/components/schemas/PermissionOut" }
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				}
+			},
+			"post": {
+				"tags": ["User permission"],
+				"summary": "Create Permission",
+				"operationId": "create_permission_api_v1_permissions__post",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": { "$ref": "#/components/schemas/PermissionIn" }
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"201": {
+						"description": "Successful Response",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/Message" }
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/v1/permissions/{id}": {
+			"get": {
+				"tags": ["User permission"],
+				"summary": "Get Permission",
+				"operationId": "get_permission_api_v1_permissions__id__get",
+				"parameters": [
+					{
+						"required": true,
+						"schema": { "title": "Id", "type": "integer" },
+						"name": "id",
+						"in": "path"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/PermissionOut" }
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				}
+			},
+			"put": {
+				"tags": ["User permission"],
+				"summary": "Update Permission",
+				"operationId": "update_permission_api_v1_permissions__id__put",
+				"parameters": [
+					{
+						"required": true,
+						"schema": { "title": "Id", "type": "integer" },
+						"name": "id",
+						"in": "path"
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": { "$ref": "#/components/schemas/PermissionIn" }
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/Message" }
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"tags": ["User permission"],
+				"summary": "Delete Permission",
+				"operationId": "delete_permission_api_v1_permissions__id__delete",
+				"parameters": [
+					{
+						"required": true,
+						"schema": { "title": "Id", "type": "integer" },
+						"name": "id",
+						"in": "path"
+					}
+				],
+				"responses": {
+					"204": { "description": "Successful Response" },
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/v1/users/register": {
+			"post": {
+				"tags": ["Users"],
+				"summary": "Create User",
+				"operationId": "create_user_api_v1_users_register_post",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": { "$ref": "#/components/schemas/UserRegisterInput" }
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"201": {
+						"description": "Successful Response",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/Message" }
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/v1/users/": {
+			"get": {
+				"tags": ["Users"],
+				"summary": "Get Users",
+				"operationId": "get_users_api_v1_users__get",
+				"parameters": [
+					{
+						"required": false,
+						"schema": { "title": "Id", "type": "integer", "default": "" },
+						"name": "id",
+						"in": "query"
+					},
+					{
+						"required": false,
+						"schema": {
+							"title": "Is Active",
+							"type": "boolean",
+							"default": true
+						},
+						"name": "is_active",
+						"in": "query"
+					},
+					{
+						"required": false,
+						"schema": { "title": "Limit", "type": "integer", "default": 10 },
+						"name": "limit",
+						"in": "query"
+					},
+					{
+						"required": false,
+						"schema": { "title": "Offset", "type": "integer", "default": 0 },
+						"name": "offset",
+						"in": "query"
+					},
+					{
+						"required": false,
+						"schema": { "title": "Filter", "type": "string", "default": "" },
+						"name": "filter",
+						"in": "query"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"title": "Response Get Users Api V1 Users  Get",
+									"type": "array",
+									"items": { "$ref": "#/components/schemas/UserDataOut" }
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				},
+				"security": [{ "OAuth2PasswordBearer": [] }]
+			},
+			"put": {
+				"tags": ["Users"],
+				"summary": "Update User Password",
+				"operationId": "update_user_password_api_v1_users__put",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": { "$ref": "#/components/schemas/PasswordResetInput" }
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": { "application/json": { "schema": {} } }
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/v1/users/{user_id}": {
+			"get": {
+				"tags": ["Users"],
+				"summary": "Get User",
+				"operationId": "get_user_api_v1_users__user_id__get",
+				"parameters": [
+					{
+						"required": true,
+						"schema": { "title": "User Id", "type": "integer" },
+						"name": "user_id",
+						"in": "path"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/UserDataOut" }
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				},
+				"security": [{ "OAuth2PasswordBearer": [] }]
+			}
+		},
+		"/api/v1/users/me": {
+			"get": {
+				"tags": ["Users"],
+				"summary": "Get User Current User Data",
+				"operationId": "get_user_current_user_data_api_v1_users_me_get",
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/UserDataOut" }
+							}
+						}
+					}
+				},
+				"security": [{ "OAuth2PasswordBearer": [] }]
+			}
+		},
+		"/api/v1/users/passwordResetLink": {
+			"post": {
+				"tags": ["Users"],
+				"summary": "Reset Password Link",
+				"operationId": "reset_password_link_api_v1_users_passwordResetLink_post",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": { "$ref": "#/components/schemas/GetPasswordResetLink" }
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": { "application/json": { "schema": {} } }
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/v1/users/account/activate": {
+			"post": {
+				"tags": ["Users"],
+				"summary": "Verify User Email",
+				"operationId": "verify_user_email_api_v1_users_account_activate_post",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/UserAccountVerifyToken"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": { "application/json": { "schema": {} } }
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/v1/users/{userId}": {
+			"delete": {
+				"tags": ["Users"],
+				"summary": "Delete User",
+				"operationId": "delete_user_api_v1_users__userId__delete",
+				"parameters": [
+					{
+						"required": true,
+						"schema": { "title": "Userid", "type": "string" },
+						"name": "userId",
+						"in": "path"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": { "application/json": { "schema": {} } }
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				},
+				"security": [{ "OAuth2PasswordBearer": [] }]
+			}
+		},
+		"/api/v1/users/{user_id}/role": {
+			"get": {
+				"tags": ["Users"],
+				"summary": "Get User Roles",
+				"operationId": "get_user_roles_api_v1_users__user_id__role_get",
+				"parameters": [
+					{
+						"required": true,
+						"schema": { "title": "User Id", "type": "integer" },
+						"name": "user_id",
+						"in": "path"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/PermissionOut" }
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				},
+				"security": [{ "OAuth2PasswordBearer": [] }]
+			}
+		},
+		"/api/v1/users/role": {
+			"put": {
+				"tags": ["Users"],
+				"summary": "Update User Role",
+				"operationId": "update_user_role_api_v1_users_role_put",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": { "$ref": "#/components/schemas/UserPermissionUpdate" }
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": { "application/json": { "schema": {} } }
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				},
+				"security": [{ "OAuth2PasswordBearer": [] }]
+			},
+			"delete": {
+				"tags": ["Users"],
+				"summary": "Remove User Role",
+				"operationId": "remove_user_role_api_v1_users_role_delete",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": { "$ref": "#/components/schemas/UserPermissionUpdate" }
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": { "application/json": { "schema": {} } }
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				},
+				"security": [{ "OAuth2PasswordBearer": [] }]
+			}
+		},
+		"/api/v1/auth/login": {
+			"post": {
+				"tags": ["Auth"],
+				"summary": "Auth Login",
+				"operationId": "auth_login_api_v1_auth_login_post",
+				"requestBody": {
+					"content": {
+						"application/x-www-form-urlencoded": {
+							"schema": {
+								"$ref": "#/components/schemas/Body_auth_login_api_v1_auth_login_post"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/TokenData" }
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/v1/auth/token-refresh": {
+			"post": {
+				"tags": ["Auth"],
+				"summary": "Auth Login Token Refresh",
+				"operationId": "auth_login_token_refresh_api_v1_auth_token_refresh_post",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": { "$ref": "#/components/schemas/UserRefreshTokenInput" }
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": { "application/json": { "schema": {} } }
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/v1/auth/check/dev": {
+			"post": {
+				"tags": ["Auth"],
+				"summary": "Check User Email",
+				"operationId": "check_user_email_api_v1_auth_check_dev_post",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": { "$ref": "#/components/schemas/CheckUserEmail" }
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/Message" }
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/v1/authors/": {
+			"get": {
+				"tags": ["Author"],
+				"summary": "Get Authors",
+				"operationId": "get_authors_api_v1_authors__get",
+				"parameters": [
+					{
+						"required": false,
+						"schema": { "title": "Limit", "type": "integer", "default": 10 },
+						"name": "limit",
+						"in": "query"
+					},
+					{
+						"required": false,
+						"schema": { "title": "Offset", "type": "integer", "default": 0 },
+						"name": "offset",
+						"in": "query"
+					},
+					{
+						"required": false,
+						"schema": { "title": "Filter", "type": "string", "default": "" },
+						"name": "filter",
+						"in": "query"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"title": "Response Get Authors Api V1 Authors  Get",
+									"type": "array",
+									"items": { "$ref": "#/components/schemas/AuthorOut" }
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				}
+			},
+			"put": {
+				"tags": ["Author"],
+				"summary": "Update Author Data",
+				"operationId": "update_author_data_api_v1_authors__put",
+				"requestBody": {
+					"content": {
+						"multipart/form-data": {
+							"schema": {
+								"$ref": "#/components/schemas/Body_update_author_data_api_v1_authors__put"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": { "application/json": { "schema": {} } }
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				},
+				"security": [{ "OAuth2PasswordBearer": [] }]
+			},
+			"post": {
+				"tags": ["Author"],
+				"summary": "Create Author",
+				"operationId": "create_author_api_v1_authors__post",
+				"requestBody": {
+					"content": {
+						"multipart/form-data": {
+							"schema": {
+								"$ref": "#/components/schemas/Body_create_author_api_v1_authors__post"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"201": {
+						"description": "Successful Response",
+						"content": { "application/json": { "schema": {} } }
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				},
+				"security": [{ "OAuth2PasswordBearer": [] }]
+			}
+		},
+		"/api/v1/authors/{author_id}": {
+			"get": {
+				"tags": ["Author"],
+				"summary": "Get Author Data",
+				"operationId": "get_author_data_api_v1_authors__author_id__get",
+				"parameters": [
+					{
+						"required": true,
+						"schema": { "title": "Author Id", "type": "integer" },
+						"name": "author_id",
+						"in": "path"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/AuthorOut" }
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"tags": ["Author"],
+				"summary": "Remove Author",
+				"operationId": "remove_author_api_v1_authors__author_id__delete",
+				"parameters": [
+					{
+						"required": true,
+						"schema": { "title": "Author Id", "type": "integer" },
+						"name": "author_id",
+						"in": "path"
+					}
+				],
+				"responses": {
+					"204": { "description": "Successful Response" },
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				},
+				"security": [{ "OAuth2PasswordBearer": [] }]
+			}
+		},
+		"/api/v1/address/": {
+			"get": {
+				"tags": ["Shipping Address"],
+				"summary": "Get Addresses",
+				"operationId": "get_addresses_api_v1_address__get",
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"title": "Response Get Addresses Api V1 Address  Get",
+									"type": "array",
+									"items": { "$ref": "#/components/schemas/AddressOut" }
+								}
+							}
+						}
+					}
+				},
+				"security": [{ "OAuth2PasswordBearer": [] }]
+			},
+			"post": {
+				"tags": ["Shipping Address"],
+				"summary": "Create Address",
+				"operationId": "create_address_api_v1_address__post",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": { "$ref": "#/components/schemas/AddressIn" }
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"201": {
+						"description": "Successful Response",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/AddressOut" }
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				},
+				"security": [{ "OAuth2PasswordBearer": [] }]
+			}
+		},
+		"/api/v1/address/{address_id}": {
+			"get": {
+				"tags": ["Shipping Address"],
+				"summary": "Get Address",
+				"operationId": "get_address_api_v1_address__address_id__get",
+				"parameters": [
+					{
+						"required": true,
+						"schema": { "title": "Address Id", "type": "integer" },
+						"name": "address_id",
+						"in": "path"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/AddressOut" }
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				},
+				"security": [{ "OAuth2PasswordBearer": [] }]
+			},
+			"put": {
+				"tags": ["Shipping Address"],
+				"summary": "Update Address",
+				"operationId": "update_address_api_v1_address__address_id__put",
+				"parameters": [
+					{
+						"required": true,
+						"schema": { "title": "Address Id", "type": "integer" },
+						"name": "address_id",
+						"in": "path"
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": { "$ref": "#/components/schemas/AddressIn" }
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/Message" }
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				},
+				"security": [{ "OAuth2PasswordBearer": [] }]
+			},
+			"delete": {
+				"tags": ["Shipping Address"],
+				"summary": "Delete Address",
+				"operationId": "delete_address_api_v1_address__address_id__delete",
+				"parameters": [
+					{
+						"required": true,
+						"schema": { "title": "Address Id", "type": "integer" },
+						"name": "address_id",
+						"in": "path"
+					}
+				],
+				"responses": {
+					"204": { "description": "Successful Response" },
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				},
+				"security": [{ "OAuth2PasswordBearer": [] }]
+			}
+		},
+		"/api/v1/carts/": {
+			"get": {
+				"tags": ["Carts"],
+				"summary": "Get Carts",
+				"operationId": "get_carts_api_v1_carts__get",
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"title": "Response Get Carts Api V1 Carts  Get",
+									"type": "array",
+									"items": { "$ref": "#/components/schemas/CartOut" }
+								}
+							}
+						}
+					}
+				},
+				"security": [{ "OAuth2PasswordBearer": [] }]
+			},
+			"put": {
+				"tags": ["Carts"],
+				"summary": "Update Cart",
+				"operationId": "update_cart_api_v1_carts__put",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": { "$ref": "#/components/schemas/CartUpdateIn" }
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/CartOut" }
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				},
+				"security": [{ "OAuth2PasswordBearer": [] }]
+			},
+			"post": {
+				"tags": ["Carts"],
+				"summary": "Create Cart",
+				"operationId": "create_cart_api_v1_carts__post",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": { "$ref": "#/components/schemas/CartIn" }
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"201": {
+						"description": "Successful Response",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/Message" }
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				},
+				"security": [{ "OAuth2PasswordBearer": [] }]
+			}
+		},
+		"/api/v1/carts/{cartId}": {
+			"get": {
+				"tags": ["Carts"],
+				"summary": "Get Cart",
+				"operationId": "get_cart_api_v1_carts__cartId__get",
+				"parameters": [
+					{
+						"required": true,
+						"schema": { "title": "Cartid", "type": "integer" },
+						"name": "cartId",
+						"in": "path"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/CartOut" }
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				},
+				"security": [{ "OAuth2PasswordBearer": [] }]
+			},
+			"delete": {
+				"tags": ["Carts"],
+				"summary": "Delete Cart",
+				"operationId": "delete_cart_api_v1_carts__cartId__delete",
+				"parameters": [
+					{
+						"required": true,
+						"schema": { "title": "Cartid", "type": "integer" },
+						"name": "cartId",
+						"in": "path"
+					}
+				],
+				"responses": {
+					"204": { "description": "Successful Response" },
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				},
+				"security": [{ "OAuth2PasswordBearer": [] }]
+			}
+		},
+		"/api/v1/products/": {
+			"get": {
+				"tags": ["Products"],
+				"summary": "Get All Products",
+				"operationId": "get_all_products_api_v1_products__get",
+				"parameters": [
+					{
+						"required": false,
+						"schema": { "title": "Limit", "type": "integer", "default": 10 },
+						"name": "limit",
+						"in": "query"
+					},
+					{
+						"required": false,
+						"schema": { "title": "Offset", "type": "integer", "default": 0 },
+						"name": "offset",
+						"in": "query"
+					},
+					{
+						"required": false,
+						"schema": { "title": "Filter", "type": "string", "default": "" },
+						"name": "filter",
+						"in": "query"
+					},
+					{
+						"required": false,
+						"schema": {
+							"title": "Is Series",
+							"type": "boolean",
+							"default": false
+						},
+						"name": "is_series",
+						"in": "query"
+					},
+					{
+						"required": false,
+						"schema": {
+							"title": "Is Assigned",
+							"type": "boolean",
+							"default": false
+						},
+						"name": "is_assigned",
+						"in": "query"
+					},
+					{
+						"required": false,
+						"schema": {
+							"title": "Is Active",
+							"type": "boolean",
+							"default": true
+						},
+						"name": "is_active",
+						"in": "query"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"title": "Response Get All Products Api V1 Products  Get",
+									"type": "array",
+									"items": { "$ref": "#/components/schemas/ProductOut" }
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				}
+			},
+			"post": {
+				"tags": ["Products"],
+				"summary": "Create Product",
+				"operationId": "create_product_api_v1_products__post",
+				"requestBody": {
+					"content": {
+						"multipart/form-data": {
+							"schema": {
+								"$ref": "#/components/schemas/Body_create_product_api_v1_products__post"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"201": {
+						"description": "Successful Response",
+						"content": { "application/json": { "schema": {} } }
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/v1/products/{productId}": {
+			"get": {
+				"tags": ["Products"],
+				"summary": "Get Product",
+				"operationId": "get_product_api_v1_products__productId__get",
+				"parameters": [
+					{
+						"required": true,
+						"schema": { "title": "Productid", "type": "integer" },
+						"name": "productId",
+						"in": "path"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/ProductOut" }
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				}
+			},
+			"put": {
+				"tags": ["Products"],
+				"summary": "Update Product",
+				"operationId": "update_product_api_v1_products__productId__put",
+				"parameters": [
+					{
+						"required": true,
+						"schema": { "title": "Productid", "type": "integer" },
+						"name": "productId",
+						"in": "path"
+					}
+				],
+				"requestBody": {
+					"content": {
+						"multipart/form-data": {
+							"schema": {
+								"$ref": "#/components/schemas/Body_update_product_api_v1_products__productId__put"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"201": {
+						"description": "Successful Response",
+						"content": { "application/json": { "schema": {} } }
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"tags": ["Products"],
+				"summary": "Delete Product",
+				"operationId": "delete_product_api_v1_products__productId__delete",
+				"parameters": [
+					{
+						"required": true,
+						"schema": { "title": "Productid", "type": "integer" },
+						"name": "productId",
+						"in": "path"
+					}
+				],
+				"responses": {
+					"204": { "description": "Successful Response" },
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/v1/variations/": {
+			"get": {
+				"tags": ["Variations"],
+				"summary": "Get All Variations",
+				"operationId": "get_all_variations_api_v1_variations__get",
+				"parameters": [
+					{
+						"required": false,
+						"schema": { "title": "Limit", "type": "integer", "default": 10 },
+						"name": "limit",
+						"in": "query"
+					},
+					{
+						"required": false,
+						"schema": { "title": "Offset", "type": "integer", "default": 0 },
+						"name": "offset",
+						"in": "query"
+					},
+					{
+						"required": false,
+						"schema": { "title": "Filter", "type": "string", "default": "" },
+						"name": "filter",
+						"in": "query"
+					},
+					{
+						"required": false,
+						"schema": {
+							"title": "Is Active",
+							"type": "boolean",
+							"default": true
+						},
+						"name": "is_active",
+						"in": "query"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"title": "Response Get All Variations Api V1 Variations  Get",
+									"type": "array",
+									"items": { "$ref": "#/components/schemas/VariationOut" }
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				}
+			},
+			"put": {
+				"tags": ["Variations"],
+				"summary": "Add Product To Variation",
+				"operationId": "add_product_to_variation_api_v1_variations__put",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": { "$ref": "#/components/schemas/VariationProductIn" }
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": { "application/json": { "schema": {} } }
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				}
+			},
+			"post": {
+				"tags": ["Variations"],
+				"summary": "Create Product Variation",
+				"operationId": "create_product_variation_api_v1_variations__post",
+				"requestBody": {
+					"content": {
+						"multipart/form-data": {
+							"schema": {
+								"$ref": "#/components/schemas/Body_create_product_variation_api_v1_variations__post"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"201": {
+						"description": "Successful Response",
+						"content": { "application/json": { "schema": {} } }
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				}
+			},
+			"patch": {
+				"tags": ["Variations"],
+				"summary": "Remove Product From Variation",
+				"operationId": "remove_product_from_variation_api_v1_variations__patch",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": { "$ref": "#/components/schemas/VariationProductIn" }
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": { "application/json": { "schema": {} } }
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/v1/variations/{variationId}": {
+			"get": {
+				"tags": ["Variations"],
+				"summary": "Get Variation",
+				"operationId": "get_variation_api_v1_variations__variationId__get",
+				"parameters": [
+					{
+						"required": true,
+						"schema": { "title": "Variationid", "type": "integer" },
+						"name": "variationId",
+						"in": "path"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/VariationOut" }
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				}
+			},
+			"put": {
+				"tags": ["Variations"],
+				"summary": "Update Product Variation",
+				"operationId": "update_product_variation_api_v1_variations__variationId__put",
+				"parameters": [
+					{
+						"required": true,
+						"schema": { "title": "Variationid", "type": "integer" },
+						"name": "variationId",
+						"in": "path"
+					}
+				],
+				"requestBody": {
+					"content": {
+						"multipart/form-data": {
+							"schema": {
+								"$ref": "#/components/schemas/Body_update_product_variation_api_v1_variations__variationId__put"
+							}
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": { "application/json": { "schema": {} } }
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"tags": ["Variations"],
+				"summary": "Delete Variation",
+				"operationId": "delete_variation_api_v1_variations__variationId__delete",
+				"parameters": [
+					{
+						"required": true,
+						"schema": { "title": "Variationid", "type": "integer" },
+						"name": "variationId",
+						"in": "path"
+					}
+				],
+				"responses": {
+					"204": { "description": "Successful Response" },
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/v1/variations/{variationId}/products": {
+			"get": {
+				"tags": ["Variations"],
+				"summary": "Get Product Variations",
+				"operationId": "get_product_variations_api_v1_variations__variationId__products_get",
+				"parameters": [
+					{
+						"required": true,
+						"schema": { "title": "Variationid", "type": "integer" },
+						"name": "variationId",
+						"in": "path"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"title": "Response Get Product Variations Api V1 Variations  Variationid  Products Get",
+									"type": "array",
+									"items": { "$ref": "#/components/schemas/ProductOut" }
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/v1/products/category/": {
+			"get": {
+				"tags": ["Product category"],
+				"summary": "Get All Categories",
+				"operationId": "get_all_categories_api_v1_products_category__get",
+				"parameters": [
+					{
+						"required": false,
+						"schema": { "title": "Limit", "type": "integer", "default": 10 },
+						"name": "limit",
+						"in": "query"
+					},
+					{
+						"required": false,
+						"schema": { "title": "Offset", "type": "integer", "default": 0 },
+						"name": "offset",
+						"in": "query"
+					},
+					{
+						"required": false,
+						"schema": { "title": "Filter", "type": "string", "default": "" },
+						"name": "filter",
+						"in": "query"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"title": "Response Get All Categories Api V1 Products Category  Get",
+									"type": "array",
+									"items": { "$ref": "#/components/schemas/CategoryOut" }
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				}
+			},
+			"post": {
+				"tags": ["Product category"],
+				"summary": "Create Category",
+				"operationId": "create_category_api_v1_products_category__post",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": { "$ref": "#/components/schemas/CategoryIn" }
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"201": {
+						"description": "Successful Response",
+						"content": { "application/json": { "schema": {} } }
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/v1/products/category/{id}": {
+			"get": {
+				"tags": ["Product category"],
+				"summary": "Get Category",
+				"operationId": "get_category_api_v1_products_category__id__get",
+				"parameters": [
+					{
+						"required": true,
+						"schema": { "title": "Id", "type": "integer" },
+						"name": "id",
+						"in": "path"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/CategoryOut" }
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				}
+			},
+			"put": {
+				"tags": ["Product category"],
+				"summary": "Update Category",
+				"operationId": "update_category_api_v1_products_category__id__put",
+				"parameters": [
+					{
+						"required": true,
+						"schema": { "title": "Id", "type": "integer" },
+						"name": "id",
+						"in": "path"
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": { "$ref": "#/components/schemas/CategoryIn" }
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/Message" }
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"tags": ["Product category"],
+				"summary": "Delete Category",
+				"operationId": "delete_category_api_v1_products_category__id__delete",
+				"parameters": [
+					{
+						"required": true,
+						"schema": { "title": "Id", "type": "integer" },
+						"name": "id",
+						"in": "path"
+					}
+				],
+				"responses": {
+					"204": { "description": "Successful Response" },
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/v1/reviews/": {
+			"post": {
+				"tags": ["Review"],
+				"summary": "Create Review",
+				"operationId": "create_review_api_v1_reviews__post",
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": { "$ref": "#/components/schemas/ReviewIn" }
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"201": {
+						"description": "Successful Response",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/Message" }
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				},
+				"security": [{ "OAuth2PasswordBearer": [] }]
+			}
+		},
+		"/api/v1/reviews/{id}": {
+			"get": {
+				"tags": ["Review"],
+				"summary": "Get User Review",
+				"operationId": "get_user_review_api_v1_reviews__id__get",
+				"parameters": [
+					{
+						"required": true,
+						"schema": { "title": "Id", "type": "integer" },
+						"name": "id",
+						"in": "path"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/ReviewOut" }
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				},
+				"security": [{ "OAuth2PasswordBearer": [] }]
+			},
+			"put": {
+				"tags": ["Review"],
+				"summary": "Update Review",
+				"operationId": "update_review_api_v1_reviews__id__put",
+				"parameters": [
+					{
+						"required": true,
+						"schema": { "title": "Id", "type": "integer" },
+						"name": "id",
+						"in": "path"
+					}
+				],
+				"requestBody": {
+					"content": {
+						"application/json": {
+							"schema": { "$ref": "#/components/schemas/ReviewIn" }
+						}
+					},
+					"required": true
+				},
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/Message" }
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				},
+				"security": [{ "OAuth2PasswordBearer": [] }]
+			},
+			"delete": {
+				"tags": ["Review"],
+				"summary": "Delete Review",
+				"operationId": "delete_review_api_v1_reviews__id__delete",
+				"parameters": [
+					{
+						"required": true,
+						"schema": { "title": "Id", "type": "integer" },
+						"name": "id",
+						"in": "path"
+					}
+				],
+				"responses": {
+					"204": { "description": "Successful Response" },
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				},
+				"security": [{ "OAuth2PasswordBearer": [] }]
+			}
+		},
+		"/api/v1/reviews/product/{productId}": {
+			"get": {
+				"tags": ["Review"],
+				"summary": "Get Product Review",
+				"operationId": "get_product_review_api_v1_reviews_product__productId__get",
+				"parameters": [
+					{
+						"required": true,
+						"schema": { "title": "Productid", "type": "integer" },
+						"name": "productId",
+						"in": "path"
+					},
+					{
+						"required": false,
+						"schema": { "title": "Limit", "type": "integer", "default": 10 },
+						"name": "limit",
+						"in": "query"
+					},
+					{
+						"required": false,
+						"schema": { "title": "Offset", "type": "integer", "default": 0 },
+						"name": "offset",
+						"in": "query"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"title": "Response Get Product Review Api V1 Reviews Product  Productid  Get",
+									"type": "array",
+									"items": { "$ref": "#/components/schemas/ReviewOut" }
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/v1/reviews/product/{productId}/count": {
+			"get": {
+				"tags": ["Review"],
+				"summary": "Get Product Review Count",
+				"operationId": "get_product_review_count_api_v1_reviews_product__productId__count_get",
+				"parameters": [
+					{
+						"required": true,
+						"schema": { "title": "Productid", "type": "integer" },
+						"name": "productId",
+						"in": "path"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"title": "Response Get Product Review Count Api V1 Reviews Product  Productid  Count Get",
+									"type": "integer"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/v1/reviews/product/{productId}/rating": {
+			"get": {
+				"tags": ["Review"],
+				"summary": "Get Product Review Average",
+				"operationId": "get_product_review_average_api_v1_reviews_product__productId__rating_get",
+				"parameters": [
+					{
+						"required": true,
+						"schema": { "title": "Productid", "type": "integer" },
+						"name": "productId",
+						"in": "path"
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Successful Response",
+						"content": {
+							"application/json": {
+								"schema": {
+									"title": "Response Get Product Review Average Api V1 Reviews Product  Productid  Rating Get",
+									"type": "integer"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Error",
+						"content": {
+							"application/json": {
+								"schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+							}
+						}
+					}
+				}
+			}
+		}
+	},
+	"components": {
+		"schemas": {
+			"AddressIn": {
+				"title": "AddressIn",
+				"required": ["street", "state", "city", "country", "tel", "zipcode"],
+				"type": "object",
+				"properties": {
+					"street": { "title": "Street", "maxLength": 50, "type": "string" },
+					"state": { "title": "State", "maxLength": 20, "type": "string" },
+					"city": { "title": "City", "maxLength": 20, "type": "string" },
+					"country": { "title": "Country", "maxLength": 20, "type": "string" },
+					"tel": { "title": "Tel", "maxLength": 15, "type": "string" },
+					"zipcode": { "title": "Zipcode", "maxLength": 10, "type": "string" }
+				}
+			},
+			"AddressOut": {
+				"title": "AddressOut",
+				"required": [
+					"street",
+					"state",
+					"city",
+					"country",
+					"tel",
+					"zipcode",
+					"id"
+				],
+				"type": "object",
+				"properties": {
+					"street": { "title": "Street", "maxLength": 50, "type": "string" },
+					"state": { "title": "State", "maxLength": 20, "type": "string" },
+					"city": { "title": "City", "maxLength": 20, "type": "string" },
+					"country": { "title": "Country", "maxLength": 20, "type": "string" },
+					"tel": { "title": "Tel", "maxLength": 15, "type": "string" },
+					"zipcode": { "title": "Zipcode", "maxLength": 10, "type": "string" },
+					"id": { "title": "Id", "type": "integer" }
+				}
+			},
+			"AuthorOut": {
+				"title": "AuthorOut",
+				"required": ["firstname", "lastname", "email", "description", "id"],
+				"type": "object",
+				"properties": {
+					"title": {
+						"allOf": [{ "$ref": "#/components/schemas/AuthorTitle" }],
+						"default": "dr"
+					},
+					"firstname": { "title": "Firstname", "type": "string" },
+					"lastname": { "title": "Lastname", "type": "string" },
+					"email": { "title": "Email", "type": "string", "format": "email" },
+					"description": { "title": "Description", "type": "string" },
+					"id": { "title": "Id", "type": "integer" },
+					"profile_img": { "$ref": "#/components/schemas/MediaBase" }
+				}
+			},
+			"AuthorTitle": {
+				"title": "AuthorTitle",
+				"enum": ["mr", "mrs", "dr", "miss", "prof"],
+				"type": "string",
+				"description": "An enumeration."
+			},
+			"Body_auth_login_api_v1_auth_login_post": {
+				"title": "Body_auth_login_api_v1_auth_login_post",
+				"required": ["username", "password"],
+				"type": "object",
+				"properties": {
+					"grant_type": {
+						"title": "Grant Type",
+						"pattern": "password",
+						"type": "string"
+					},
+					"username": { "title": "Username", "type": "string" },
+					"password": { "title": "Password", "type": "string" },
+					"scope": { "title": "Scope", "type": "string", "default": "" },
+					"client_id": { "title": "Client Id", "type": "string" },
+					"client_secret": { "title": "Client Secret", "type": "string" }
+				}
+			},
+			"Body_create_author_api_v1_authors__post": {
+				"title": "Body_create_author_api_v1_authors__post",
+				"required": ["firstname", "lastname", "email", "description"],
+				"type": "object",
+				"properties": {
+					"profile_img": {
+						"title": "Profile Img",
+						"type": "string",
+						"format": "binary"
+					},
+					"title": {
+						"allOf": [{ "$ref": "#/components/schemas/AuthorTitle" }],
+						"default": "dr"
+					},
+					"firstname": { "title": "Firstname", "type": "string" },
+					"lastname": { "title": "Lastname", "type": "string" },
+					"email": { "title": "Email", "type": "string", "format": "email" },
+					"description": { "title": "Description", "type": "string" }
+				}
+			},
+			"Body_create_product_api_v1_products__post": {
+				"title": "Body_create_product_api_v1_products__post",
+				"required": [
+					"cover_img",
+					"pdf_file",
+					"paper_back_price",
+					"name",
+					"description",
+					"categories"
+				],
+				"type": "object",
+				"properties": {
+					"cover_img": {
+						"title": "Cover Img",
+						"type": "string",
+						"format": "binary"
+					},
+					"gallery": {
+						"title": "Gallery",
+						"type": "array",
+						"items": { "type": "string", "format": "binary" }
+					},
+					"pdf_file": {
+						"title": "Pdf File",
+						"type": "string",
+						"format": "binary"
+					},
+					"in_stock": {
+						"title": "In Stock",
+						"type": "boolean",
+						"default": true
+					},
+					"discount": { "title": "Discount", "type": "number", "default": 0.0 },
+					"paper_back_price": { "title": "Paper Back Price", "type": "number" },
+					"paper_back_qty": {
+						"title": "Paper Back Qty",
+						"type": "integer",
+						"default": 1
+					},
+					"hard_back_price": {
+						"title": "Hard Back Price",
+						"type": "number",
+						"default": 0.0
+					},
+					"hard_back_qty": {
+						"title": "Hard Back Qty",
+						"type": "integer",
+						"default": 1
+					},
+					"pdf_price": {
+						"title": "Pdf Price",
+						"type": "number",
+						"default": 0.0
+					},
+					"isbn10": { "title": "Isbn10", "type": "string" },
+					"isbn13": { "title": "Isbn13", "type": "string" },
+					"language": {
+						"title": "Language",
+						"type": "string",
+						"default": "english"
+					},
+					"pub_date": {
+						"title": "Pub Date",
+						"type": "string",
+						"format": "date-time"
+					},
+					"pages": { "title": "Pages", "type": "integer" },
+					"height": { "title": "Height", "type": "number", "default": 0.0 },
+					"width": { "title": "Width", "type": "number", "default": 0.0 },
+					"weight": { "title": "Weight", "type": "number", "default": 0.0 },
+					"name": { "title": "Name", "maxLength": 300, "type": "string" },
+					"description": {
+						"title": "Description",
+						"maxLength": 1000,
+						"type": "string"
+					},
+					"categories": {
+						"title": "Categories",
+						"maxLength": 1000,
+						"type": "string"
+					},
+					"is_series": {
+						"title": "Is Series",
+						"type": "boolean",
+						"default": false
+					},
+					"is_active": {
+						"title": "Is Active",
+						"type": "boolean",
+						"default": true
+					},
+					"is_assigned": {
+						"title": "Is Assigned",
+						"type": "boolean",
+						"default": false
+					}
+				}
+			},
+			"Body_create_product_variation_api_v1_variations__post": {
+				"title": "Body_create_product_variation_api_v1_variations__post",
+				"required": ["cover_img", "name", "description"],
+				"type": "object",
+				"properties": {
+					"cover_img": {
+						"title": "Cover Img",
+						"type": "string",
+						"format": "binary"
+					},
+					"name": { "title": "Name", "maxLength": 300, "type": "string" },
+					"description": {
+						"title": "Description",
+						"maxLength": 1000,
+						"type": "string"
+					},
+					"is_active": {
+						"title": "Is Active",
+						"type": "boolean",
+						"default": true
+					}
+				}
+			},
+			"Body_update_author_data_api_v1_authors__put": {
+				"title": "Body_update_author_data_api_v1_authors__put",
+				"required": ["firstname", "lastname", "email", "description"],
+				"type": "object",
+				"properties": {
+					"profile_img": {
+						"title": "Profile Img",
+						"type": "string",
+						"format": "binary"
+					},
+					"title": {
+						"allOf": [{ "$ref": "#/components/schemas/AuthorTitle" }],
+						"default": "dr"
+					},
+					"firstname": { "title": "Firstname", "type": "string" },
+					"lastname": { "title": "Lastname", "type": "string" },
+					"email": { "title": "Email", "type": "string", "format": "email" },
+					"description": { "title": "Description", "type": "string" }
+				}
+			},
+			"Body_update_product_api_v1_products__productId__put": {
+				"title": "Body_update_product_api_v1_products__productId__put",
+				"required": ["paper_back_price", "name", "description", "categories"],
+				"type": "object",
+				"properties": {
+					"pdf_file": {
+						"title": "Pdf File",
+						"type": "string",
+						"format": "binary"
+					},
+					"cover_img": {
+						"title": "Cover Img",
+						"type": "string",
+						"format": "binary"
+					},
+					"gallery": {
+						"title": "Gallery",
+						"type": "array",
+						"items": { "type": "string", "format": "binary" }
+					},
+					"in_stock": {
+						"title": "In Stock",
+						"type": "boolean",
+						"default": true
+					},
+					"discount": { "title": "Discount", "type": "number", "default": 0.0 },
+					"paper_back_price": { "title": "Paper Back Price", "type": "number" },
+					"paper_back_qty": {
+						"title": "Paper Back Qty",
+						"type": "integer",
+						"default": 1
+					},
+					"hard_back_price": {
+						"title": "Hard Back Price",
+						"type": "number",
+						"default": 0.0
+					},
+					"hard_back_qty": {
+						"title": "Hard Back Qty",
+						"type": "integer",
+						"default": 1
+					},
+					"pdf_price": {
+						"title": "Pdf Price",
+						"type": "number",
+						"default": 0.0
+					},
+					"isbn10": { "title": "Isbn10", "type": "string" },
+					"isbn13": { "title": "Isbn13", "type": "string" },
+					"language": {
+						"title": "Language",
+						"type": "string",
+						"default": "english"
+					},
+					"pub_date": {
+						"title": "Pub Date",
+						"type": "string",
+						"format": "date-time"
+					},
+					"pages": { "title": "Pages", "type": "integer" },
+					"height": { "title": "Height", "type": "number", "default": 0.0 },
+					"width": { "title": "Width", "type": "number", "default": 0.0 },
+					"weight": { "title": "Weight", "type": "number", "default": 0.0 },
+					"name": { "title": "Name", "maxLength": 300, "type": "string" },
+					"description": {
+						"title": "Description",
+						"maxLength": 1000,
+						"type": "string"
+					},
+					"categories": {
+						"title": "Categories",
+						"maxLength": 1000,
+						"type": "string"
+					},
+					"is_series": {
+						"title": "Is Series",
+						"type": "boolean",
+						"default": false
+					},
+					"is_active": {
+						"title": "Is Active",
+						"type": "boolean",
+						"default": true
+					},
+					"is_assigned": {
+						"title": "Is Assigned",
+						"type": "boolean",
+						"default": false
+					}
+				}
+			},
+			"Body_update_product_variation_api_v1_variations__variationId__put": {
+				"title": "Body_update_product_variation_api_v1_variations__variationId__put",
+				"required": ["name", "description"],
+				"type": "object",
+				"properties": {
+					"cover_img": {
+						"title": "Cover Img",
+						"type": "string",
+						"format": "binary"
+					},
+					"name": { "title": "Name", "maxLength": 300, "type": "string" },
+					"description": {
+						"title": "Description",
+						"maxLength": 1000,
+						"type": "string"
+					},
+					"is_active": {
+						"title": "Is Active",
+						"type": "boolean",
+						"default": true
+					}
+				}
+			},
+			"CartIn": {
+				"title": "CartIn",
+				"required": ["productId", "pdf", "paper_back_qty", "hard_back_qty"],
+				"type": "object",
+				"properties": {
+					"productId": { "title": "Productid", "type": "integer" },
+					"pdf": { "title": "Pdf", "type": "boolean" },
+					"paper_back_qty": { "title": "Paper Back Qty", "type": "integer" },
+					"hard_back_qty": { "title": "Hard Back Qty", "type": "integer" }
+				}
+			},
+			"CartOut": {
+				"title": "CartOut",
+				"required": ["id", "pdf", "paper_back_qty", "hard_back_qty", "product"],
+				"type": "object",
+				"properties": {
+					"id": { "title": "Id", "type": "integer" },
+					"pdf": { "title": "Pdf", "type": "boolean" },
+					"paper_back_qty": { "title": "Paper Back Qty", "type": "integer" },
+					"hard_back_qty": { "title": "Hard Back Qty", "type": "integer" },
+					"product": { "$ref": "#/components/schemas/CartProductOut" }
+				}
+			},
+			"CartProductOut": {
+				"title": "CartProductOut",
+				"required": ["name", "property"],
+				"type": "object",
+				"properties": {
+					"name": { "title": "Name", "type": "string" },
+					"cover_img": { "$ref": "#/components/schemas/MediaBase" },
+					"property": { "$ref": "#/components/schemas/CartProductPropertyOut" }
+				}
+			},
+			"CartProductPropertyOut": {
+				"title": "CartProductPropertyOut",
+				"required": ["hard_back_price", "paper_back_price", "pdf_price"],
+				"type": "object",
+				"properties": {
+					"hard_back_price": { "title": "Hard Back Price", "type": "number" },
+					"paper_back_price": { "title": "Paper Back Price", "type": "number" },
+					"pdf_price": { "title": "Pdf Price", "type": "number" }
+				}
+			},
+			"CartUpdateIn": {
+				"title": "CartUpdateIn",
+				"required": ["cartId", "pdf", "paper_back_qty", "hard_back_qty"],
+				"type": "object",
+				"properties": {
+					"cartId": { "title": "Cartid", "type": "integer" },
+					"pdf": { "title": "Pdf", "type": "boolean" },
+					"paper_back_qty": { "title": "Paper Back Qty", "type": "integer" },
+					"hard_back_qty": { "title": "Hard Back Qty", "type": "integer" }
+				}
+			},
+			"CategoryIn": {
+				"title": "CategoryIn",
+				"required": ["name"],
+				"type": "object",
+				"properties": { "name": { "title": "Name", "type": "string" } }
+			},
+			"CategoryOut": {
+				"title": "CategoryOut",
+				"required": ["id", "name"],
+				"type": "object",
+				"properties": {
+					"id": { "title": "Id", "type": "integer" },
+					"name": { "title": "Name", "type": "string" }
+				}
+			},
+			"CheckUserEmail": {
+				"title": "CheckUserEmail",
+				"required": ["email"],
+				"type": "object",
+				"properties": { "email": { "title": "Email", "type": "string" } }
+			},
+			"GetPasswordResetLink": {
+				"title": "GetPasswordResetLink",
+				"required": ["email"],
+				"type": "object",
+				"properties": {
+					"email": { "title": "Email", "type": "string", "format": "email" }
+				}
+			},
+			"HTTPValidationError": {
+				"title": "HTTPValidationError",
+				"type": "object",
+				"properties": {
+					"detail": {
+						"title": "Detail",
+						"type": "array",
+						"items": { "$ref": "#/components/schemas/ValidationError" }
+					}
+				}
+			},
+			"HealthCheck": {
+				"title": "HealthCheck",
+				"required": ["name", "version", "description"],
+				"type": "object",
+				"properties": {
+					"name": { "title": "Name", "type": "string" },
+					"version": { "title": "Version", "type": "string" },
+					"description": { "title": "Description", "type": "string" }
+				}
+			},
+			"MediaBase": {
+				"title": "MediaBase",
+				"type": "object",
+				"properties": {
+					"alt": { "title": "Alt", "type": "string" },
+					"url": { "title": "Url", "type": "string" },
+					"content_type": { "title": "Content Type", "type": "string" }
+				}
+			},
+			"Message": {
+				"title": "Message",
+				"required": ["message"],
+				"type": "object",
+				"properties": { "message": { "title": "Message", "type": "string" } }
+			},
+			"PasswordResetInput": {
+				"title": "PasswordResetInput",
+				"required": ["token", "password", "confirm_password"],
+				"type": "object",
+				"properties": {
+					"token": { "title": "Token", "type": "string" },
+					"password": { "title": "Password", "type": "string" },
+					"confirm_password": { "title": "Confirm Password", "type": "string" }
+				}
+			},
+			"PermissionIn": {
+				"title": "PermissionIn",
+				"required": ["name"],
+				"type": "object",
+				"properties": {
+					"name": {
+						"title": "Name",
+						"maxLength": 20,
+						"type": "string",
+						"description": "Name of the permission"
+					}
+				}
+			},
+			"PermissionOut": {
+				"title": "PermissionOut",
+				"required": ["id", "name"],
+				"type": "object",
+				"properties": {
+					"id": {
+						"title": "Id",
+						"type": "integer",
+						"description": "Id of the permission"
+					},
+					"name": {
+						"title": "Name",
+						"maxLength": 20,
+						"type": "string",
+						"description": "Name of the permission"
+					}
+				}
+			},
+			"ProductAttributeOut": {
+				"title": "ProductAttributeOut",
+				"type": "object",
+				"properties": {
+					"isbn10": { "title": "Isbn10", "type": "string" },
+					"isbn13": { "title": "Isbn13", "type": "string" },
+					"language": {
+						"title": "Language",
+						"type": "string",
+						"default": "english"
+					},
+					"pub_date": {
+						"title": "Pub Date",
+						"type": "string",
+						"format": "date-time"
+					},
+					"pages": { "title": "Pages", "type": "integer" },
+					"height": { "title": "Height", "type": "number", "default": 0.0 },
+					"width": { "title": "Width", "type": "number", "default": 0.0 },
+					"weight": { "title": "Weight", "type": "number", "default": 0.0 }
+				}
+			},
+			"ProductOut": {
+				"title": "ProductOut",
+				"required": [
+					"name",
+					"description",
+					"slug",
+					"id",
+					"is_series",
+					"categories",
+					"property",
+					"attribute",
+					"created_at"
+				],
+				"type": "object",
+				"properties": {
+					"name": { "title": "Name", "type": "string" },
+					"description": { "title": "Description", "type": "string" },
+					"slug": { "title": "Slug", "type": "string" },
+					"id": { "title": "Id", "type": "integer" },
+					"is_series": { "title": "Is Series", "type": "boolean" },
+					"author": { "$ref": "#/components/schemas/AuthorOut" },
+					"cover_img": { "$ref": "#/components/schemas/MediaBase" },
+					"categories": {
+						"title": "Categories",
+						"type": "array",
+						"items": { "$ref": "#/components/schemas/CategoryIn" }
+					},
+					"property": { "$ref": "#/components/schemas/ProductPropertyOut" },
+					"attribute": { "$ref": "#/components/schemas/ProductAttributeOut" },
+					"gallery": {
+						"title": "Gallery",
+						"type": "array",
+						"items": { "$ref": "#/components/schemas/MediaBase" }
+					},
+					"created_at": {
+						"title": "Created At",
+						"type": "string",
+						"format": "date-time"
+					}
+				}
+			},
+			"ProductPropertyOut": {
+				"title": "ProductPropertyOut",
+				"required": ["paper_back_price"],
+				"type": "object",
+				"properties": {
+					"in_stock": {
+						"title": "In Stock",
+						"type": "boolean",
+						"default": true
+					},
+					"discount": { "title": "Discount", "type": "number", "default": 0.0 },
+					"paper_back_price": { "title": "Paper Back Price", "type": "number" },
+					"paper_back_qty": {
+						"title": "Paper Back Qty",
+						"type": "integer",
+						"default": 1
+					},
+					"hard_back_price": {
+						"title": "Hard Back Price",
+						"type": "number",
+						"default": 0.0
+					},
+					"hard_back_qty": {
+						"title": "Hard Back Qty",
+						"type": "integer",
+						"default": 1
+					},
+					"pdf_price": {
+						"title": "Pdf Price",
+						"type": "number",
+						"default": 0.0
+					}
+				}
+			},
+			"ReviewIn": {
+				"title": "ReviewIn",
+				"required": ["rating"],
+				"type": "object",
+				"properties": {
+					"comment": { "title": "Comment", "maxLength": 250, "type": "string" },
+					"rating": {
+						"title": "Rating",
+						"exclusiveMaximum": 11.0,
+						"minimum": 0.0,
+						"type": "integer"
+					},
+					"productId": { "title": "Productid", "type": "integer" }
+				}
+			},
+			"ReviewOut": {
+				"title": "ReviewOut",
+				"required": ["id", "comment", "rating", "user", "created_at"],
+				"type": "object",
+				"properties": {
+					"id": { "title": "Id", "type": "integer" },
+					"comment": { "title": "Comment", "type": "string" },
+					"rating": { "title": "Rating", "type": "integer" },
+					"user": { "$ref": "#/components/schemas/ReviewUserOut" },
+					"created_at": {
+						"title": "Created At",
+						"type": "string",
+						"format": "date-time"
+					}
+				}
+			},
+			"ReviewUserOut": {
+				"title": "ReviewUserOut",
+				"required": ["firstname", "lastname", "email"],
+				"type": "object",
+				"properties": {
+					"firstname": { "title": "Firstname", "type": "string" },
+					"lastname": { "title": "Lastname", "type": "string" },
+					"email": { "title": "Email", "type": "string" }
+				}
+			},
+			"TokenData": {
+				"title": "TokenData",
+				"required": ["refresh_token", "access_token"],
+				"type": "object",
+				"properties": {
+					"refresh_token": { "title": "Refresh Token", "type": "string" },
+					"access_token": { "title": "Access Token", "type": "string" },
+					"token_type": {
+						"title": "Token Type",
+						"type": "string",
+						"default": "bearer"
+					}
+				}
+			},
+			"UserAccountVerifyToken": {
+				"title": "UserAccountVerifyToken",
+				"required": ["token"],
+				"type": "object",
+				"properties": { "token": { "title": "Token", "type": "string" } }
+			},
+			"UserDataOut": {
+				"title": "UserDataOut",
+				"required": ["id", "email", "firstname", "lastname", "is_active"],
+				"type": "object",
+				"properties": {
+					"id": { "title": "Id", "type": "integer" },
+					"email": { "title": "Email", "type": "string", "format": "email" },
+					"firstname": { "title": "Firstname", "type": "string" },
+					"lastname": { "title": "Lastname", "type": "string" },
+					"is_active": { "title": "Is Active", "type": "boolean" },
+					"role": { "$ref": "#/components/schemas/PermissionIn" }
+				}
+			},
+			"UserPermissionUpdate": {
+				"title": "UserPermissionUpdate",
+				"required": ["user_id", "role"],
+				"type": "object",
+				"properties": {
+					"user_id": { "title": "User Id", "type": "integer" },
+					"role": { "title": "Role", "type": "string" }
+				}
+			},
+			"UserRefreshTokenInput": {
+				"title": "UserRefreshTokenInput",
+				"required": ["refresh_token"],
+				"type": "object",
+				"properties": {
+					"refresh_token": { "title": "Refresh Token", "type": "string" }
+				}
+			},
+			"UserRegisterInput": {
+				"title": "UserRegisterInput",
+				"required": ["email", "firstname", "lastname", "password"],
+				"type": "object",
+				"properties": {
+					"email": { "title": "Email", "type": "string", "format": "email" },
+					"firstname": {
+						"title": "Firstname",
+						"minLength": 2,
+						"type": "string"
+					},
+					"lastname": { "title": "Lastname", "minLength": 2, "type": "string" },
+					"password": { "title": "Password", "minLength": 5, "type": "string" }
+				}
+			},
+			"ValidationError": {
+				"title": "ValidationError",
+				"required": ["loc", "msg", "type"],
+				"type": "object",
+				"properties": {
+					"loc": {
+						"title": "Location",
+						"type": "array",
+						"items": { "anyOf": [{ "type": "string" }, { "type": "integer" }] }
+					},
+					"msg": { "title": "Message", "type": "string" },
+					"type": { "title": "Error Type", "type": "string" }
+				}
+			},
+			"VariationOut": {
+				"title": "VariationOut",
+				"required": [
+					"name",
+					"description",
+					"slug",
+					"id",
+					"items",
+					"created_at"
+				],
+				"type": "object",
+				"properties": {
+					"name": { "title": "Name", "type": "string" },
+					"description": { "title": "Description", "type": "string" },
+					"slug": { "title": "Slug", "type": "string" },
+					"id": { "title": "Id", "type": "integer" },
+					"cover_img": { "$ref": "#/components/schemas/MediaBase" },
+					"items": {
+						"title": "Items",
+						"type": "array",
+						"items": { "$ref": "#/components/schemas/ProductOut" }
+					},
+					"created_at": {
+						"title": "Created At",
+						"type": "string",
+						"format": "date-time"
+					}
+				}
+			},
+			"VariationProductIn": {
+				"title": "VariationProductIn",
+				"required": ["productId", "variationId"],
+				"type": "object",
+				"properties": {
+					"productId": { "title": "Productid", "type": "integer" },
+					"variationId": { "title": "Variationid", "type": "integer" }
+				}
+			}
+		},
+		"securitySchemes": {
+			"OAuth2PasswordBearer": {
+				"type": "oauth2",
+				"flows": {
+					"password": { "scopes": {}, "tokenUrl": "/api/v1/auth/login" }
+				}
+			}
+		}
+	}
+}
