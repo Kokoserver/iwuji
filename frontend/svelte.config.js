@@ -1,5 +1,5 @@
-import adapter from "@sveltejs/adapter-auto";
-import preprocess from "svelte-preprocess";
+import adapter from "@sveltejs/adapter-auto"
+import preprocess from "svelte-preprocess"
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
@@ -13,10 +13,14 @@ const config = {
 
 	kit: {
 		adapter: adapter(),
+		methodOverride: {
+			allowed: ["PUT", "DELETE"]
+		},
 		alias: {
-			$root: "src"
+			$root: "src",
+			$lib: "src/lib"
 		}
 	}
-};
+}
 
-export default config;
+export default config

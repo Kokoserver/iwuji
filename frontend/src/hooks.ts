@@ -6,30 +6,22 @@ import type {
 	UserRefreshTokenInput,
 	TokenDataIn
 } from "./lib/interface/user.interface"
+import * as cookie from "cookie"
+
 export const handle: Handle = async ({ event, resolve }) => {
-	let response = await resolve(event)
-
-	if (response.status === status.HTTP_401_UNAUTHORIZED) {
-		// @TODO check if user refresh_token is available
-		const refresh_token: UserRefreshTokenInput = {
-			refresh_token: "hwerheoitheriterhterihteirhtoierhtierht"
-		}
-
-		const res = await axios.post(
-			API.auth + "/refresh_token",
-			JSON.stringify(refresh_token),
-			{
-				headers: { "Content-Type": "application/json" }
-			}
-		)
-		const token: TokenDataIn = res.data
-		if (res.status === status.HTTP_200_OK) {
-			event.setHeaders({
-				Authorization: `bearer ${token.access_token}`
-			})
+	event.locals.user = {
+		firstname: "ola",
+		lastname: "ola",
+		email: "koko",
+		is_active: true,
+		role: {
+			name: "customer"
 		}
 	}
-	response = await resolve(event)
 
-	return response
+	const cookies = cookie.parse(event.request.headers.get("cookie") || "")
+	const jwt =
+		cookies.tokens && Buffer.from(cookies.jwt, "base64").toString("utf-8")
+	event.locals.user = jwt ? JSON.parse(jwt) : null
+	return await resolve(event)
 }

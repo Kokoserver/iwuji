@@ -30,12 +30,12 @@ class ProductAttributeOut(ProductAttributeIn):
 
 class ProductPropertyIn(pd.BaseModel):
     in_stock : bool = True
-    discount : Optional[float] = 0.0
+    discount : Optional[float] = 1000.0
     paper_back_price : float
     paper_back_qty : int = 1
-    hard_back_price  : Optional[float] = 0.0
+    hard_back_price  : Optional[float] = 1000.0
     hard_back_qty : int = 1
-    pdf_price : Optional[float] = 0.0
+    pdf_price : Optional[float] = 1000.0
 
 
 class ProductPropertyOut(ProductPropertyIn):

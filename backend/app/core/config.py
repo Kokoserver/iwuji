@@ -43,6 +43,9 @@ class Settings(BaseSettings):
     REFRESH_TOKEN_EXPIRATION_DURATION: timedelta = timedelta(days=7)
     ACCESS_TOKEN_EXPIRATION_DURATION: timedelta = timedelta(minutes=30)
 
+    # payment
+    PAYMENT_SECRET_KEY: str
+
     """Validate the cores origins."""
     @validator("BACKEND_CORS_ORIGINS", pre=True)
     def assemble_cors_origins(cls, v: t.Union[str, t.List[str]]) -> t.Union[t.List[str], str]:

@@ -1,3 +1,4 @@
+from email.policy import default
 import typing as t
 from app.database.document import BaseMeta, DateMixin, Model, fields as f
 from app.src.address.models import ShippingAddress
@@ -47,3 +48,4 @@ class OrderItem(Model):
         related_name="order_item_order",
         ondelete="CASCADE",
         onupdate="CASCADE")
+    deliver: bool = f.Boolean(default=False)

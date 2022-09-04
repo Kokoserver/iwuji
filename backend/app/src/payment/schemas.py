@@ -1,43 +1,57 @@
 from datetime import datetime
+from typing import List
+from xmlrpc.client import boolean
 from app.utils.random_string import generate_pay_ref
 from pydantic import BaseModel, Field, condecimal
 from app.src.payment import enum
 from pydantic.networks import EmailStr
 
 
-class PaymentIn(BaseModel):
+class DataIn(BaseModel):
+    authorization_url: str
+    access_code: str
+    reference: str
+
+
+class PaymentResponse(BaseModel):
+    status: bool
+    message: str
+    data: DataIn
+
+
+class VerifyData(BaseModel):
+    status: str
+    reference: str
+    amount: int
+    channel: str
+    currency: str
+
+
+class PaymentVerifyOut(BaseModel):
+    data: VerifyData
+
+
+class VerifyPaymentResponse(BaseModel):
+    reference: str
     orderId: str
-    pay_ref: str = Field(..., max_length=50)
-    amount: condecimal(decimal_places=2, max_digits=10) = Field(...)
-    currency: enum.PaymentCurrency = enum.PaymentCurrency.NGN
-    method: enum.PaymentMethod = enum.PaymentMethod.CARD
 
 
-class PaymentOut(PaymentIn):
+class PaymentOut(PaymentResponse):
     status: enum.PaymentStatus = enum.PaymentStatus.PENDING
     created_at: datetime
 
 
 class PaymentMeta(BaseModel):
-    consumer_id: int
+    user_id: int
+    order_id: int
+    cancel_action: str
 
 
-class CustomerInfo(BaseModel):
-    email: EmailStr
-    phonenumber: str
-    name: str
-
-
-class PaymentCustomize(BaseModel):
-    title: str
-    logo: str
-
-
-class paymentLink(BaseModel):
-    tx_ref: str = Field(default=generate_pay_ref)
+class PaymentLinkData(BaseModel):
     amount: int
+    email: EmailStr
+    reference: str = Field(default=generate_pay_ref)
+    channel: List[str] = ["card", "bank", "ussd"]
     currency: enum.PaymentCurrency = enum.PaymentCurrency.NGN
-    redirect_url: str = "https://webhook.site/9d0b00ba-9a69-44fa-a43d-a82c33c36fdc"
-    meta: PaymentMeta
-    customer: CustomerInfo
-    customizations: PaymentCustomize
+    callback_url: str = "https://webhook.site/9d0b00ba-9a69-44fa-a43d-a82c33c36fdc"
+    metadata: PaymentMeta
