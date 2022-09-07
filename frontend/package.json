@@ -3,7 +3,7 @@
 	"version": "0.0.1",
 	"private": true,
 	"scripts": {
-		"dev": "env-cmd vite dev",
+		"dev": "env-cmd vite dev --port 5000",
 		"build": "env-cmd vite build",
 		"preview": "env-cmd vite preview",
 		"test": "playwright test",
