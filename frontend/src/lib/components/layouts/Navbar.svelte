@@ -4,11 +4,11 @@
 	import { BaseRoutes } from "./baseroute"
 </script>
 
-<div class="mt-4">
-	<Navbar let:hidden let:toggle>
+<div class="mt-4 ">
+	<Navbar let:hidden let:toggle navClass="bg-gray-50 w-full px-4 md:px-0">
 		<div class="container mx-auto md:space-y-6">
 			<div class="flex justify-center items-center space-x-10">
-				<NavBrand href="/" class="md:block">
+				<NavBrand href="/" class="md:block ">
 					<img src="/logo.svg" class="h-5" alt="iwuji Logo" />
 				</NavBrand>
 				<NavHamburger on:click={toggle} />

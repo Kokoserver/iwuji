@@ -3,37 +3,43 @@
 	import Grid from "$root/lib/components/layouts/Grid.svelte"
 </script>
 
-<Container divClass=" pt-10 pb-28 px-5">
-	<div class="flex flex-col md:flex-row items-center justify-center gap-12">
-		<div class="md:w-1/2 p-2">
-			<img src="/hero.png" width="527" height="627" alt="" srcset="" />
-		</div>
-		<div class="md:w-2/5 space-y-4 p-3 ">
-			<h1 class="font-semibold uppercase text-2xl text-center md:text-left">
-				consequence
-			</h1>
-			<p class="font-normal text-gray-700 text-center md:text-left">
-				Lorem, ipsum dolor sit amet consectetur adipisicing elit. Eaque hic odio
-				illum ipsam consequuntur in rem vero placeat possimus adipisci harum
-				debitis ab provident quam enim, porro dolor repellat cum laboriosam
-				culpa? Aliquid ducimus eos vero adipisci! Voluptatibus possimus culpa ut
-				ullam repellendus voluptates quam fugit iure consectetur magnam. Ex.
-			</p>
-			<div class="pt-6">
-				<a
-					href="/"
-					class="rounded-full font-semibold bg-yellow-200 px-4 py-3 text-center uppercase "
-					>buy now</a
+<section class="relative">
+	<Container divClass="pt-10 pb-28 px-5">
+		<div class="flex flex-col md:flex-row items-center justify-center gap-12">
+			<div class="md:w-1/2 p-2">
+				<img src="/hero.png" width="527" height="627" alt="" srcset="" />
+			</div>
+			<div class="md:w-2/5 space-y-4 p-3 ">
+				<h1 class="font-semibold uppercase text-2xl text-center md:text-left">
+					consequence
+				</h1>
+				<p class="font-normal text-gray-700 text-center md:text-left">
+					Lorem, ipsum dolor sit amet consectetur adipisicing elit. Eaque hic
+					odio illum ipsam consequuntur in rem vero placeat possimus adipisci
+					harum debitis ab provident quam enim, porro dolor repellat cum
+					laboriosam culpa? Aliquid ducimus eos vero adipisci! Voluptatibus
+					possimus culpa ut ullam repellendus voluptates quam fugit iure
+					consectetur magnam. Ex.
+				</p>
+				<div
+					class="pt-6 space-x-4 flex items-start md:items-center justify-center md:justify-start"
 				>
-				<a
-					href="/"
-					class="rounded-full font-semibold border border-gray-700 px-4 py-3 text-center uppercase"
-					>see more books</a
-				>
+					<a
+						href="/"
+						class="rounded-full font-semibold bg-yellow-200 px-4 py-3 text-center uppercase "
+						>buy now</a
+					>
+					<a
+						href="/books"
+						class="rounded-full font-semibold border border-gray-700 px-4 py-3 text-center uppercase"
+						>see more books</a
+					>
+				</div>
 			</div>
 		</div>
-	</div>
-</Container>
+	</Container>
+	<!-- <img src="/designs.svg" alt="" srcset="" class="absolute top-100 left-0" /> -->
+</section>
 
 <Container divClass="pb-28 px-5">
 	<h3 class="font-bold text-3xl uppercase text-center pb-7">Reviews</h3>
@@ -85,7 +91,7 @@
 				debitis ab provident quam enim, porro dolor repellat cum laboriosam
 				culpa? Aliquid ducimus eos vero adipisci! Voluptatibus possimus culpa ut
 				ullam repellendus voluptates quam fugit iure consectetur magnam. Ex.
-				<a href="/" class="font-normal text-blue-300 ">Read more</a>
+				<a href="/bio" class="font-normal text-blue-300 ">Read more</a>
 			</p>
 		</div>
 	</div>

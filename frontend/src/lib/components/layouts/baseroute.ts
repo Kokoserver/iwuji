@@ -14,11 +14,11 @@ export const BaseRoutes: Route[] = [
 		name: "bio"
 	},
 	{
-		url: "/book",
+		url: "/books",
 		name: "books"
 	},
 	{
-		url: "/cart",
+		url: "/shop",
 		name: "shop"
 	},
 	{

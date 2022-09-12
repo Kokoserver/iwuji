@@ -2,7 +2,12 @@ import { error } from "@sveltejs/kit"
 import type { PageLoad } from "./$types"
 
 export const load: PageLoad = ({ url }) => {
-	console.log(url.searchParams.get("next"))
+	if (url.pathname === "hello-world") {
+		return {
+			title: "Hello world!",
+			content: "Welcome to our blog. Lorem ipsum dolor sit amet..."
+		}
+	}
 
 	// throw error(404, "Not found")
 }
