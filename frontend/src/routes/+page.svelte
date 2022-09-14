@@ -25,7 +25,7 @@
 					class="pt-6 space-x-4 flex items-start md:items-center justify-center md:justify-start"
 				>
 					<a
-						href="/"
+						href="/books/764"
 						class="rounded-full font-semibold bg-yellow-200 px-4 py-3 text-center uppercase "
 						>buy now</a
 					>
@@ -113,7 +113,7 @@
 		</div>
 	</Grid>
 	<div class="flex justify-end pt-20">
-		<a href="/" class="rounded-full font-semibold bg-yellow-200 px-5 py-3"
+		<a href="/books" class="rounded-full font-semibold bg-yellow-200 px-5 py-3"
 			>view more</a
 		>
 	</div>

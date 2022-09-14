@@ -1,5 +1,5 @@
 import { error } from "@sveltejs/kit"
-import type { PageLoad } from "./$types"
+import type { PageLoad } from "../../../../.svelte-kit/types/src/routes/passwordreset/$types"
 
 export const load: PageLoad = ({ url }) => {
 	if (url.pathname === "hello-world") {
@@ -9,5 +9,5 @@ export const load: PageLoad = ({ url }) => {
 		}
 	}
 
-	throw error(404, "Not found")
+	// throw error(404, "Not found")
 }
