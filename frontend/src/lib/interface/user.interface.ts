@@ -1,47 +1,46 @@
 export interface UserRegisterInput {
-	email: string
-	firstname: string
-	lastname: string
-	password: string
+	email: string;
+	firstname: string;
+	lastname: string;
+	password: string;
 }
 
 export interface PasswordResetOut {
-	token: string
-	password: string
-	confirm_password: string
+	token: string;
+	password: string;
+	confirm_password: string;
 }
 
 export interface GetPasswordResetLink {
-	email: string
+	email: string;
 }
 
 export interface TokenDataIn {
-	refresh_token: string
-	access_token: string
-	token_type?: string
+	refresh_token: string;
+	access_token: string;
 }
 
 export interface UserRefreshTokenInput {
-	refresh_token: string
+	refresh_token: string;
 }
 
 export interface UserPermissionUpdateOut {
-	user_id: number
-	role: string
+	user_id: number;
+	role: string;
 }
 
 export interface UserAccountVerifyToken {
-	token: string
+	token: string;
 }
 
 export interface UserRoleIn {
-	name: string
+	name: string;
 }
 export interface UserDataIn {
-	id: number
-	email: string
-	firstname: string
-	lastname: string
-	is_active: boolean
-	role: UserRoleIn
+	id: number;
+	email: string;
+	firstname: string;
+	lastname: string;
+	is_active: boolean;
+	role: UserRoleIn;
 }

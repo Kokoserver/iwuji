@@ -8,14 +8,18 @@
 // }
 
 export const API = {
-	permissions: "/permissions",
-	user: "/users",
-	auth: "/auth",
-	author: "/authors",
-	product: "/products",
-	variation: "/variations",
-	address: "/address",
-	cart: "/carts",
-	review: "/reviewS",
-	category: "/products/category"
-}
+	permissions: '/permissions',
+	user: '/users',
+	auth: '/auth',
+	author: '/authors',
+	product: '/products',
+	variation: '/variations',
+	address: '/address',
+	cart: '/carts',
+	review: '/reviewS',
+	category: '/products/category'
+};
+
+export type APIErrorResponse = {
+	detail: object | string;
+};

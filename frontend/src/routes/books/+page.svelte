@@ -1,8 +1,7 @@
 <script lang="ts">
 	import Container from "$root/lib/components/layouts/Container.svelte"
-	import { showModel } from "$root/lib/store/modalStore"
+
 	import { Iconinput, Next, Previous } from "flowbite-svelte"
-	showModel
 </script>
 
 <Container divClass="mt-28 px-3 md:px-0">

@@ -22,6 +22,10 @@ export const BaseRoutes: Route[] = [
 		name: "shop"
 	},
 	{
+		url: "/login",
+		name: "login"
+	},
+	{
 		url: "#contact",
 		name: "contact",
 		is_last: true

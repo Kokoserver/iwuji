@@ -20,12 +20,12 @@ async def get_users(id: int="", is_active: bool=True, limit: int = 10, offset: i
     return await crud.get_users(limit, offset, filter, id, is_active)
 
 
-@user.get("/{user_id}", response_model=schemas.UserDataOut, status_code=status.HTTP_200_OK)
+@user.get("/{user_id}/data", response_model=schemas.UserDataOut, status_code=status.HTTP_200_OK)
 async def get_user(user_id: int, _: int = Depends(UserWrite.super_or_admin))->schemas.UserDataOut:
     return await crud.get_user(user_id)
 
 
-@user.get("/me", response_model=schemas.UserDataOut, status_code=status.HTTP_200_OK)
+@user.get("/whoami", response_model=schemas.UserDataOut, status_code=status.HTTP_200_OK)
 async def get_user_current_user_data(user_id: int= Depends(UserWrite.current_user))->schemas.UserDataOut:
     return await crud.get_current_user_data(user_id)
 
@@ -49,18 +49,17 @@ async def update_user_password(user_data: schemas.PasswordResetInput)->Message:
 async def delete_user(userId: str, _: User = Depends(UserWrite.is_super_admin))->None:
     return await crud.remove_user_data(userId)
 
+
 @user.get("/{user_id}/role", response_model=PermissionOut)
 async def get_user_roles(user_id: int, _: int= Depends(UserWrite.super_or_admin)):
     return await crud.get_user_role(user_id)
 
 
 @user.put("/role", status_code=status.HTTP_200_OK)
-async def update_user_role(data:schemas.UserPermissionUpdate, _: int = Depends(UserWrite.super_or_admin))->Message:
+async def update_user_role(data: schemas.UserPermissionUpdate, _: int = Depends(UserWrite.super_or_admin))->Message:
     return await crud.add_user_role(data)
 
 
 @user.delete("/role", status_code=status.HTTP_200_OK)
 async def remove_user_role(data: schemas.UserPermissionUpdate, _: int=Depends(UserWrite.is_super_admin))->Message:
     return await crud.remove_user_role(data)
-
-

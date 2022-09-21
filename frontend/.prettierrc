@@ -1,9 +1,8 @@
 {
-	"semi": false,
 	"useTabs": true,
-	"singleQuote": false,
+	"singleQuote": true,
 	"trailingComma": "none",
-	"printWidth": 80,
+	"printWidth": 150,
 	"pluginSearchDirs": ["."],
 	"overrides": [
 		{
