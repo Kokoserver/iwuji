@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { Navbar, NavBrand, NavLi, NavUl, NavHamburger } from "flowbite-svelte"
-	import { page } from "$app/stores"
-	import { BaseRoutes } from "./baseroute"
+	import { Navbar, NavBrand, NavLi, NavUl, NavHamburger } from 'flowbite-svelte';
+	import { page } from '$app/stores';
+	export let is_login: boolean = false;
 </script>
 
 <div>
@@ -15,15 +15,59 @@
 			</div>
 			<div class="flex justify-center items-center px-2">
 				<NavUl {hidden}>
-					{#each BaseRoutes as route}
+					<NavLi
+						href="/"
+						active={true && $page.url.pathname === '/'}
+						activeClass="border-b-blue-600"
+						data-sveltekit-prefetch
+						class="uppercase border-b-transparent border-b-2 text-gray-700 font-normal md:pb-3
+							  mr-10">home</NavLi
+					>
+
+					<NavLi
+						href="/bio"
+						active={true && $page.url.pathname === '/bio'}
+						activeClass="border-b-blue-600"
+						data-sveltekit-prefetch
+						class="uppercase border-b-transparent border-b-2 text-gray-700 font-normal md:pb-3
+							  mr-10">bio</NavLi
+					>
+
+					<NavLi
+						href="/books"
+						active={true && $page.url.pathname === '/books'}
+						activeClass="border-b-blue-600"
+						data-sveltekit-prefetch
+						class="uppercase border-b-transparent border-b-2 text-gray-700 font-normal md:pb-3
+							  mr-10">books</NavLi
+					>
+
+					<NavLi
+						href="/shop"
+						active={true && $page.url.pathname === '/shop'}
+						activeClass="border-b-blue-600"
+						data-sveltekit-prefetch
+						class="uppercase border-b-transparent border-b-2 text-gray-700 font-normal md:pb-3
+							  mr-10">shop</NavLi
+					>
+					<NavLi
+						href="#contact"
+						active={true && $page.url.pathname === '/#contact'}
+						activeClass="border-b-blue-600"
+						data-sveltekit-prefetch
+						class="uppercase border-b-transparent border-b-2 text-gray-700 font-normal md:pb-3
+							  ">contact</NavLi
+					>
+					{#if !is_login}
 						<NavLi
-							href={route.url}
-							active={true && $page.url.pathname === route.url}
+							href="/login"
+							active={true && $page.url.pathname === '/login'}
 							activeClass="border-b-blue-600"
-							class={`uppercase border-b-transparent border-b-2 text-gray-700 font-normal md:pb-3
-							  ${!route.is_last && "mr-10"}`}>{route.name}</NavLi
+							data-sveltekit-prefetch
+							class="uppercase border-b-transparent border-b-2 text-gray-700 font-normal md:pb-3
+							  mr-10">login</NavLi
 						>
-					{/each}
+					{/if}
 				</NavUl>
 			</div>
 		</div>

@@ -134,9 +134,9 @@ async def update_product(productId: int,
 
 async def get_products(*, limit: int, offset: int, filter: str, is_series: bool, is_assigned: bool, is_active: bool) -> t.List[Product]:
     return await Product.objects.filter(
-        and_(is_active=is_active)).filter(
-        and_(property__paper_back_qty__qt=0),
-        and_(property__hard_back_qty__qt=0),
+        and_(is_active=is_active),
+        and_(property__paper_back_qty__gt=0),
+        and_(property__hard_back_qty__gt=0),
         and_(is_series=is_series)
     ).filter(is_assigned=is_assigned).filter(
         or_(name__icontains=filter,

@@ -1,33 +1,35 @@
 export interface Route {
-	url: string
-	name: string
-	is_last?: boolean
+	url: string;
+	name: string;
+	visible?: boolean;
+	is_last?: boolean;
 }
 
 export const BaseRoutes: Route[] = [
 	{
-		url: "/",
-		name: "home"
+		url: '/',
+		name: 'home'
 	},
 	{
-		url: "/bio",
-		name: "bio"
+		url: '/bio',
+		name: 'bio'
 	},
 	{
-		url: "/books",
-		name: "books"
+		url: '/books',
+		name: 'books'
 	},
 	{
-		url: "/shop",
-		name: "shop"
+		url: '/shop',
+		name: 'shop'
 	},
 	{
-		url: "/login",
-		name: "login"
+		url: '/login',
+		name: 'login',
+		visible: false
 	},
 	{
-		url: "#contact",
-		name: "contact",
+		url: '#contact',
+		name: 'contact',
 		is_last: true
 	}
-]
+];

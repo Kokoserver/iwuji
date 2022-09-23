@@ -38,7 +38,7 @@ export const actions: Actions = {
 			locals.token = token;
 			locals.is_login = true;
 			if (url.searchParams.get('redirectTo')) {
-				const location = url.searchParams.get('redirectTo');
+				const location = String(url.searchParams.get('redirectTo'));
 				throw redirect(status.HTTP_308_PERMANENT_REDIRECT, location);
 			}
 			throw redirect(status.HTTP_307_TEMPORARY_REDIRECT, '/');

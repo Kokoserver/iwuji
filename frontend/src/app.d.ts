@@ -7,7 +7,7 @@ import { UserDataIn } from '$lib/interface/user.interface';
 
 declare global {
 	declare namespace App {
-		interface PageError {
+		interface AppError {
 			message: string;
 			code: string;
 		}

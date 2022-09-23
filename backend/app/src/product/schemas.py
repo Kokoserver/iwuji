@@ -73,10 +73,10 @@ class VariationProductUpdateIn(VariationProductIn):
 class ProductOut(ProductToVariationBase):
     id: int
     is_series : bool
-    author: Optional[AuthorOut]
+    # author: Optional[AuthorOut]
     # pdf_file: Optional[MediaBase]
     cover_img: Optional[MediaBase]
-    categories : List[CategoryIn]
+    # categories : List[CategoryIn]
     property  : ProductPropertyOut
     attribute : ProductAttributeOut
     cover_img : Optional[MediaBase]
