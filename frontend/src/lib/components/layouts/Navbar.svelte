@@ -19,7 +19,7 @@
 						href="/"
 						active={true && $page.url.pathname === '/'}
 						activeClass="border-b-blue-600"
-						data-sveltekit-prefetch
+						data-sveltekit-prefetch=""
 						class="uppercase border-b-transparent border-b-2 text-gray-700 font-normal md:pb-3
 							  mr-10">home</NavLi
 					>
@@ -28,7 +28,7 @@
 						href="/bio"
 						active={true && $page.url.pathname === '/bio'}
 						activeClass="border-b-blue-600"
-						data-sveltekit-prefetch
+						data-sveltekit-prefetch=""
 						class="uppercase border-b-transparent border-b-2 text-gray-700 font-normal md:pb-3
 							  mr-10">bio</NavLi
 					>
@@ -37,7 +37,7 @@
 						href="/books"
 						active={true && $page.url.pathname === '/books'}
 						activeClass="border-b-blue-600"
-						data-sveltekit-prefetch
+						data-sveltekit-prefetch=""
 						class="uppercase border-b-transparent border-b-2 text-gray-700 font-normal md:pb-3
 							  mr-10">books</NavLi
 					>
@@ -46,7 +46,7 @@
 						href="/shop"
 						active={true && $page.url.pathname === '/shop'}
 						activeClass="border-b-blue-600"
-						data-sveltekit-prefetch
+						data-sveltekit-prefetch=""
 						class="uppercase border-b-transparent border-b-2 text-gray-700 font-normal md:pb-3
 							  mr-10">shop</NavLi
 					>
@@ -54,7 +54,7 @@
 						href="#contact"
 						active={true && $page.url.pathname === '/#contact'}
 						activeClass="border-b-blue-600"
-						data-sveltekit-prefetch
+						data-sveltekit-prefetch=""
 						class="uppercase border-b-transparent border-b-2 text-gray-700 font-normal md:pb-3
 							  ">contact</NavLi
 					>
@@ -63,7 +63,7 @@
 							href="/login"
 							active={true && $page.url.pathname === '/login'}
 							activeClass="border-b-blue-600"
-							data-sveltekit-prefetch
+							data-sveltekit-prefetch=""
 							class="uppercase border-b-transparent border-b-2 text-gray-700 font-normal md:pb-3
 							  mr-10">login</NavLi
 						>

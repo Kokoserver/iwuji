@@ -1,3 +1,8 @@
 export interface CheckUserEmailOut {
-	email: string
+	email: string;
+}
+
+export interface UserLoginInput {
+	username: string;
+	password: string;
 }

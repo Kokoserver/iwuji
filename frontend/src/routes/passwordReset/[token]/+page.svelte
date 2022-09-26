@@ -2,17 +2,21 @@
 	import Container from '$root/lib/components/layouts/Container.svelte';
 	import suite from './form';
 	import { Button, Helper, Input, Label } from 'flowbite-svelte';
-	import type { ActionData } from './$types';
+	import type { ActionData } from '../../../../.svelte-kit/types/src/routes/passwordReset/$types';
 	import { notification } from '$root/lib/notification';
 	import { goto } from '$app/navigation';
-	const formdata = { email: '' };
+	import { enhance } from '$app/forms';
+	import { error } from '@sveltejs/kit';
+	const formdata = { password: '', confirm_password: '' };
 	export let form: ActionData;
 
 	let res = suite.get();
-	let email_error = '';
+	let password_error = '';
+
 	$: {
-		if (email_error) {
-			res.getErrors('email')[0] = email_error;
+		if (form?.error) {
+			password_error = form.error;
+			form.error = '';
 		}
 		if (form?.message) {
 			notification.success(form.message, 6000);
@@ -24,18 +28,9 @@
 
 	const handleChange = async (event: Event) => {
 		const inputField = event.target as HTMLInputElement;
-		if (inputField.name === 'email') {
-			email_error = '';
-			const response = await fetch('/register/api', {
-				method: 'POST',
-				body: JSON.stringify({ email: inputField.value })
-			});
-			const field_error = (await response.json()) as { email: string };
-			if (field_error?.email === '') {
-				email_error = 'Account does not exist';
-			}
+		if (inputField.name === 'password' && form?.error) {
+			password_error = '';
 		}
-
 		res = suite(formdata, inputField.name);
 	};
 </script>
@@ -48,31 +43,39 @@
 		>
 			<div class="w-72">
 				<div class="pb-5">
-					<h1 class="text-xl font-semibold">forgot your password</h1>
+					<h1 class="text-xl font-semibold">Reset password</h1>
 				</div>
 
-				<form class="flex flex-col space-y-6" method="POST">
+				<form class="flex flex-col space-y-6" method="POST" use:enhance>
 					<Label class="space-y-2">
-						<span>Email</span>
+						<span>Password</span>
 						<Input
-							type="email"
-							bind:value={formdata.email}
+							type="password"
+							bind:value={formdata.password}
 							on:change={handleChange}
-							name="email"
-							placeholder="name@company.com"
+							name="password"
+							placeholder="*********"
 							required
 						/>
-						{#if res.getErrors('email')}
-							<Helper color="red">{res.getErrors('email') ?? email_error}</Helper>
+						{#if res.getErrors('password')}
+							<Helper color="red">{res.getErrors('password').concat(password_error) ?? ''}</Helper>
+						{/if}
+					</Label>
+					<Label class="space-y-2">
+						<span>Confirm password</span>
+						<Input
+							type="password"
+							bind:value={formdata.confirm_password}
+							on:change={handleChange}
+							name="confirm_password"
+							placeholder="**********"
+							required
+						/>
+						{#if res.getErrors('confirm_password')}
+							<Helper color="red">{res.getErrors('confirm_password') ?? ''}</Helper>
 						{/if}
 					</Label>
 
-					<div class="flex items-start">
-						<div class="text-center">
-							<span class="text-xs text-gray-400 font-semibold">remember your password</span>
-							<a href="/login" class="text-xs font-semibold text-purple-700">Login here</a>
-						</div>
-					</div>
 					<Button type="submit" class="w-full1 capitalize">submit</Button>
 				</form>
 

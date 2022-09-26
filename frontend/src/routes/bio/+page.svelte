@@ -28,7 +28,14 @@
 	<Grid gap={6}>
 		{#each products as product}
 			<div class="flex flex-col items-center space-y-7">
-				<img src={product.cover_img.url} alt={product.cover_img.alt} srcset="" class="w-65 h-60" />
+				<a href="/books/{product.id}"
+					><img
+						src={product.cover_img.url}
+						alt={product.cover_img.alt}
+						srcset=""
+						class="w-65 h-60"
+					/></a
+				>
 				<h1 class="font-normal text-xl uppercase">{product.name}</h1>
 			</div>
 		{:else}

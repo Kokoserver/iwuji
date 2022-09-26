@@ -24,7 +24,7 @@ async def create_user(new_user_data: schemas.UserRegisterInput, background_task:
     if new_user:
         token: str = security.JWTAUTH.DataEncoder(data={"id": str(new_user.id)})
         mail_template_context = {
-            "url": f"{config.settings.PROJECT_URL}/user/{token}/confirmation",
+            "url": f"{config.settings.PROJECT_URL}/user/{token}",
             "button_label": "confirm",
             "title": "user email confirmation link",
             "description": f"""Welcome to <b>{config.settings.PROJECT_URL}</b>, 
@@ -72,7 +72,7 @@ async def reset_password_link(background_task: BackgroundTasks, user_data: schem
         token = security.JWTAUTH.DataEncoder(
             data={"id": user_obj.id}, duration=timedelta(days=1))
         mail_template_context = {
-            "url": f"{config.settings.PROJECT_URL}/user/{token}/password-reset",
+            "url": f"{config.settings.PROJECT_URL}/passwordReset/{token}",
             "button_label": "reset password",
             "title": "password reset link",
             "description": "You request for password reset link, if not you please contact admin",

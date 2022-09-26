@@ -26,7 +26,6 @@ async def auth_login(background_task: BackgroundTasks, request: Request, auth_da
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="incorrect email or password")
-
     if not check_user.check_password(auth_data.password):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -39,23 +38,7 @@ async def auth_login(background_task: BackgroundTasks, request: Request, auth_da
         )
         access_token, refresh_token = JWTAUTH.JwtEncoder(
             data=get_jwt_data_for_encode.dict())
-        # _ = await create_or_update_auth(request, check_user)
         return schemas.TokenData(access_token=access_token, refresh_token=refresh_token)
-    token: str = JWTAUTH.DataEncoder(data={"id": check_user.id})
-    mail_template_context = {
-        "url": f"{settings.PROJECT_URL}/user/{token}/confirmation",
-        "button_label": "confirm",
-        "title": "user email confirmation link",
-        "description": f"""Welcome to <b>{settings.PROJECT_URL}</b>, 
-            kindly click on the link below to activate your account""",
-    }
-
-    new_mail = Mailer(
-        website_name=settings.PROJECT_NAME,
-        template_name="action.html",
-        subject="Email confirmation",
-        context=mail_template_context)
-    background_task.add_task(new_mail.send_mail, email=[check_user.email])
     raise HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Account is not verified, please check your email for verification link"
@@ -71,14 +54,6 @@ async def auth_login_token_refresh(user_token: schemas.UserRefreshTokenInput, re
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Account does not exist",
         )
-    # get_user_auth: AuthModel = await AuthModel.objects.get_or_none(user=check_user)
-    # if request.client.host != get_user_auth.ip:
-    #     raise HTTPException(
-    #         status_code=status.HTTP_401_UNAUTHORIZED,
-    #         detail="Invalid issuer device or ip",
-    #     )
-
-    # _ = await create_or_update_auth(request, check_user)
     get_jwt_data_for_encode = schemas.ToEncode(
         id=check_user.id,
         firstname=check_user.firstname,

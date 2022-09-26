@@ -34,6 +34,7 @@ class API {
 				return { text, status: response.status };
 			}
 		}
+		return {};
 	}
 
 	async send(form: HTMLFormElement, config: object = {}) {
@@ -58,29 +59,30 @@ class API {
 			return this.handleResponse(response);
 		}
 	}
-
-	async post(endpoint: string, body, config = {}) {
+	/* eslint-disable @typescript-eslint/no-explicit-any */
+	async post(endpoint: string, body: any, config = {}) {
 		const requestOptions = {
 			method: 'POST',
 			headers: { ...config, accept: 'application/json' },
 			body: body
 		};
 		if (typeof body === 'object') {
-			JSON.stringify(requestOptions.body);
+			requestOptions.body = JSON.stringify(requestOptions.body);
 		}
 
 		const response = await fetch(this.get_url(endpoint), requestOptions);
+
 		return this.handleResponse(response);
 	}
 
-	async put(endpoint: string, body, config = {}) {
+	async put(endpoint: string, body: any, config = {}) {
 		const requestOptions = {
 			method: 'PUT',
 			headers: { ...config, accept: 'application/json' },
 			body: body
 		};
 		if (typeof body === 'object') {
-			JSON.stringify(body);
+			requestOptions.body = JSON.stringify(requestOptions.body);
 		}
 
 		const response = await fetch(this.get_url(endpoint), requestOptions);
