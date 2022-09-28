@@ -8,10 +8,11 @@
 	import { Notification } from '$root/lib/notification';
 	import type { LayoutData } from './$types';
 	export let data: LayoutData;
+	$: user_data = data;
 </script>
 
 <div>
-	<Navbar is_login={data.is_login} />
+	<Navbar is_login={user_data.is_login} user={user_data.user} />
 	<!-- <Transition url={$page.url} animate={$animate}> -->
 	<slot />
 	<!-- </Transition> -->

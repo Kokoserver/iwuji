@@ -8,7 +8,11 @@ export const cookiesData = (event: RequestEvent, name: string) => {
 };
 
 export const deleteCookiesData = (event: RequestEvent, name: string) => {
-	event.cookies.delete(name);
+	event.cookies.set(name, '', {
+		httpOnly: true,
+		path: '/',
+		maxAge: 0
+	});
 };
 
 export const getUserSession = (event: RequestEvent, names: string[]) => {
@@ -35,11 +39,16 @@ export const getUserSession = (event: RequestEvent, names: string[]) => {
 
 export const updateCookies = (event: RequestEvent, name: string, toUpdate: string) => {
 	const cookies_string = cookiesData(event, name);
-	const cookies_data = JSON.parse(cookies_string);
-	event.locals[toUpdate] = cookies_data;
+	const cookies_data = JSON.parse(String(cookies_string));
+	event.locals[String(toUpdate)] = cookies_data;
 };
 
-export const setCookies = (token: string, data: string | object, name: string, cookies: Cookies) => {
+export const setCookies = (
+	token: string,
+	data: string | object,
+	name: string,
+	cookies: Cookies
+) => {
 	const token_data = get_jwt_data(token) as { exp: number };
 	let to_be_store: string;
 	if (typeof data === 'object') {

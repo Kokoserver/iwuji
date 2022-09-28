@@ -6,5 +6,22 @@
 @tailwind components;
 @tailwind utilities;
 .active {
-	@apply bg-yellow-300;
+	@apply bg-primary;
+}
+
+#cartbtn {
+	@apply text-center font-medium focus:ring-0 inline-flex items-center justify-center px-4 py-2 text-sm text-white bg-primary hover:bg-primary  dark:bg-primary dark:hover:bg-primary dark:focus:ring-0 rounded-full relative text-gray-600;
+}
+
+#booksearch {
+	@apply rounded-full;
+}
+
+table,
+tbody {
+	@apply bg-transparent;
+}
+
+.hover\:bg-blue-800:hover {
+	@apply bg-primary text-gray-800 border-none outline-none;
 }

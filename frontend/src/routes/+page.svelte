@@ -7,8 +7,8 @@
 	$: latest_product = products.slice(1, products.length);
 </script>
 
-<section class="relative">
-	<Container divClass="pt-10 pb-28 px-5">
+<section class="relative pb-28">
+	<Container divClass="pt-10  px-5">
 		{#if products.length > 0}
 			<div class="flex flex-col md:flex-row items-center justify-center gap-6">
 				<div class="md:w-1/2 p-2">
@@ -26,7 +26,7 @@
 					>
 						<a
 							href="/books/{products[0].id}"
-							class="rounded-full font-semibold bg-yellow-200 px-4 py-3 text-center uppercase "
+							class="rounded-full font-semibold bg-secondary px-4 py-3 text-center uppercase "
 							>buy now</a
 						>
 						<a
@@ -41,7 +41,7 @@
 			<h1 class="text-4xl text-center font-semibold">No books yet</h1>
 		{/if}
 	</Container>
-	<!-- <img src="/designs.svg" alt="" srcset="" class="absolute top-100 left-0" /> -->
+	<img src="/homepage design.svg" alt="" class="absolute top-90 left-0 right-0" />
 </section>
 
 <Container divClass="pb-28 px-5">
@@ -104,6 +104,8 @@
 		{/each}
 	</Grid>
 	<div class="flex justify-end pt-20">
-		<a href="/books" class="rounded-full font-semibold bg-yellow-200 px-5 py-3">view more</a>
+		<a href="/books" class="rounded-full font-semibold bg-secondary px-5 py-3 capitalize"
+			>view more</a
+		>
 	</div>
 </Container>

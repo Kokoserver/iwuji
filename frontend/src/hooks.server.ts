@@ -8,7 +8,6 @@ import { refresh_token } from '$root/lib/utils/get_token_data';
 
 export const handle: Handle = async ({ event, resolve }) => {
 	getUserSession(event, ['session', 'details', 'is_login']);
-	
 
 	if (event.url.pathname.startsWith('/admin') && event.locals.user.role.name !== 'admin') {
 		if (event.locals.token?.access_token && event.locals.token?.refresh_token) {
@@ -17,7 +16,11 @@ export const handle: Handle = async ({ event, resolve }) => {
 		return await resolve(event);
 	}
 
-	if (event.url.pathname.startsWith('/dashboard') && !event.locals.token?.access_token && !event.locals.token?.refresh_token) {
+	if (
+		event.url.pathname.startsWith('/dashboard') &&
+		!event.locals.token?.access_token &&
+		!event.locals.token?.refresh_token
+	) {
 		return redirect('/login');
 	}
 

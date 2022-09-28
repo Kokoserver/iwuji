@@ -1,9 +1,6 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
-	import type { UserDataIn } from '$root/lib/interface/user.interface';
 	export let is_login: boolean = false;
-	export let user: UserDataIn;
 	import {
 		Navbar,
 		NavBrand,
@@ -18,15 +15,12 @@
 		Button,
 		Badge
 	} from 'flowbite-svelte';
-	const handleLogout = () => {
-		goto('/user/logout');
-	};
 </script>
 
-<Navbar let:hidden let:toggle DivClass="px-3 md:px-0">
-	<div class="w-full flex items-center justify-center pb-4 mt-2">
+<Navbar let:hidden let:toggle>
+	<div class="w-full flex items-center justify-center pb-6">
 		<NavBrand href="/">
-			<img src="/logo.svg" class="h-5" alt="iwuji Logo" />
+			<img src="/logo.svg" class="h-5" alt="Flowbite Logo" />
 		</NavBrand>
 	</div>
 	<div class="flex items-center md:order-2">
@@ -34,20 +28,7 @@
 		<NavHamburger on:click={toggle} class1="w-full md:flex md:w-auto md:order-1" />
 	</div>
 	<div>
-		<Dropdown placement="bottom" triggeredBy="#avatar-menu">
-			{#if is_login}
-				<DropdownHeader>
-					<span class="block text-sm">{`${user.firstname} ${user.lastname}`}</span>
-					<span class="block truncate text-sm font-medium">{user.email} </span>
-				</DropdownHeader>
-				<DropdownItem><a href="/user/dashboard">Dashboard</a></DropdownItem>
-				<DropdownDivider />
-				<DropdownItem on:click={handleLogout}>sign out</DropdownItem>
-			{:else}
-				<DropdownItem><a href="/login">login</a></DropdownItem>
-			{/if}
-		</Dropdown>
-		<Button href="/cart" id="cartbtn" size="sm">
+		<Button class="relative" size="sm">
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				fill="none"
@@ -64,9 +45,21 @@
 			</svg>
 
 			<span class="sr-only">Notifications</span>
-			<Badge rounded={true} index color="yellow">20</Badge>
+			<Badge rounded index color="red">20</Badge>
 			cart
 		</Button>
+
+		<Dropdown placement="bottom" triggeredBy="#avatar-menu">
+			<DropdownHeader>
+				<span class="block text-sm"> Bonnie Green </span>
+				<span class="block truncate text-sm font-medium"> name@flowbite.com </span>
+			</DropdownHeader>
+			<DropdownItem>Dashboard</DropdownItem>
+			<DropdownItem>Settings</DropdownItem>
+			<DropdownItem>Earnings</DropdownItem>
+			<DropdownDivider />
+			<DropdownItem>Sign out</DropdownItem>
+		</Dropdown>
 	</div>
 	<NavUl {hidden}>
 		<NavLi
@@ -75,7 +68,7 @@
 			activeClass="border-b-blue-600"
 			data-sveltekit-prefetch=""
 			class="uppercase border-b-transparent border-b-2 text-gray-700 font-normal md:pb-3
-							  mr-5">home</NavLi
+							  mr-10">home</NavLi
 		>
 
 		<NavLi
@@ -84,7 +77,7 @@
 			activeClass="border-b-blue-600"
 			data-sveltekit-prefetch=""
 			class="uppercase border-b-transparent border-b-2 text-gray-700 font-normal md:pb-3
-							  mr-5">bio</NavLi
+							  mr-10">bio</NavLi
 		>
 
 		<NavLi
@@ -93,9 +86,17 @@
 			activeClass="border-b-blue-600"
 			data-sveltekit-prefetch=""
 			class="uppercase border-b-transparent border-b-2 text-gray-700 font-normal md:pb-3
-							  mr-5">books</NavLi
+							  mr-10">books</NavLi
 		>
 
+		<NavLi
+			href="/shop"
+			active={$page.url.pathname === '/shop'}
+			activeClass="border-b-blue-600"
+			data-sveltekit-prefetch=""
+			class="uppercase border-b-transparent border-b-2 text-gray-700 font-normal md:pb-3
+							  mr-10">shop</NavLi
+		>
 		<NavLi
 			href="#contact"
 			active={$page.url.pathname === '/#contact'}
@@ -104,5 +105,15 @@
 			class="uppercase border-b-transparent border-b-2 text-gray-700 font-normal md:pb-3
 							  ">contact</NavLi
 		>
+		{#if !is_login}
+			<NavLi
+				href="/login"
+				active={$page.url.pathname === '/login'}
+				activeClass="border-b-blue-600"
+				data-sveltekit-prefetch=""
+				class="uppercase border-b-transparent border-b-2 text-gray-700 font-normal md:pb-3
+							  mr-10">login</NavLi
+			>
+		{/if}
 	</NavUl>
 </Navbar>
