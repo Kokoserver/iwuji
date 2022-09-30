@@ -4,6 +4,7 @@
 	import type { UserDataIn } from '$root/lib/interface/user.interface';
 	export let is_login: boolean = false;
 	export let user: UserDataIn;
+	export let cart_count: number = 0;
 	import {
 		Navbar,
 		NavBrand,
@@ -18,8 +19,10 @@
 		Button,
 		Badge
 	} from 'flowbite-svelte';
-	const handleLogout = () => {
-		goto('/user/logout');
+	const handleLogout = async () => {
+		await goto('/user/logout', {
+			replaceState: true
+		});
 	};
 </script>
 
@@ -43,7 +46,7 @@
 				<DropdownItem><a href="/user/dashboard">Dashboard</a></DropdownItem>
 				<DropdownDivider />
 				<DropdownItem on:click={handleLogout}>sign out</DropdownItem>
-			{:else}
+			{:else if !is_login}
 				<DropdownItem><a href="/login">login</a></DropdownItem>
 			{/if}
 		</Dropdown>
@@ -63,8 +66,8 @@
 				/>
 			</svg>
 
-			<span class="sr-only">Notifications</span>
-			<Badge rounded={true} index color="yellow">20</Badge>
+			<span class="sr-only">Cart</span>
+			<Badge rounded={true} index color="yellow">{cart_count}</Badge>
 			cart
 		</Button>
 	</div>

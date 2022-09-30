@@ -5,9 +5,13 @@ import { getUserSession, updateCookies } from '$root/lib/utils/getCookies';
 import type { Handle, HandleFetch } from '@sveltejs/kit';
 
 import { refresh_token } from '$root/lib/utils/get_token_data';
+import { TokenData } from './lib/store/tokenStore';
 
 export const handle: Handle = async ({ event, resolve }) => {
 	getUserSession(event, ['session', 'details', 'is_login']);
+	await refresh_token(event);
+	getUserSession(event, ['session', 'details', 'is_login']);
+	TokenData.set(event.locals.token);
 
 	if (event.url.pathname.startsWith('/admin') && event.locals.user.role.name !== 'admin') {
 		if (event.locals.token?.access_token && event.locals.token?.refresh_token) {
@@ -28,7 +32,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 	if (response.status === status.HTTP_401_UNAUTHORIZED) {
 		const is_refresh: boolean = await refresh_token(event);
 		if (is_refresh) {
-			event.request.headers.set('Authorization', `bearer ${event.locals.token.access_token}`);
+			event.request.headers.set('Authorization', `Bearer ${event.locals.token.access_token}`);
 			updateCookies(event, 'session', 'token');
 			return await resolve(event);
 		}
@@ -38,15 +42,15 @@ export const handle: Handle = async ({ event, resolve }) => {
 	return response;
 };
 
-// export const handleFetch: HandleFetch = async ({ event, request, fetch }) => {
-// 	const baseURL = process.env.BASE_URL ?? '';
-// 	if (baseURL) {
-// 		if (request.url.startsWith(PUBLIC_BASE_URL)) {
-// 			if (event) {
-// 				request.headers.set('Authorization', `bearer ${event.locals.token.access_token}`);
-// 			}
-// 		}
-// 	}
-// 	const res = fetch(request);
-// 	return res;
-// };
+export const handleFetch: HandleFetch = async ({ event, request, fetch }) => {
+	const baseURL = process.env.BASE_URL ?? '';
+	if (baseURL) {
+		if (request.url.startsWith(PUBLIC_BASE_URL)) {
+			if (event) {
+				request.headers.set('Authorization', `bearer ${event.locals.token.access_token}`);
+			}
+		}
+	}
+	const res = fetch(request);
+	return res;
+};

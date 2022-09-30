@@ -32,16 +32,14 @@ export const actions: Actions = {
 			const user = await api.get('/users/whoami', {
 				Authorization: `bearer ${token.access_token}`
 			});
-			if (user.status === status.HTTP_200_OK) {
-				const user_data: UserDataIn = user.data as UserDataIn;
-				setCookies(token.refresh_token, user_data, 'details', cookies);
-				setCookies(token.refresh_token, { is_login: true }, 'is_login', cookies);
-			}
+			const user_data: UserDataIn = user.data as UserDataIn;
+			setCookies(token.refresh_token, user_data, 'details', cookies);
+			setCookies(token.refresh_token, { is_login: true }, 'is_login', cookies);
 			locals.token = token;
 			locals.is_login = true;
 			if (url.searchParams.get('redirectTo')) {
 				const location = String(url.searchParams.get('redirectTo'));
-				throw redirect(status.HTTP_308_PERMANENT_REDIRECT, location);
+				throw redirect(status.HTTP_301_MOVED_PERMANENTLY, location);
 			}
 			return { message: 'login successfully' };
 		}

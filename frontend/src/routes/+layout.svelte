@@ -9,10 +9,11 @@
 	import type { LayoutData } from './$types';
 	export let data: LayoutData;
 	$: user_data = data;
+	$: cart_count = data.carts.length;
 </script>
 
 <div>
-	<Navbar is_login={user_data.is_login} user={user_data.user} />
+	<Navbar is_login={user_data.is_login} user={user_data.user} {cart_count} />
 	<!-- <Transition url={$page.url} animate={$animate}> -->
 	<slot />
 	<!-- </Transition> -->

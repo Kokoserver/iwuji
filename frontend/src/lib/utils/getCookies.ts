@@ -33,6 +33,7 @@ export const getUserSession = (event: RequestEvent, names: string[]) => {
 		event.locals.token = cookies_data;
 		event.locals.user = user_details;
 		event.locals.is_login = login_status.is_login;
+
 		return cookies_data;
 	}
 };
@@ -44,18 +45,19 @@ export const updateCookies = (event: RequestEvent, name: string, toUpdate: strin
 };
 
 export const setCookies = (
-	token: string,
+	token: string, //to get expire time
 	data: string | object,
 	name: string,
 	cookies: Cookies
 ) => {
 	const token_data = get_jwt_data(token) as { exp: number };
-	let to_be_store: string;
+	let to_be_store = '';
 	if (typeof data === 'object') {
 		to_be_store = JSON.stringify(data);
 	} else if (typeof data === 'string') {
 		to_be_store = data;
 	}
+
 	cookies.set(name, to_be_store, {
 		path: '/',
 		httpOnly: true,

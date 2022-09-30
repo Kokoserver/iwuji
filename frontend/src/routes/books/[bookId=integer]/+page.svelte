@@ -1,13 +1,47 @@
 <script lang="ts">
 	import Container from '$root/lib/components/layouts/Container.svelte';
-	import Grid from '$root/lib/components/layouts/Grid.svelte';
-	import { AccordionItem, Badge, Button } from 'flowbite-svelte';
+	import { Badge, Button } from 'flowbite-svelte';
 	import type { PageServerData } from './$types';
+	import { CartType } from '$root/lib/store/toggleSeriesStore';
+	import type { CartOut } from '$root/lib/interface/cart.interface';
+	import { handleAddCart } from '$root/routes/cart/crud';
 	export let data: PageServerData;
+
 	$: product = data.product;
 	$: is_single_product = data.is_single_product;
 	$: variation = data.variation;
 	$: is_variation = data.is_variation;
+	$: cart_toggle = $CartType;
+	$: hard_back_count = $CartType.hard_back_qty;
+	$: paper_back_count = $CartType.paper_back_qty;
+
+	const cart_out: CartOut = {
+		productId: data?.product?.id,
+		pdf: $CartType.pdf,
+		paper_back_qty: $CartType.paper_back_qty,
+		hard_back_qty: $CartType.hard_back_qty
+	};
+
+	const handlePlus = (type: string) => {
+		if (type === 'hard_back') {
+			$CartType.hard_back_qty++;
+		}
+		if (type === 'paper_back') {
+			$CartType.paper_back_qty++;
+		}
+	};
+	const handleMinus = (type: string) => {
+		if (type === 'hard_back') {
+			if ($CartType.hard_back_qty !== 0) {
+				$CartType.hard_back_qty--;
+			}
+		}
+		if (type === 'paper_back') {
+			if ($CartType.paper_back_qty !== 0) {
+				$CartType.paper_back_qty--;
+			}
+		}
+	};
 </script>
 
 {#if is_single_product && product}
@@ -22,14 +56,23 @@
 					{product.description}
 				</p>
 				<div class="pt-6  t space-y-6  flex flex-col md:items-start items-center">
-					<a
-						href="/"
-						class="rounded-full font-semibold bg-primary px-4 py-3 w-24 text-center uppercase"
-						>Pdf
-					</a>
+					<label
+						for="pdf"
+						class="rounded-full font-semibold border border-gray-700  px-4 py-3 w-24 text-center uppercase"
+						class:active={$CartType.pdf}
+						>pdf
+						<input
+							type="checkbox"
+							name="pdf"
+							id="pdf"
+							bind:checked={cart_toggle.pdf}
+							class="hidden"
+						/>
+					</label>
 					<div class="flex flex-col md:items-start md:flex-row gap-6">
 						<div class="flex items-center justify-center space-x-1">
 							<Button
+								on:click={() => handleMinus('hard_back')}
 								btnClass="rounded-full border border-gray-600 h-12 w-12 text-3xl text-center font-bold text-2xl"
 								><svg
 									xmlns="http://www.w3.org/2000/svg"
@@ -42,14 +85,25 @@
 									<path stroke-linecap="round" stroke-linejoin="round" d="M19.5 12h-15" />
 								</svg>
 							</Button>
-							<a
-								href="/"
+							<label
+								for="hard_back"
 								class=" relative rounded-full font-semibold border border-gray-700 px-4 py-3 text-center uppercase flex items-center space-x-2"
+								class:active={$CartType.hard_back}
 							>
-								<span>Hard back</span>
-								<Badge rounded index color="red">20</Badge>
-							</a>
+								<span>
+									Hard back
+									<input
+										type="checkbox"
+										bind:checked={$CartType.hard_back}
+										name="hard_back"
+										id="hard_back"
+										class="hidden"
+									/>
+								</span>
+								<Badge rounded index color="yellow">{hard_back_count}</Badge>
+							</label>
 							<Button
+								on:click={() => handlePlus('hard_back')}
 								btnClass="rounded-full border border-gray-600 h-12 w-12 text-3xl text-center font-bold text-2xl"
 								><svg
 									xmlns="http://www.w3.org/2000/svg"
@@ -65,6 +119,7 @@
 						</div>
 						<div class="flex md:items-center justify-center space-x-1">
 							<Button
+								on:click={() => handleMinus('paper_back')}
 								btnClass="rounded-full border border-gray-600 h-12 w-12 text-3xl text-center font-bold text-2xl"
 								><svg
 									xmlns="http://www.w3.org/2000/svg"
@@ -77,14 +132,25 @@
 									<path stroke-linecap="round" stroke-linejoin="round" d="M19.5 12h-15" />
 								</svg>
 							</Button>
-							<a
-								href="/"
+							<label
+								for="paper_back"
 								class=" relative rounded-full font-semibold border border-gray-700 px-4 py-3 text-center uppercase flex items-center space-x-2"
+								class:active={$CartType.paper_back}
 							>
-								<span>Paper back</span>
-								<Badge rounded index color="red">20</Badge>
-							</a>
+								<span>
+									Paper back
+									<input
+										type="checkbox"
+										bind:checked={$CartType.paper_back}
+										name="hard_back"
+										id="paper_back"
+										class="hidden"
+									/>
+								</span>
+								<Badge rounded index color="yellow">{paper_back_count}</Badge>
+							</label>
 							<Button
+								on:click={() => handlePlus('paper_back')}
 								btnClass="rounded-full border border-gray-600 h-12 w-12 text-3xl text-center font-bold text-2xl"
 								><svg
 									xmlns="http://www.w3.org/2000/svg"
@@ -101,12 +167,12 @@
 					</div>
 
 					<div class="flex flex-col md:flex-row gap-6">
-						<a
-							href="/"
+						<button
+							on:click={() => handleAddCart(cart_out)}
 							class="rounded-full font-semibold border border-gray-700 px-4 py-3 w-48 text-center uppercase flex items-center space-x-2"
 						>
 							<span><img src="/icons/cart.svg" class="h-5 w-5" alt="" srcset="" /></span>
-							<span>add to cart</span></a
+							<span>add to cart</span></button
 						>
 					</div>
 				</div>
@@ -166,10 +232,9 @@
 										>preview</a
 									>
 
-									<a
-										href="/"
+									<button
 										class="rounded-full font-semibold 
-									text-sm bg-primary px-1 py-2 text-center uppercase ">view on amazon</a
+									text-sm bg-primary px-1 py-2 text-center uppercase ">view on amazon</button
 									>
 								</div>
 							</div>

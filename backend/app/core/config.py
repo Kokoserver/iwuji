@@ -41,7 +41,7 @@ class Settings(BaseSettings):
     REFRESH_KEY: str
     ALGORITHM: str
     REFRESH_TOKEN_EXPIRATION_DURATION: timedelta = timedelta(days=7)
-    ACCESS_TOKEN_EXPIRATION_DURATION: timedelta = timedelta(minutes=30)
+    ACCESS_TOKEN_EXPIRATION_DURATION: timedelta = timedelta(seconds=30)
 
     # payment
     PAYMENT_SECRET_KEY: str
