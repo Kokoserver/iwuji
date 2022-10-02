@@ -14,7 +14,7 @@ export interface CartProductIn {
 
 export interface CartIn extends CartProductPropertyIn {
 	id: number;
-	pdf: true;
+	pdf: boolean;
 	paper_back_qty: number;
 	hard_back_qty: number;
 	product: CartProductIn;
@@ -25,6 +25,9 @@ export interface CartOut {
 	paper_back_qty: number;
 	hard_back_qty: number;
 }
-export interface CartUpdateOut extends CartProductPropertyIn {
+export interface CartUpdateOut {
 	cartId: number;
+	pdf: boolean;
+	paper_back_qty: number;
+	hard_back_qty: number;
 }

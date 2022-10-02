@@ -7,16 +7,19 @@
 	import Transition from '$root/lib/components/layouts/Transition.svelte';
 	import { Notification } from '$root/lib/notification';
 	import type { LayoutData } from './$types';
+	import { Cart } from '$root/lib/store/toggleSeriesStore';
 	export let data: LayoutData;
 	$: user_data = data;
-	$: cart_count = data.carts.length;
+	$: $Cart = data.carts;
 </script>
 
 <div>
-	<Navbar is_login={user_data.is_login} user={user_data.user} {cart_count} />
-	<!-- <Transition url={$page.url} animate={$animate}> -->
-	<slot />
-	<!-- </Transition> -->
+	<Navbar is_login={user_data.is_login} user={user_data.user} cart_count={$Cart.length} />
+	<Transition url={$page.url} animate={$animate}>
+		<div data-sveltekit-prefetch="" class="overflow-x-hidden">
+			<slot />
+		</div>
+	</Transition>
 	<Footer />
 	<Notification />
 </div>

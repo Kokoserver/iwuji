@@ -7,8 +7,11 @@ import type { TokenDataIn, UserDataIn } from '$root/lib/interface/user.interface
 import { deleteCookiesData, setCookies } from './getCookies';
 
 export const get_jwt_data = (token: string) => {
-	const token_details = jwtDecode(token);
-	return token_details;
+	if (token) {
+		const token_details = jwtDecode(token);
+		return token_details;
+	}
+	return {};
 };
 
 type tokenData = { id: number; firstname: string; is_active: boolean; exp: number };

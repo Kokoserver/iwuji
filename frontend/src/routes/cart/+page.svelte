@@ -1,6 +1,8 @@
 <script lang="ts">
+	import { browser } from '$app/environment';
 	import Container from '$root/lib/components/layouts/Container.svelte';
-	import type { CartIn } from '$root/lib/interface/cart.interface';
+	import type { CartIn, CartUpdateOut } from '$root/lib/interface/cart.interface';
+	import { Cart, CartType } from '$root/lib/store/toggleSeriesStore';
 	import type { PageServerData } from '.svelte-kit/types/src/routes/cart/$types';
 	import {
 		Table,
@@ -10,34 +12,86 @@
 		TableHead,
 		TableHeadCell
 	} from 'flowbite-svelte';
+	import { get_total_price, handleRemoveFromCart, handleUpdateCart } from './crud';
 	export let data: PageServerData;
-	$: carts = data.carts;
+	$: $Cart = data.carts;
 
-	$: get_totoal_price = (item: CartIn) => {
-		let total =
-			item.product.property.hard_back_price * item.hard_back_qty +
-			item.product.property.paper_back_price * item.paper_back_qty;
-		if (item.pdf) {
-			total += item.product.property.pdf_price;
+	const handleUpdate = async (
+		cartItemObj: CartIn,
+		type: 'hard_back' | 'paper_back' | 'pdf',
+		direction: 'up' | 'down'
+	) => {
+		if (type === 'pdf') {
+			$Cart = $Cart.map((item) => {
+				if (item === cartItemObj) {
+					item.pdf = !cartItemObj.pdf;
+					return item;
+				}
+				return item;
+			});
 		}
-		return total;
+		if (type === 'hard_back' && direction == 'up') {
+			$Cart = $Cart.map((item) => {
+				if (item === cartItemObj && item.hard_back_qty < 41) {
+					item.hard_back_qty++;
+					return item;
+				}
+				return item;
+			});
+		}
+		if (type === 'hard_back' && direction == 'down') {
+			$Cart = $Cart.map((item) => {
+				if (item === cartItemObj && item.hard_back_qty != 0) {
+					item.hard_back_qty--;
+					return item;
+				}
+				return item;
+			});
+		}
+		if (type === 'paper_back' && direction == 'up') {
+			$Cart = $Cart.map((item) => {
+				if (item === cartItemObj && item.paper_back_qty <= 40) {
+					item.paper_back_qty++;
+					return item;
+				}
+				return item;
+			});
+		}
+		if (type === 'paper_back' && direction == 'down') {
+			$Cart = $Cart.map((item) => {
+				if (item === cartItemObj && item.paper_back_qty !== 0) {
+					item.paper_back_qty--;
+					return item;
+				}
+				return item;
+			});
+		}
+		if (data.carts !== $Cart) {
+			const to_update: CartUpdateOut = {
+				cartId: cartItemObj.id,
+				pdf: cartItemObj.pdf,
+				paper_back_qty: cartItemObj.paper_back_qty,
+				hard_back_qty: cartItemObj.hard_back_qty
+			};
+
+			setTimeout(async () => {
+				await handleUpdateCart(to_update);
+			}, 5000);
+		}
 	};
-
-	
-
 </script>
 
 <Container divClass="mt-20 space-y-20">
 	<h1 class="text-center font-bold text-3xl uppercase">Cart</h1>
-	{#if carts[0]?.id}
+	{#if $Cart[0]?.id}
 		<div class="flex justify-end">
 			<a href="/checkout" class="rounded-full font-semibold bg-primary px-5 py-3 capitalize"
 				>Checkout</a
 			>
 		</div>
 	{/if}
-	{#if carts[0]?.id}
-		{#each carts as item}
+	{#if $Cart[0]?.id}
+		{#each $Cart as item}
 			<div
 				class="flex flex-col md:flex-row items-center md:items-start justify-center  md:gap-20 border-b-2 border-b-secondary py-14"
 			>
@@ -57,12 +111,13 @@
 						</div>
 						<div>
 							<svg
+								on:click={() => handleRemoveFromCart(item.id)}
 								xmlns="http://www.w3.org/2000/svg"
 								fill="none"
 								viewBox="0 0 24 24"
 								stroke-width="1.2"
 								stroke="currentColor"
-								class="w-6 h-6"
+								class="w-6 h-6 cursor-pointer"
 							>
 								<path
 									stroke-linecap="round"
@@ -72,136 +127,146 @@
 							</svg>
 						</div>
 					</div>
-					<Table divClass="bg-transperent ">
-						<TableHead theadClass="bg-none capitalize text-left">
-							<TableHeadCell><span class="font-normal">qty</span></TableHeadCell>
-							<TableHeadCell><span class="font-normal">price per unit</span></TableHeadCell>
-							<TableHeadCell><span class="font-normal">price</span></TableHeadCell>
-						</TableHead>
-						<TableBody>
-							<TableBodyRow trClass="bg-transparent capitalize">
-								<TableBodyCell>
-									<div class="flex items-center justify-start">
-										<h1 class="font-normal">
-											Hard back <span class="pl-5 pr-7">x{item.hard_back_qty}</span>
-										</h1>
-										<div>
-											<svg
-												xmlns="http://www.w3.org/2000/svg"
-												fill="none"
-												viewBox="0 0 24 24"
-												stroke-width=".9"
-												stroke="currentColor"
-												class="w-6 h-6"
-											>
-												<path
-													stroke-linecap="round"
-													stroke-linejoin="round"
-													d="M4.5 15.75l7.5-7.5 7.5 7.5"
-												/>
-											</svg>
-											<svg
-												xmlns="http://www.w3.org/2000/svg"
-												fill="none"
-												viewBox="0 0 24 24"
-												stroke-width=".9"
-												stroke="currentColor"
-												class="w-6 h-6"
-											>
-												<path
-													stroke-linecap="round"
-													stroke-linejoin="round"
-													d="M19.5 8.25l-7.5 7.5-7.5-7.5"
-												/>
-											</svg>
+					<div>
+						<Table divClass="bg-transperent ">
+							<TableHead theadClass="bg-none capitalize text-left">
+								<TableHeadCell><span class="font-normal">qty</span></TableHeadCell>
+								<TableHeadCell><span class="font-normal">price per unit</span></TableHeadCell>
+								<TableHeadCell><span class="font-normal">price</span></TableHeadCell>
+							</TableHead>
+							<TableBody>
+								<TableBodyRow trClass="bg-transparent capitalize">
+									<TableBodyCell>
+										<div class="flex items-center justify-start">
+											<h1 class="font-normal">
+												Hard back <span class="pl-5 pr-7">x{item.hard_back_qty}</span>
+											</h1>
+											<div>
+												<svg
+													on:click={() => handleUpdate(item, 'hard_back', 'up')}
+													xmlns="http://www.w3.org/2000/svg"
+													fill="none"
+													viewBox="0 0 24 24"
+													stroke-width=".9"
+													stroke="currentColor"
+													class="w-6 h-6 cursor-pointer"
+												>
+													<path
+														stroke-linecap="round"
+														stroke-linejoin="round"
+														d="M4.5 15.75l7.5-7.5 7.5 7.5"
+													/>
+												</svg>
+												<svg
+													on:click={() => handleUpdate(item, 'hard_back', 'down')}
+													xmlns="http://www.w3.org/2000/svg"
+													fill="none"
+													viewBox="0 0 24 24"
+													stroke-width=".9"
+													stroke="currentColor"
+													class="w-6 h-6 cursor-pointer"
+												>
+													<path
+														stroke-linecap="round"
+														stroke-linejoin="round"
+														d="M19.5 8.25l-7.5 7.5-7.5-7.5"
+													/>
+												</svg>
+											</div>
 										</div>
-									</div>
-								</TableBodyCell>
-								<TableBodyCell
-									><span class="font-normal">${item.product.property.hard_back_price}</span
-									></TableBodyCell
-								>
-								<TableBodyCell
-									><span class="font-normal"
-										>${item.hard_back_qty * item.product.property.hard_back_price}</span
-									></TableBodyCell
-								>
-							</TableBodyRow>
-							<TableBodyRow trClass="bg-transparent capitalize">
-								<TableBodyCell>
-									<div class="flex items-center justify-start">
-										<h1 class="capiterlize font-normal">
-											paper back <span class="pl-5 pr-6">x{item.paper_back_qty}</span>
-										</h1>
-										<div>
-											<svg
-												xmlns="http://www.w3.org/2000/svg"
-												fill="none"
-												viewBox="0 0 24 24"
-												stroke-width=".9"
-												stroke="currentColor"
-												class="w-6 h-6"
-											>
-												<path
-													stroke-linecap="round"
-													stroke-linejoin="round"
-													d="M4.5 15.75l7.5-7.5 7.5 7.5"
-												/>
-											</svg>
-											<svg
-												xmlns="http://www.w3.org/2000/svg"
-												fill="none"
-												viewBox="0 0 24 24"
-												stroke-width=".9"
-												stroke="currentColor"
-												class="w-6 h-6"
-											>
-												<path
-													stroke-linecap="round"
-													stroke-linejoin="round"
-													d="M19.5 8.25l-7.5 7.5-7.5-7.5"
-												/>
-											</svg>
+									</TableBodyCell>
+									<TableBodyCell
+										><span class="font-normal">${item.product.property.hard_back_price}</span
+										></TableBodyCell
+									>
+									<TableBodyCell
+										><span class="font-normal"
+											>${item.hard_back_qty * item.product.property.hard_back_price}</span
+										></TableBodyCell
+									>
+								</TableBodyRow>
+								<TableBodyRow trClass="bg-transparent capitalize">
+									<TableBodyCell>
+										<div class="flex items-center justify-start">
+											<h1 class="capiterlize font-normal">
+												paper back <span class="pl-5 pr-6">x{item.paper_back_qty}</span>
+											</h1>
+											<div>
+												<svg
+													on:click={() => handleUpdate(item, 'paper_back', 'up')}
+													xmlns="http://www.w3.org/2000/svg"
+													fill="none"
+													viewBox="0 0 24 24"
+													stroke-width=".9"
+													stroke="currentColor"
+													class="w-6 h-6"
+												>
+													<path
+														stroke-linecap="round"
+														stroke-linejoin="round"
+														d="M4.5 15.75l7.5-7.5 7.5 7.5"
+													/>
+												</svg>
+												<svg
+													on:click={() => handleUpdate(item, 'paper_back', 'down')}
+													xmlns="http://www.w3.org/2000/svg"
+													fill="none"
+													viewBox="0 0 24 24"
+													stroke-width=".9"
+													stroke="currentColor"
+													class="w-6 h-6"
+												>
+													<path
+														stroke-linecap="round"
+														stroke-linejoin="round"
+														d="M19.5 8.25l-7.5 7.5-7.5-7.5"
+													/>
+												</svg>
+											</div>
 										</div>
-									</div>
-								</TableBodyCell>
-								<TableBodyCell
-									><span class="font-normal">${item.product.property.paper_back_price}</span
-									></TableBodyCell
-								>
-								<TableBodyCell
-									><span class="font-normal">
-										${item.paper_back_qty * item.product.property.paper_back_price}</span
-									></TableBodyCell
-								>
-							</TableBodyRow>
-							<TableBodyRow trClass="bg-transparent capitalize">
-								<TableBodyCell>
-									<div class="flex items-center justify-start gap-16 font-normal">
-										<h1 class="pr-1">pdf</h1>
-										<span class="font-normal">{item.pdf ? 'X1' : 'X0'}</span>
-									</div>
-								</TableBodyCell>
-								<TableBodyCell
-									><span class="font-normal">${item.product.property.pdf_price}</span
-									></TableBodyCell
-								>
-								<TableBodyCell
-									><span class="font-normal">${item.pdf && item.product.property.pdf_price}</span
-									></TableBodyCell
-								>
-							</TableBodyRow>
-							<TableBodyRow trClass="bg-transparent">
-								<TableBodyCell />
-								<TableBodyCell />
-								<TableBodyCell class="!px-0 md:!p-6" tdClass="pt-10 "
-									><span class="capitalize  pr-2">total:</span><span class="font-bold "
-										>${get_totoal_price(item)}</span
-									></TableBodyCell
-								>
-							</TableBodyRow>
-						</TableBody>
-					</Table>
+									</TableBodyCell>
+									<TableBodyCell
+										><span class="font-normal">${item.product.property.paper_back_price}</span
+										></TableBodyCell
+									>
+									<TableBodyCell
+										><span class="font-normal">
+											${item.paper_back_qty * item.product.property.paper_back_price}</span
+										></TableBodyCell
+									>
+								</TableBodyRow>
+								<TableBodyRow trClass="bg-transparent capitalize">
+									<TableBodyCell>
+										<div
+											class="flex items-center justify-start gap-16 font-normal cursor-pointer"
+											on:click={() => handleUpdate(item, 'pdf', 'up')}
+										>
+											<h1 class="pr-1">pdf</h1>
+											<span class="font-normal">{item.pdf ? 'X1' : 'X0'}</span>
+										</div>
+									</TableBodyCell>
+									<TableBodyCell
+										><span class="font-normal">${item.product.property.pdf_price}</span
+										></TableBodyCell
+									>
+									<TableBodyCell
+										><span class="font-normal"
+											>${item.pdf ? item.product.property.pdf_price : 0}</span
+										></TableBodyCell
+									>
+								</TableBodyRow>
+								<TableBodyRow trClass="bg-transparent">
+									<TableBodyCell />
+									<TableBodyCell />
+									<TableBodyCell class="" tdClass="pt-10 "
+										><span class="capitalize  ">total: </span><span class="font-bold "
+											>${get_total_price(item)}</span
+										></TableBodyCell
+									>
+								</TableBodyRow>
+							</TableBody>
+						</Table>
+					</div>
 				</div>
 			</div>
 		{/each}

@@ -8,7 +8,7 @@ from app.src.cart import crud, schemas
 cart = APIRouter()
 
 
-@cart.post("/", response_model=Message, status_code=status.HTTP_201_CREATED)
+@cart.post("/", response_model=schemas.CartOut, status_code=status.HTTP_201_CREATED)
 async def create_cart(cart: schemas.CartIn, user: User = Depends(UserWrite.current_user_with_data)):
     return await crud.create_cart(cart, user)
 

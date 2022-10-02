@@ -1,4 +1,5 @@
 import { writable, type Writable } from 'svelte/store';
+import type { CartIn } from '../interface/cart.interface';
 
 export type BookType = {
 	is_series: boolean;
@@ -26,3 +27,5 @@ export const CartType: Writable<CartItemType> = writable({
 	paper_back_qty: 0,
 	hard_back_qty: 0
 });
+
+export const Cart: Writable<CartIn[]> = writable([]);

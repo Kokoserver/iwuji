@@ -2,6 +2,7 @@
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import type { UserDataIn } from '$root/lib/interface/user.interface';
+	import { TokenData } from '$root/lib/store/tokenStore';
 	export let is_login: boolean = false;
 	export let user: UserDataIn;
 	export let cart_count: number = 0;
@@ -38,7 +39,7 @@
 	</div>
 	<div>
 		<Dropdown placement="bottom" triggeredBy="#avatar-menu">
-			{#if is_login}
+			{#if is_login || $TokenData.access_token}
 				<DropdownHeader>
 					<span class="block text-sm">{`${user.firstname} ${user.lastname}`}</span>
 					<span class="block truncate text-sm font-medium">{user.email} </span>
@@ -46,11 +47,11 @@
 				<DropdownItem><a href="/user/dashboard">Dashboard</a></DropdownItem>
 				<DropdownDivider />
 				<DropdownItem on:click={handleLogout}>sign out</DropdownItem>
-			{:else if !is_login}
+			{:else if !is_login && !$TokenData.access_token}
 				<DropdownItem><a href="/login">login</a></DropdownItem>
 			{/if}
 		</Dropdown>
-		<Button href="/cart" id="cartbtn" size="sm">
+		<Button href="/cart" id="cartbtn" size="sm" data-sveltekit-prefetch="">
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				fill="none"

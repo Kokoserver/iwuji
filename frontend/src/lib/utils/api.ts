@@ -15,13 +15,13 @@ class API {
 	constructor(protected baseurl: string) {}
 
 	async get_token() {
-		const token_detail = get_jwt_data(tokens.access_token) as { exp: number };
+		const token_detail = get_jwt_data(tokens?.access_token ?? '') as { exp: number };
 		const isExpire: boolean = dayjs.unix(token_detail.exp).diff(dayjs()) < 1;
 		let new_token = get(TokenData);
 		if (isExpire) {
 			new_token = get(TokenData);
 		}
-		return { Authorization: `Bearer ${new_token.access_token}` };
+		return { Authorization: `Bearer ${new_token?.access_token}` };
 	}
 
 	get_url(endpoint: string) {
@@ -37,14 +37,16 @@ class API {
 		if (!response.ok) {
 			try {
 				const data = text && JSON.parse(text);
-				if (data) return { data, status: response.status };
+				if (data) {
+					return { data, status: response.status };
+				}
 			} catch (error) {
 				return { text, status: response.status };
 			}
 		} else {
 			try {
 				const data = text && JSON.parse(text);
-				if (data) return { data, status: response.status };
+				return { data, status: response.status };
 			} catch (error) {
 				return { text, status: response.status };
 			}

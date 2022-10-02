@@ -1,3 +1,4 @@
+from cmath import log
 from fastapi import status, HTTPException, Response
 from app.src._base.schemas import Message
 from app.src.cart import schemas
@@ -30,7 +31,8 @@ async def create_cart(cart: schemas.CartIn, user: User):
         user=user,
         product=get_product)
     if add_cart:
-        return Message(message='Cart created successfully')
+        new_cart = await get_cart(add_cart.id, user)
+        return new_cart
     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                         detail='product does not exist in cart')
 

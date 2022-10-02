@@ -2,7 +2,7 @@
 	import Container from './Container.svelte';
 </script>
 
-<footer class=" bg-primary p-6" id="contact">
+<footer class=" bg-primary p-6  mt-40" id="contact">
 	<Container divClass="flex flex-col md:flex-row gap-6 justify-between items-center gap-6">
 		<div class="space-y-4 flex flex-col  justify-center items-center md:items-start">
 			<a href="/"><img src="/logo.svg" class="h-5" alt="" /></a>

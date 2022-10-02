@@ -1,4 +1,5 @@
 import type { TokenDataIn, UserDataIn } from '$root/lib/interface/user.interface';
+import { TokenData } from '$root/lib/store/tokenStore';
 import api from '$root/lib/utils/api';
 import { deleteCookiesData, setCookies } from '$root/lib/utils/getCookies';
 import { status } from '$root/lib/utils/status';
@@ -29,9 +30,8 @@ export const actions: Actions = {
 		if (res.status === status.HTTP_200_OK) {
 			const token: TokenDataIn = res.data as TokenDataIn;
 			setCookies(token.refresh_token, token, 'session', cookies);
-			const user = await api.get('/users/whoami', {
-				Authorization: `bearer ${token.access_token}`
-			});
+			TokenData.set(token);
+			const user = await api.get('/users/whoami', {});
 			const user_data: UserDataIn = user.data as UserDataIn;
 			setCookies(token.refresh_token, user_data, 'details', cookies);
 			setCookies(token.refresh_token, { is_login: true }, 'is_login', cookies);

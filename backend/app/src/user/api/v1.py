@@ -27,6 +27,7 @@ async def get_user(user_id: int, _: int = Depends(UserWrite.super_or_admin))->sc
 
 @user.get("/whoami", response_model=schemas.UserDataOut, status_code=status.HTTP_200_OK)
 async def get_user_current_user_data(user_id: int= Depends(UserWrite.current_user))->schemas.UserDataOut:
+    print("here")
     return await crud.get_current_user_data(user_id)
 
 

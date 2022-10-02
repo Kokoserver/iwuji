@@ -3,7 +3,6 @@
 	import { Badge, Button } from 'flowbite-svelte';
 	import type { PageServerData } from './$types';
 	import { CartType } from '$root/lib/store/toggleSeriesStore';
-	import type { CartOut } from '$root/lib/interface/cart.interface';
 	import { handleAddCart } from '$root/routes/cart/crud';
 	export let data: PageServerData;
 
@@ -11,35 +10,30 @@
 	$: is_single_product = data.is_single_product;
 	$: variation = data.variation;
 	$: is_variation = data.is_variation;
-	$: cart_toggle = $CartType;
-	$: hard_back_count = $CartType.hard_back_qty;
-	$: paper_back_count = $CartType.paper_back_qty;
+	$: hard_back_count = $CartType.hard_back ? $CartType.hard_back_qty : 0;
+	$: paper_back_count = $CartType.paper_back ? $CartType.paper_back_qty : 0;
 
-	const cart_out: CartOut = {
+	$: cart_out = {
 		productId: data?.product?.id,
 		pdf: $CartType.pdf,
-		paper_back_qty: $CartType.paper_back_qty,
-		hard_back_qty: $CartType.hard_back_qty
+		paper_back_qty: paper_back_count,
+		hard_back_qty: hard_back_count
 	};
 
 	const handlePlus = (type: string) => {
-		if (type === 'hard_back') {
+		if (type === 'hard_back' && $CartType.hard_back) {
 			$CartType.hard_back_qty++;
 		}
-		if (type === 'paper_back') {
+		if (type === 'paper_back' && $CartType.paper_back) {
 			$CartType.paper_back_qty++;
 		}
 	};
 	const handleMinus = (type: string) => {
-		if (type === 'hard_back') {
-			if ($CartType.hard_back_qty !== 0) {
-				$CartType.hard_back_qty--;
-			}
+		if (type === 'hard_back' && $CartType.hard_back) {
+			$CartType.hard_back_qty--;
 		}
-		if (type === 'paper_back') {
-			if ($CartType.paper_back_qty !== 0) {
-				$CartType.paper_back_qty--;
-			}
+		if (type === 'paper_back' && $CartType.paper_back) {
+			$CartType.paper_back_qty--;
 		}
 	};
 </script>
@@ -65,7 +59,7 @@
 							type="checkbox"
 							name="pdf"
 							id="pdf"
-							bind:checked={cart_toggle.pdf}
+							bind:checked={$CartType.pdf}
 							class="hidden"
 						/>
 					</label>
@@ -169,7 +163,12 @@
 					<div class="flex flex-col md:flex-row gap-6">
 						<button
 							on:click={() => handleAddCart(cart_out)}
-							class="rounded-full font-semibold border border-gray-700 px-4 py-3 w-48 text-center uppercase flex items-center space-x-2"
+							disabled={!$CartType.paper_back && !$CartType.hard_back && !$CartType.pdf}
+							class="rounded-full font-semibold border border-gray-700 px-4 py-3 w-48  text-center uppercase flex items-center space-x-2  {!$CartType.paper_back &&
+							!$CartType.hard_back &&
+							!$CartType.pdf
+								? 'cursor-not-allowed bg-gray-200'
+								: 'cursor_pointer'}"
 						>
 							<span><img src="/icons/cart.svg" class="h-5 w-5" alt="" srcset="" /></span>
 							<span>add to cart</span></button
