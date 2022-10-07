@@ -5,7 +5,7 @@
 	import type { PageServerData } from './$types';
 	export let data: PageServerData;
 
-	if (data.message) {
+	if (data.message !== null && data.message !== undefined) {
 		notification.success(data.message, 5000);
 		if (browser) {
 			goto('/', {

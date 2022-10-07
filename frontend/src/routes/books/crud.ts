@@ -45,7 +45,7 @@ export const get_singleProduct = async (productId: number): Promise<ProductIn> =
 	if (res.status === status.HTTP_200_OK) {
 		return res.data as ProductIn;
 	}
-	return {} as ProductIn;
+	return {} as VariationIn;
 };
 
 export const get_singleVariation = async (variationId: number): Promise<VariationIn> => {
@@ -62,6 +62,16 @@ export const get_ProductReview = async (
 	productId: number
 ): Promise<ReviewIn[]> => {
 	const res = await api.get(`/reviews/product/${productId}/?limit=${limit}&offset=${offset}`);
+	if (res.status === status.HTTP_200_OK) {
+		return res.data as ReviewIn[];
+	}
+	return [];
+};
+
+export const get_Reviews = async (limit = 10, offset = 0, filter = ''): Promise<ReviewIn[]> => {
+	const res = await api.get(
+		`/reviews/?limit=${limit}&offset=${offset}&${filter ? `$filter=${filter}` : ''}`
+	);
 	if (res.status === status.HTTP_200_OK) {
 		return res.data as ReviewIn[];
 	}

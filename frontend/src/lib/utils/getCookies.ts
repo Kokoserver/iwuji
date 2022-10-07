@@ -62,7 +62,7 @@ export const setCookies = (
 		path: '/',
 		httpOnly: true,
 		sameSite: 'strict',
-		secure: process.env.NODE_ENV === 'production',
+		secure: true,
 		maxAge: token_data.exp
 	});
 };

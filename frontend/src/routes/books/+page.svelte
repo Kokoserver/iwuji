@@ -3,13 +3,10 @@
 	import type { PageServerData } from './$types';
 	import { Iconinput, Next, Previous } from 'flowbite-svelte';
 	import { bookType } from '$root/lib/store/toggleSeriesStore';
-	import type { ProductIn } from '$root/lib/interface/product.interface';
-	import type { VariationIn } from '$root/lib/interface/variation.interface';
 	import { onMount } from 'svelte';
 	import { browser } from '$app/environment';
 
 	export let data: PageServerData;
-	let products: ProductIn[], variations: VariationIn[];
 
 	onMount(() => {
 		$bookType.normal_book = true;

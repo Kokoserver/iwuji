@@ -1,17 +1,8 @@
-// import { error } from "@sveltejs/kit"
-import type { RequestHandler } from "@sveltejs/kit"
+import type { PageServerLoad } from './$types';
+import { get_addressList } from './crud';
 
-export const POST: RequestHandler = ({ url }) => {
-	url.username
-	return new Response()
-}
-
-export const PUT: RequestHandler = ({ url }) => {
-	url.username
-	return new Response()
-}
-
-export const GET: RequestHandler = ({ url }) => {
-	url.username
-	return new Response()
-}
+export const load: PageServerLoad = async () => {
+	return {
+		addressList: get_addressList()
+	};
+};

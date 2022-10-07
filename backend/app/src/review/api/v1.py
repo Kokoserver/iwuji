@@ -15,6 +15,11 @@ async def create_review(review: schemas.ReviewIn, user: User = Depends(UserWrite
     return await crud.create_review(review, user)
 
 
+@review.get("/", response_model=List[schemas.ReviewIn], status_code=status.HTTP_200_OK)
+async def get_reviews(filter: str = '', limit: int = 10, offset: int = 0):
+    return await crud.get_reviews(filter, limit, offset)
+
+
 @review.put("/{id}", response_model=Message, status_code=status.HTTP_200_OK)
 async def update_review(id: int, review: schemas.ReviewIn, user: User = Depends(UserWrite.current_user_with_data)):
     return await crud.update_review(id, review, user)

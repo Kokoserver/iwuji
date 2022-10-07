@@ -22,7 +22,6 @@ const suite = create((data: AddressOut, currentField: string) => {
 	test('zipcode', 'zipcode is required', () => {
 		enforce(data.zipcode).isNotBlank();
 	});
-
 });
 
 export default suite;

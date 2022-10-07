@@ -3,7 +3,6 @@ import { status } from '$root/lib/utils/status';
 import { redirect } from '$root/lib/utils/redirect';
 import { getUserSession, updateCookies } from '$root/lib/utils/getCookies';
 import type { Handle, HandleFetch } from '@sveltejs/kit';
-
 import { refresh_token } from '$root/lib/utils/get_token_data';
 import { TokenData } from './lib/store/tokenStore';
 
@@ -38,7 +37,6 @@ export const handle: Handle = async ({ event, resolve }) => {
 		}
 		return await resolve(event);
 	}
-
 	return response;
 };
 

@@ -13,18 +13,18 @@ from starlette.responses import Response
 def check_quantity(carts: t.List[Cart])->t.List[str]:
     error_list: t.List[str] = []
     for cart in carts:
-        if cart.hard_back_qty < cart.product.property.hard_back_qty:
+        if cart.hard_back_qty > cart.product.property.hard_back_qty:
             error_list.append(
                 f"only {cart.product.property.hard_back_qty} left of {cart.product.name}"
             )
-        if cart.paper_back_qty < cart.product.property.paper_back_qty:
+        if cart.paper_back_qty > cart.product.property.paper_back_qty:
             error_list.append(
                 f"only {cart.product.property.hard_back_qty} left of {cart.product.name}"
             )
     return error_list
 
 
-async def create_order(data: OrderIn, user: User)->str:
+async def create_order(data: OrderIn, user: User)->dict:
     get_shipping_address = await ShippingAddress.objects.get_or_none(id=data.addressId, user=user)
     if not get_shipping_address:
         raise HTTPException(detail="Shipping address does not exist",
@@ -41,6 +41,7 @@ async def create_order(data: OrderIn, user: User)->str:
                                               shipping_address=get_shipping_address,
                                               status=OrderStatus.PROCESSING
                                               )
+
     if create_order:
         order_items = [OrderItem(pdf=cart.pdf,
                                  paper_back_qty=cart.paper_back_qty,
@@ -50,10 +51,9 @@ async def create_order(data: OrderIn, user: User)->str:
                                  )
                        for cart in get_cart_product if get_cart_product
                        ]
-        new_order_items = await OrderItem.objects.bulk_create(order_items)
-        if new_order_items:
-            await Cart.objects.select_related("product").filter(user=user).delete()
-        return create_order.orderId
+        await OrderItem.objects.bulk_create(order_items)
+        await Cart.objects.filter(user=user).delete()
+        return {"orderId": create_order.orderId}
 
 
 async def get_all_orders(user: User, offset: int = 0, limit: int= 10, filter: str='')->t.List[Order]:

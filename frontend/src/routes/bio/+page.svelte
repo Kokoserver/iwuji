@@ -7,7 +7,7 @@
 </script>
 
 <Container divClass=" pt-10 pb-28 px-5">
-	{#if author.email}
+	{#if author}
 		<div class="flex flex-col md:flex-row items-center justify-center gap-6">
 			<div class="md:w-1/2 p-2">
 				<img src={author?.profile_img?.url} width="500" height="500" alt="" />
@@ -26,7 +26,7 @@
 	{/if}
 </Container>
 
-{#if products[0]?.name === null}
+{#if products[0]}
 	<Container divClass="pb-28 ">
 		<h3 class="font-bold text-3xl uppercase text-center pb-20">authors works</h3>
 		<Grid gap={6}>

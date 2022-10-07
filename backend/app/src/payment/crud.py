@@ -1,8 +1,18 @@
 import typing as t
 from app.src._base.schemas import Message
 from app.src.order.enum import OrderStatus
+from .enum import PaymentStatus
 from app.src.payment.models import Payment
-from app.src.payment.schemas import PaymentResponse, PaymentLinkData, PaymentMeta, PaymentVerifyOut, VerifyPaymentResponse
+from app.src.payment.schemas import (
+    Customer,
+    PaymentResponse,
+    PaymentLinkData,
+    PaymentMeta,
+    PaymentVerifyOut,
+    VerifyPaymentResponse,
+    PaymentIn,
+    PaymentInitOut,
+)
 from app.src.user.models import User
 from fastapi import HTTPException, status
 from app.src.order.models import Order, OrderItem
@@ -10,51 +20,90 @@ from app.utils.payments import generate_link, get_product_total_price, verify_pa
 from app.core.config import settings
 
 
-async def create_payment(orderId: str, user: User):
-    get_order: Order = await Order.objects.get_or_none(orderId=orderId)
+async def create_payment(orderIn: PaymentIn, user: User):
+    get_order: Order = await Order.objects.get_or_none(orderId=orderIn.orderId)
+
     if not get_order:
         raise HTTPException(
-            detail=f"order with Id {orderId} not found", status_code=status.HTTP_404_NOT_FOUND)
-    order_items: t.List[OrderItem] = await OrderItem.objects.select_related("product__property").filter(order=get_order).all()
+            detail=f"order with Id {orderIn.orderId} not found",
+            status_code=status.HTTP_404_NOT_FOUND,
+        )
+    order_items: t.List[OrderItem] = (
+        await OrderItem.objects.select_related("product__property")
+        .filter(order=get_order)
+        .all()
+    )
     if not order_items:
-        raise HTTPException(detail="order items can not be empty")
+        raise HTTPException(
+            detail="order items can not be empty", status_code=status.HTTP_404_NOT_FOUND
+        )
     total_price = get_product_total_price(order_items)
     if total_price > 0:
-        meta_data: PaymentMeta = PaymentMeta(order_id=get_order.orderId,
-                                             user_id=user.id,
-                                             cancel_action=f"{settings.PROJECT_URL}")
-        payment_data: PaymentLinkData = PaymentLinkData(
+        await Payment.objects.create(
+            pay_ref=get_order.orderId,
+            user=user,
+            order=get_order,
             amount=total_price,
-            email=user.email,
-            metadata=meta_data.dict(),
-            callback_url=f"{settings.PROJECT_URL}/payment"
         )
-    data_out: PaymentResponse = generate_link(dataIn=payment_data)
-    if data_out.data.authorization_url:
-        return data_out
-    raise HTTPException(detail="error creating payment link",
-                        status_code=status.HTTP_201_CREATED)
+
+        meta_data: PaymentMeta = PaymentMeta(
+            order_id=get_order.orderId, user_id=user.id
+        )
+        customer = Customer(
+            email=user.email,
+            name=f"{user.firstname} {user.lastname}",
+            user_id=user.id,
+            order_id=get_order.id,
+        )
+        payment_data: PaymentLinkData = PaymentLinkData(
+            tx_ref=get_order.orderId,
+            amount=total_price,
+            meta=meta_data.dict(),
+            customer=customer.dict(),
+            redirect_url=f"{settings.PROJECT_URL}/user/payment/{user.firstname}",
+        )
+        data_out: PaymentResponse = generate_link(dataIn=payment_data)
+        if data_out.status == "success":
+            return PaymentInitOut(paymentLink=data_out.data.link)
+    raise HTTPException(
+        detail="error creating payment link",
+        status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+    )
 
 
 async def verify_user_payment(data: VerifyPaymentResponse, user: User):
-    check_payment: PaymentVerifyOut = verify_payment(reference=data.reference)
-    if check_payment.data.status == "success":
-        get_order = await Order.objects.get_or_none(orderId=data.orderId, user=user)
+    get_payment = await Payment.objects.get_or_none(pay_ref=data.tx_ref, user=user)
+    if not get_payment:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="invalid payment details was provided",
+        )
+    check_payment: PaymentVerifyOut = verify_payment(tx_ref=data.tx_ref)
+    if not check_payment.error:
+        get_order = await Order.objects.get_or_none(
+            orderId=data.tx_ref,
+            user=user,
+        )
         if not get_order:
             raise HTTPException(
-                detail=f"order with id {data.orderId} does not exist", status_code=status.HTTP_404_NOT_FOUND)
-        save_payment = await Payment.objects.create(
-            pay_ref=check_payment.data.reference,
-            user=user,
-            order=get_order,
-            amount=check_payment.data.amount,
-            currency=check_payment.data.currency.lower(),
-            method=check_payment.data.channel,
-            status=check_payment.data.status
-        )
-        if save_payment:
-            get_order.status = OrderStatus.COMPLETED
-            await get_order.upsert()
-            return Message(message="payment successful")
-        raise HTTPException(detail="internal server error",
-                            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                detail=f"order with id {data.tx_ref} does not exist",
+                status_code=status.HTTP_404_NOT_FOUND,
+            )
+        if get_order.orderId != get_payment.pay_ref:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Error validating payment details",
+            )
+        if get_payment.amount != check_payment.amount:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Error validating payment details",
+            )
+
+        await get_payment.update(status=PaymentStatus.SUCCESS)
+        await get_order.update(status=OrderStatus.PROCESSING)
+        return Message(message="payment successful")
+    await get_payment.update(status=PaymentStatus.FAIL)
+    raise HTTPException(
+        status_code=status.HTTP_402_PAYMENT_REQUIRED, detail="payment failed"
+    )

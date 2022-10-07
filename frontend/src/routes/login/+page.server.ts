@@ -3,10 +3,10 @@ import { TokenData } from '$root/lib/store/tokenStore';
 import api from '$root/lib/utils/api';
 import { deleteCookiesData, setCookies } from '$root/lib/utils/getCookies';
 import { status } from '$root/lib/utils/status';
-import { invalid, redirect, type Actions } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
+import { invalid, redirect, type Actions } from '@sveltejs/kit';
 
-export const load: PageServerLoad = async (event) => {
+export const load: PageServerLoad = (event) => {
 	if (event.locals.user && event.locals.is_login === true) {
 		throw redirect(status.HTTP_307_TEMPORARY_REDIRECT, '/');
 	}
@@ -31,7 +31,7 @@ export const actions: Actions = {
 			const token: TokenDataIn = res.data as TokenDataIn;
 			setCookies(token.refresh_token, token, 'session', cookies);
 			TokenData.set(token);
-			const user = await api.get('/users/whoami', {});
+			const user = await api.get('/users/whoami');
 			const user_data: UserDataIn = user.data as UserDataIn;
 			setCookies(token.refresh_token, user_data, 'details', cookies);
 			setCookies(token.refresh_token, { is_login: true }, 'is_login', cookies);

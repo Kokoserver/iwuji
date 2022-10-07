@@ -1,9 +1,9 @@
 <script lang="ts">
 	import Container from '$root/lib/components/layouts/Container.svelte';
 	import { Badge, Button } from 'flowbite-svelte';
-	import type { PageServerData } from './$types';
+	import type { PageServerData } from '../../../../.svelte-kit/types/src/routes/books/[bookId=integer]/$types';
 	import { CartType } from '$root/lib/store/toggleSeriesStore';
-	import { handleAddCart } from '$root/routes/cart/crud';
+	import { handleAddCart } from '$root/routes/shop/crud';
 	export let data: PageServerData;
 
 	$: product = data.product;

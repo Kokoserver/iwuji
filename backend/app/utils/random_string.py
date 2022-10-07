@@ -14,7 +14,7 @@ def generate_orderId()->str:
 
 
 def generate_pay_ref()->str:
-    return f"IW-{datetime.now()}-{random_str(8)}"
+    return f"IW-{random_str(15)}"
 
 
 def generate_uuid(make_string: bool = False):

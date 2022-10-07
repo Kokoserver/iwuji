@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { page } from '$app/stores';
 	import type { UserDataIn } from '$root/lib/interface/user.interface';
 	import { TokenData } from '$root/lib/store/tokenStore';
 	export let is_login: boolean = false;
 	export let user: UserDataIn;
-	export let cart_count: number = 0;
+	export let url: string;
+	export let cart_count = 0;
 	import {
 		Navbar,
 		NavBrand,
@@ -75,7 +75,7 @@
 	<NavUl {hidden}>
 		<NavLi
 			href="/"
-			active={$page.url.pathname === '/'}
+			active={url === '/'}
 			activeClass="border-b-blue-600"
 			data-sveltekit-prefetch=""
 			class="uppercase border-b-transparent border-b-2 text-gray-700 font-normal md:pb-3
@@ -84,7 +84,7 @@
 
 		<NavLi
 			href="/bio"
-			active={$page.url.pathname === '/bio'}
+			active={url === '/bio'}
 			activeClass="border-b-blue-600"
 			data-sveltekit-prefetch=""
 			class="uppercase border-b-transparent border-b-2 text-gray-700 font-normal md:pb-3
@@ -93,7 +93,7 @@
 
 		<NavLi
 			href="/books"
-			active={$page.url.pathname === '/books'}
+			active={url === '/books'}
 			activeClass="border-b-blue-600"
 			data-sveltekit-prefetch=""
 			class="uppercase border-b-transparent border-b-2 text-gray-700 font-normal md:pb-3
@@ -102,7 +102,7 @@
 
 		<NavLi
 			href="#contact"
-			active={$page.url.pathname === '/#contact'}
+			active={url === '/#contact'}
 			activeClass="border-b-blue-600"
 			data-sveltekit-prefetch=""
 			class="uppercase border-b-transparent border-b-2 text-gray-700 font-normal md:pb-3

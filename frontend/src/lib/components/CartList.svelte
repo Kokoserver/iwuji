@@ -11,7 +11,7 @@
 		TableHeadCell
 	} from 'flowbite-svelte';
      import type { Writable } from 'svelte/store';
-	import { get_total_price, handleRemoveFromCart, handleUpdateCart } from '$root/routes/cart/crud';
+	import { get_total_price, handleRemoveFromCart, handleUpdateCart } from '$root/routes/shop/crud';
 	export let data: { carts: CartIn[] };
     export let cartStore:Writable<CartIn[]>
    

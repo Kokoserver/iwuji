@@ -5,19 +5,22 @@ description = ""
 authors = [
     {name = "kokoserver", email = "owonikokoolaoluwa@gmail.com"},
 ]
+dependencies = [
+    "paystackapi>=2.1.0",
+]
 [project.optional-dependencies]
 
 [tool.pdm.scripts] 
 server = "uvicorn app.main:app --reload"
 dependencies = [
-    "fastapi[all]>=0.81.0",
+    "fastapi[all]>=0.85.0",
     "ormar[postgresql]>=0.11.2",
     "python-slugify>=6.1.2",
     "aiosqlite>=0.17.0",
     "python-jose[cryptography]>=3.3.0",
     "passlib[bcrypt]>=1.7.4",
 ]
-requires-python = ">=3.9"
+requires-python = ">=3.8"
 license = {text = "MIT"}
 
 [tool.pdm.dev-dependencies]

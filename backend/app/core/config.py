@@ -1,9 +1,15 @@
-
 from datetime import timedelta
 import typing as t
 from pathlib import Path
 from functools import lru_cache
-from pydantic import AnyHttpUrl, BaseSettings, DirectoryPath, EmailStr, PostgresDsn, validator
+from pydantic import (
+    AnyHttpUrl,
+    BaseSettings,
+    DirectoryPath,
+    EmailStr,
+    PostgresDsn,
+    validator,
+)
 from app.utils import os_operation
 
 
@@ -41,14 +47,18 @@ class Settings(BaseSettings):
     REFRESH_KEY: str
     ALGORITHM: str
     REFRESH_TOKEN_EXPIRATION_DURATION: timedelta = timedelta(days=7)
-    ACCESS_TOKEN_EXPIRATION_DURATION: timedelta = timedelta(minutes=5)
+    ACCESS_TOKEN_EXPIRATION_DURATION: timedelta = timedelta(minutes=30)
 
     # payment
-    PAYMENT_SECRET_KEY: str
+    RAVE_SECRET_KEY: str
+    RAVE_PUBLIC_KEY: str
 
     """Validate the cores origins."""
+
     @validator("BACKEND_CORS_ORIGINS", pre=True)
-    def assemble_cors_origins(cls, v: t.Union[str, t.List[str]]) -> t.Union[t.List[str], str]:
+    def assemble_cors_origins(
+        cls, v: t.Union[str, t.List[str]]
+    ) -> t.Union[t.List[str], str]:
         if isinstance(v, str) and not v.startswith("["):
             return [i.strip() for i in v.split(",")]
         elif isinstance(v, (list, str)):
@@ -56,7 +66,9 @@ class Settings(BaseSettings):
         raise ValueError(v)
 
     @validator("DATABASE_URI", pre=True)
-    def assemble_db_connection(cls, v: t.Optional[str], values: t.Dict[str, t.Any]) -> t.Any:
+    def assemble_db_connection(
+        cls, v: t.Optional[str], values: t.Dict[str, t.Any]
+    ) -> t.Any:
         if isinstance(v, str):
             return v
         return PostgresDsn.build(

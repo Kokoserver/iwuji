@@ -43,14 +43,27 @@ export const handleUpdateCart = async (data: CartUpdateOut) => {
 	}
 };
 
-export const get_total_price = (item: CartIn) => {
-	let total =
-		item.product.property.hard_back_price * item.hard_back_qty +
-		item.product.property.paper_back_price * item.paper_back_qty;
-	if (item.pdf) {
-		total += item.product.property.pdf_price;
+export const get_total_price = (item: CartIn | CartIn[]) => {
+	if (Array.isArray(item) && item.length > 0) {
+		let total_price = 0;
+		for (let index = 0; index < item.length; index++) {
+			total_price =
+				item[index].product.property.hard_back_price * item[index].hard_back_qty +
+				item[index].product.property.paper_back_price * item[index].paper_back_qty;
+			if (item[index].pdf) {
+				total_price += item[index].product.property.pdf_price;
+			}
+			return total_price;
+		}
+	} else if (!Array.isArray(item)) {
+		let total =
+			item.product.property.hard_back_price * item.hard_back_qty +
+			item.product.property.paper_back_price * item.paper_back_qty;
+		if (item.pdf) {
+			total += item.product.property.pdf_price;
+		}
+		return total;
 	}
-	return total;
 };
 
 export const handleRemoveFromCart = async (id: number) => {

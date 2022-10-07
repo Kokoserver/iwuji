@@ -8,7 +8,7 @@ from app.src.order import schemas, crud
 order = APIRouter()
 
 
-@order.post("/", status_code=status.HTTP_201_CREATED, response_model=str)
+@order.post("/", status_code=status.HTTP_201_CREATED, response_model=schemas.OrderOut)
 async def create_order(data: schemas.OrderIn, user: User = Depends(UserWrite.current_user_with_data)):
     return await crud.create_order(data=data, user=user)
 

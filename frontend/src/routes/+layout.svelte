@@ -8,18 +8,25 @@
 	import { Notification } from '$root/lib/notification';
 	import type { LayoutData } from './$types';
 	import { Cart } from '$root/lib/store/toggleSeriesStore';
+	import type { CartIn } from '$root/lib/interface/cart.interface';
 	export let data: LayoutData;
 	$: user_data = data;
-	$: $Cart = data.carts;
+	$: $Cart = data.carts as CartIn[];
+
 </script>
 
 <div>
-	<Navbar is_login={user_data.is_login} user={user_data.user} cart_count={$Cart.length} />
-	<Transition url={$page.url} animate={$animate}>
-		<div data-sveltekit-prefetch="" class="overflow-x-hidden">
-			<slot />
-		</div>
-	</Transition>
+	<Navbar
+		is_login={user_data.is_login}
+		user={user_data.user}
+		url={$page.url.pathname}
+		cart_count={$Cart.length}
+	/>
+	<!-- <Transition url={$page.url} animate={$animate}> -->
+	<div class="overflow-x-hidden">
+		<slot />
+	</div>
+	<!-- </Transition> -->
 	<Footer />
 	<Notification />
 </div>
