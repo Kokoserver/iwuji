@@ -76,15 +76,17 @@
 						<h1 class="font-bold text-2xl">Total: ${get_total_price($Cart)}</h1>
 					</div>
 				{:else}
-					<DefaultMessage message="please select or create shipping address" />
+					<DefaultMessage message="Please select or create shipping address" />
 				{/if}
 			</TabContentItem>
 		</TabWrapper>
 	{:else}
-		<DefaultMessage message="no items to checkout" />
+		<DefaultMessage message="No items to checkout" />
 	{/if}
 </Container>
-<div class="flex items-center justify-center gap-5">
-	<Previous on:previous={previous} icon />
-	<Next on:next={next} icon />
-</div>
+{#if $Cart.length > 0}
+	<div class="flex items-center justify-center gap-5">
+		<Previous on:previous={previous} icon />
+		<Next on:next={next} icon />
+	</div>
+{/if}

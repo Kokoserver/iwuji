@@ -73,8 +73,8 @@ async def get_reviews(limit: int = 10, offset: int = 0, filter: str = "") -> Rev
     reviews = (
         await Review.objects.select_related("user")
         .filter(or_(comment__icontains=filter))
-        .limit(int(limit))
-        .offset(int(offset))
+        .limit(limit)
+        .offset(offset)
         .all()
     )
     if not reviews:

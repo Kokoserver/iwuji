@@ -32,7 +32,7 @@ export const get_addressList = async () => {
 	if (res.status === status.HTTP_200_OK) {
 		return res.data as AddressIn[];
 	}
-	throw error(status.HTTP_422_UNPROCESSABLE_ENTITY, 'Invalid data was provided');
+	return [];
 };
 
 export const delete_address = async (addressId: number) => {

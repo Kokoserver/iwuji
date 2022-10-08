@@ -45,7 +45,7 @@ export const get_singleProduct = async (productId: number): Promise<ProductIn> =
 	if (res.status === status.HTTP_200_OK) {
 		return res.data as ProductIn;
 	}
-	return {} as VariationIn;
+	return {} as ProductIn;
 };
 
 export const get_singleVariation = async (variationId: number): Promise<VariationIn> => {

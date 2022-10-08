@@ -12,7 +12,6 @@
 	export let data: LayoutData;
 	$: user_data = data;
 	$: $Cart = data.carts as CartIn[];
-
 </script>
 
 <div>
@@ -22,11 +21,11 @@
 		url={$page.url.pathname}
 		cart_count={$Cart.length}
 	/>
-	<!-- <Transition url={$page.url} animate={$animate}> -->
-	<div class="overflow-x-hidden">
-		<slot />
-	</div>
-	<!-- </Transition> -->
+	<Transition url={$page.url} animate={$animate}>
+		<div class="overflow-x-hidden">
+			<slot />
+		</div>
+	</Transition>
 	<Footer />
 	<Notification />
 </div>

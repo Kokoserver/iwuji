@@ -1,9 +1,11 @@
 <script lang="ts">
 	import Container from '$root/lib/components/layouts/Container.svelte';
 	import { Badge, Button } from 'flowbite-svelte';
-	import type { PageServerData } from '../../../../.svelte-kit/types/src/routes/books/[bookId=integer]/$types';
+	import type { PageServerData } from './$types';
 	import { CartType } from '$root/lib/store/toggleSeriesStore';
 	import { handleAddCart } from '$root/routes/shop/crud';
+	import DefaultMessage from '$root/lib/components/DefaultMessage.svelte';
+	import SectionTitle from '$root/lib/components/SectionTitle.svelte';
 	export let data: PageServerData;
 
 	$: product = data.product;
@@ -198,7 +200,7 @@
 				</div>
 			</div>
 			<div class="md:w-3/5  space-y-3 flex flex-col items-center justify-center shadow-xl px-4">
-				<h1 class="text-3xl font-semibold pt-3">Series books</h1>
+				<SectionTitle title="Series books" />
 				<div
 					class="{variation.items[0]?.name
 						? `h-[50rem] overflow-y-scroll overflow-x-hidden`
@@ -239,7 +241,7 @@
 							</div>
 						</div>
 					{:else}
-						<p class="text-center font-semibold text-xl">Series parts is not available yet</p>
+						<DefaultMessage message="Series parts is not available yet" />
 					{/each}
 				</div>
 			</div>
@@ -247,6 +249,6 @@
 	</Container>
 {:else}
 	<div class="h-screen flex justify-center items-center">
-		<p class="text-center text-4xl font-bold">Book is not found</p>
+		<DefaultMessage message="Book is not found" />
 	</div>
 {/if}

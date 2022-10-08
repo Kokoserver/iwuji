@@ -5,6 +5,7 @@
 	import type { ActionData } from './$types';
 	import { notification } from '$root/lib/notification';
 	import { goto } from '$app/navigation';
+	import FormTitlte from '$root/lib/components/layouts/FormTitlte.svelte';
 	const formdata = { email: '' };
 	export let form: ActionData;
 
@@ -48,7 +49,7 @@
 		>
 			<div class="w-72">
 				<div class="pb-5">
-					<h1 class="text-xl font-semibold">forgot your password</h1>
+					<FormTitlte title="Forgot password" />
 				</div>
 
 				<form class="flex flex-col space-y-6" method="POST">
@@ -75,21 +76,7 @@
 					</div>
 					<Button type="submit" class="w-full1 capitalize">submit</Button>
 				</form>
-
-				<!-- Footer -->
 			</div>
 		</div>
-
-		<!-- Login banner -->
-		<!-- <div
-			class="md:flex md:flex-wrap content-center justify-center rounded-r-md hidden"
-			style="width: 24rem; height: 32rem;"
-		>
-			<img
-				class="w-full h-full bg-center bg-no-repeat bg-cover rounded-r-md"
-				src="/books.jpg"
-				alt="book"
-			/>
-		</div> -->
 	</div>
 </Container>

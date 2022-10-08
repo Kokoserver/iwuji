@@ -2,4 +2,4 @@
 	export let message: string;
 </script>
 
-<h1 class="text-center font-bold text-4xl">{message}</h1>
+<h1 class="text-center font-semibold text-3xl">{message}</h1>

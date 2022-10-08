@@ -7,6 +7,7 @@
 	import { goto } from '$app/navigation';
 	import { enhance } from '$app/forms';
 	import { error } from '@sveltejs/kit';
+	import LableInput from '$root/lib/components/LableInput.svelte';
 	const formdata = { password: '', confirm_password: '' };
 	export let form: ActionData;
 
@@ -47,34 +48,26 @@
 				</div>
 
 				<form class="flex flex-col space-y-6" method="POST" use:enhance>
-					<Label class="space-y-2">
-						<span>Password</span>
-						<Input
-							type="password"
-							bind:value={formdata.password}
-							on:change={handleChange}
-							name="password"
-							placeholder="*********"
-							required
-						/>
-						{#if res.getErrors('password')}
-							<Helper color="red">{res.getErrors('password').concat(password_error) ?? ''}</Helper>
-						{/if}
-					</Label>
-					<Label class="space-y-2">
-						<span>Confirm password</span>
-						<Input
-							type="password"
-							bind:value={formdata.confirm_password}
-							on:change={handleChange}
-							name="confirm_password"
-							placeholder="**********"
-							required
-						/>
-						{#if res.getErrors('confirm_password')}
-							<Helper color="red">{res.getErrors('confirm_password') ?? ''}</Helper>
-						{/if}
-					</Label>
+					<LableInput
+						name="password"
+						value={formdata.password}
+						{handleChange}
+						type="password"
+						placeholder="***********"
+						required
+						labeleValue="new password"
+						error={res.getErrors('password')[0]}
+					/>
+					<LableInput
+						name="confirm_password"
+						value={formdata.confirm_password}
+						{handleChange}
+						type="password"
+						placeholder="***********"
+						required
+						labeleValue="confirm password"
+						error={res.getErrors('confirm_password')[0]}
+					/>
 
 					<Button type="submit" class="w-full1 capitalize">submit</Button>
 				</form>

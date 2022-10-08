@@ -1,6 +1,8 @@
 import { goto } from '$app/navigation';
+import type { OrderDetailsIn } from '$root/lib/interface/order.interface';
 import { notification } from '$root/lib/notification';
 import { Loading } from '$root/lib/store/modalStore';
+import api from '$root/lib/utils/api';
 import { status } from '$root/lib/utils/status';
 import { error } from '@sveltejs/kit';
 import { generate_payment_Link } from '../payment/crud';
@@ -13,10 +15,9 @@ export const create_order = async (addressId: number) => {
 	});
 
 	const data = await res.json();
-	console.log(data);
-
 	if (data.status === status.HTTP_201_CREATED) {
 		await generate_payment_Link(data.data.orderId);
+		await goto('/');
 	}
 	if (data.status === status.HTTP_404_NOT_FOUND) {
 		notification.danger('address details that was provided does not exist');
@@ -36,4 +37,10 @@ export const create_order = async (addressId: number) => {
 		await goto('/');
 	}
 	throw error(status.HTTP_400_BAD_REQUEST, 'Error creating order');
+};
+
+export const get_order_list = async () => {
+	const res = await api.get('/orders/');
+	if (res.status === status.HTTP_200_OK) return res.data as OrderDetailsIn[];
+	return [];
 };

@@ -1,5 +1,6 @@
 import typing as t
 from fastapi import status, HTTPException
+from ormar import or_
 from app.src._base.schemas import Message
 from app.src.address.models import ShippingAddress
 from app.src.cart.models import Cart
@@ -57,7 +58,7 @@ async def create_order(data: OrderIn, user: User)->dict:
 
 
 async def get_all_orders(user: User, offset: int = 0, limit: int= 10, filter: str='')->t.List[Order]:
-    all_order = await Order.objects.filter(status=filter, user=user).limit(limit).offset(offset).all()
+    all_order = await Order.objects.filter(or_(orderId__icontains=filter),user=user, ).limit(limit).offset(offset).all()
     return all_order
 
 

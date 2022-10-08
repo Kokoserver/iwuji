@@ -1,10 +1,13 @@
 <script lang="ts">
 	import Container from '$root/lib/components/layouts/Container.svelte';
 	import type { PageServerData } from './$types';
-	import { Iconinput, Next, Previous } from 'flowbite-svelte';
+	import { Iconinput } from 'flowbite-svelte';
 	import { bookType } from '$root/lib/store/toggleSeriesStore';
 	import { onMount } from 'svelte';
 	import { browser } from '$app/environment';
+	import DefaultMessage from '$root/lib/components/DefaultMessage.svelte';
+	import ProductCard from '$root/lib/components/ProductCard.svelte';
+	import ProductVariationCard from '$root/lib/components/ProductVariationCard.svelte';
 
 	export let data: PageServerData;
 
@@ -112,83 +115,16 @@
 <Container divClass="pt-10 pb-28 px-5 space-y-7">
 	{#if is_series && variations}
 		{#each variations as variation}
-			<div
-				class="flex flex-col md:flex-row items-center justify-center gap-2 md:gap-0 border-b border-b-secondary py-10"
-			>
-				<div class="md:w-1/2 p-2">
-					<img
-						src={variation.cover_img.url}
-						width="427"
-						height="527"
-						alt={variation.name}
-						srcset=""
-					/>
-				</div>
-				<div class="md:w-2/5 space-y-4 p-3 ">
-					<h1 class="font-semibold uppercase text-2xl text-center md:text-left">
-						{variation.name}
-					</h1>
-					<p class="font-normal text-gray-700 text-center md:text-left">
-						{variation.description.slice(1, 300)}...
-					</p>
-					<div
-						class="pt-6 space-x-4 flex items-start md:items-center justify-center md:justify-start"
-					>
-						<a
-							href="/books/{variation.id}/?is_series=true"
-							class="rounded-full font-semibold bg-primary px-4 py-3 text-center uppercase "
-							>preview</a
-						>
-
-						<a
-							href="/"
-							class="rounded-full font-semibold bg-primary px-4 py-3 text-center uppercase "
-							>view on amazon</a
-						>
-					</div>
-				</div>
-			</div>
+			<ProductVariationCard {variation} />
 		{:else}
-			<h1 class="text-center font-bold text-4xl">No series books yet</h1>
+			<DefaultMessage message="No series books yet" />
 		{/each}
 	{/if}
 	{#if mormal_book && products}
 		{#each products as product}
-			<div
-				class="flex flex-col md:flex-row items-center justify-center gap-2 md:gap-0 border-b border-b-secondary py-10"
-			>
-				<div class="md:w-1/2 p-2">
-					<img src={product.cover_img.url} width="427" height="527" alt={product.name} srcset="" />
-				</div>
-				<div class="md:w-2/5 space-y-4 p-3 ">
-					<h1 class="font-semibold uppercase text-2xl text-center md:text-left">{product.name}</h1>
-					<p class="font-normal text-gray-700 text-center md:text-left">
-						{product.description.slice(1, 300)}...
-					</p>
-					<div
-						class="pt-6 space-x-4 flex items-start md:items-center justify-center md:justify-start"
-					>
-						<a
-							href="/books/{product.id}"
-							class="rounded-full font-semibold bg-primary px-4 py-3 text-center uppercase "
-							>preview</a
-						>
-
-						<a
-							href="/"
-							class="rounded-full font-semibold bg-primary px-4 py-3 text-center uppercase "
-							>view on amazon</a
-						>
-					</div>
-				</div>
-			</div>
+			<ProductCard {product} />
 		{:else}
-			<h1 class="text-center font-bold text-4xl">No books yet</h1>
+			<DefaultMessage message="No books yet" />
 		{/each}
 	{/if}
-
-	<div class="flex items-center justify-center py-20">
-		<Previous on:previous={() => alert('previous is click')} icon />
-		<Next on:next={() => alert('next is click')} icon />
-	</div>
 </Container>

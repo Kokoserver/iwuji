@@ -5,11 +5,11 @@
 </script>
 
 {#key url}
-	{#if animate}
+	{#if animate === true}
 		<div in:fly={{ y: -50, duration: 250, delay: 300 }} out:fly={{ y: -50, duration: 250 }}>
 			<slot />
 		</div>
 	{:else}
-		<div><slot /></div>
+		<slot />
 	{/if}
 {/key}

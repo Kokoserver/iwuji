@@ -5,6 +5,7 @@
 	import type { ActionData } from './$types';
 	import suite from './form';
 	import type { UserLoginInput } from '$root/lib/interface/auth.interface';
+	import FormTitlte from '$root/lib/components/layouts/FormTitlte.svelte';
 
 	export let form: ActionData;
 	const formdata = {} as UserLoginInput;
@@ -26,7 +27,7 @@
 		>
 			<div class="w-72">
 				<div class="pb-10">
-					<h1 class="text-xl font-semibold">Welcome back</h1>
+					<FormTitlte title="Welcome back" />
 				</div>
 
 				<form class="flex flex-col space-y-6" method="post" use:enhance>

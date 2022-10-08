@@ -11,8 +11,8 @@ const suite = create((data: UserLoginInput, currentField: string) => {
 		enforce(data.username).matches(/^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/);
 	});
 
-	test('password', 'Username must be at least 3 characters long', () => {
-		enforce(data.password).isNotEmpty();
+	test('password', 'password is required', () => {
+		enforce(data.password).isNotBlank();
 	});
 });
 

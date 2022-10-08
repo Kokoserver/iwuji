@@ -21,7 +21,7 @@ export const load: PageServerLoad = async ({ url }) => {
 			if (res.status === status.HTTP_200_OK) {
 				Cart.set([]);
 				Loading.set(false);
-				return true;
+				return;
 			}
 
 			if (res.status === status.HTTP_404_NOT_FOUND) {
@@ -34,7 +34,7 @@ export const load: PageServerLoad = async ({ url }) => {
 
 			if (res.status === status.HTTP_402_PAYMENT_REQUIRED) {
 				Loading.set(false);
-				return false;
+				return;
 			}
 			Loading.set(false);
 			throw error(status.HTTP_400_BAD_REQUEST, 'payment verification failed');

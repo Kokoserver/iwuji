@@ -1,6 +1,11 @@
 <script lang="ts">
+	import AuthorDetailsCard from '$root/lib/components/AuthorDetailsCard.svelte';
+	import DefaultMessage from '$root/lib/components/DefaultMessage.svelte';
 	import Container from '$root/lib/components/layouts/Container.svelte';
 	import Grid from '$root/lib/components/layouts/Grid.svelte';
+	import NewReleaseCard from '$root/lib/components/NewReleaseCard.svelte';
+	import ReviewCard from '$root/lib/components/ReviewCard.svelte';
+	import SectionTitle from '$root/lib/components/SectionTitle.svelte';
 	import type { PageServerData } from './$types';
 	export let data: PageServerData;
 	const { products, reviews, author } = data;
@@ -38,69 +43,37 @@
 				</div>
 			</div>
 		{:else}
-			<h1 class="text-4xl text-center font-semibold">No books yet</h1>
+			<DefaultMessage message="No books yet" />
 		{/if}
 	</Container>
-	<img src="/homepage design.svg" alt="" class="absolute top-90 left-0 right-0" />
+	<img src="/homepage design.svg" alt="design" class="absolute top-90 left-0 right-0" />
 </section>
 
 <Container divClass="pb-28 px-5">
 	{#if !reviews}
-		<h3 class="font-bold text-3xl uppercase text-center pb-7">Reviews</h3>
+		<SectionTitle title="Reviews" />
 	{/if}
 	<Grid>
-		{#each reviews as review, index}
-			<div class="flex  justify-between  gap-4" id={`${review.id}`}>
-				<div class="w-1/3">
-					<img src="/books.jpg" alt="" srcset="" class="rounded-full w-24 h-24" />
-				</div>
-				<div class="w-2/3">
-					<h1 class="capitalize font-semibold text-md text-gray-500">
-						{review.user.firstname}
-						{review.user.lastname}
-					</h1>
-					<p>{review.comment}</p>
-				</div>
-			</div>
+		{#each reviews as review}
+			<ReviewCard {review} />
 		{/each}
 	</Grid>
 </Container>
 
 <Container divClass=" pt-10 pb-28 px-5">
-	{#if author.email}
-		<div class="flex flex-col md:flex-row items-center justify-center gap-6">
-			<div class="md:w-1/2 p-2">
-				<img
-					src={author?.profile_img?.url}
-					width="500"
-					height="500"
-					alt={author?.profile_img?.alt}
-				/>
-			</div>
-			<div class="md:w-2/5 space-y-4 p-3 ">
-				<h1 class="font-semibold uppercase text-2xl text-center md:text-left">The author</h1>
-				<p class="font-normal text-gray-700 text-center md:text-left">
-					{author.description.slice(1, 400)}...
-					<a href="/bio" class="font-normal text-blue-300 ">Read more</a>
-				</p>
-			</div>
-		</div>
+	{#if author !== undefined}
+		<AuthorDetailsCard {author} max_lenght={300} />
 	{:else}
-		<h1 class="text-4xl text-center font-semibold">Author's details not available</h1>
+		<DefaultMessage message="Author's details not available" />
 	{/if}
 </Container>
 <Container divClass="pb-28 ">
-	<h3 class="font-bold text-3xl uppercase text-center pb-20">new release</h3>
+	<SectionTitle title="new release" />
 	<Grid gap={6}>
 		{#each latest_product as product}
-			<div class="flex flex-col items-center space-y-7">
-				<a href="/books/{product.id}">
-					<img src={product.cover_img.url} alt={product.cover_img.alt} class="w-65 h-60" />
-				</a>
-				<h1 class="font-normal text-xl uppercase">{product.name}</h1>
-			</div>
+			<NewReleaseCard {product} />
 		{:else}
-			<h1 class="text-4xl text-center font-semibold">No new release books</h1>
+			<DefaultMessage message="No new release books" />
 		{/each}
 	</Grid>
 	<div class="flex justify-end pt-20">

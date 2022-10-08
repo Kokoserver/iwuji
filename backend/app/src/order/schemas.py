@@ -1,6 +1,8 @@
 
 from pydantic import BaseModel
 
+from app.src.order.enum import OrderStatus
+
 
 class OrderItemsIn(BaseModel):
     pdf: bool
@@ -9,6 +11,9 @@ class OrderItemsIn(BaseModel):
     product: int
     order: int
 
+class OrderDetailsOut(BaseModel):
+    orderId:str
+    status:OrderStatus
 
 class OrderIn(BaseModel):
     addressId: int
