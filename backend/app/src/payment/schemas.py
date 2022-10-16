@@ -1,8 +1,6 @@
 from datetime import datetime
-from typing import List, Optional, Union
-from xmlrpc.client import boolean
-from app.utils.random_string import generate_pay_ref
-from pydantic import BaseModel, Field, condecimal
+from typing import Optional
+from pydantic import BaseModel
 from app.src.payment import enum
 from pydantic.networks import EmailStr
 
@@ -13,6 +11,14 @@ class PaymentIn(BaseModel):
 
 class DataIn(BaseModel):
     link: str
+
+
+class PaymentDataViewOut(BaseModel):
+    id: int
+    amount: int
+    pay_ref: str
+    currency: enum.PaymentCurrency = enum.PaymentCurrency.NGN
+    status: enum.PaymentStatus = enum.PaymentStatus.PENDING
 
 
 class PaymentResponse(BaseModel):

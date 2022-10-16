@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import type { UserDataIn } from '$root/lib/interface/user.interface';
-	import { TokenData } from '$root/lib/store/tokenStore';
 	export let is_login: boolean = false;
 	export let user: UserDataIn;
 	export let url: string;
@@ -21,9 +20,11 @@
 		Badge
 	} from 'flowbite-svelte';
 	const handleLogout = async () => {
-		await goto('/user/logout', {
-			replaceState: true
+		await fetch('/api/auth/logout', {
+			method: 'DELETE'
 		});
+		is_login = false;
+		await goto('/');
 	};
 </script>
 
@@ -35,20 +36,20 @@
 	</div>
 	<div class="flex items-center md:order-2">
 		<Avatar id="avatar-menu" src="/author.png" />
-		<NavHamburger on:click={toggle} class1="w-full md:flex md:w-auto md:order-1" />
+		<NavHamburger on:click={toggle} class="w-full md:flex md:w-auto md:order-1" />
 	</div>
 	<div>
 		<Dropdown placement="bottom" triggeredBy="#avatar-menu">
-			{#if is_login || $TokenData.access_token}
+			{#if is_login}
 				<DropdownHeader>
 					<span class="block text-sm">{`${user.firstname} ${user.lastname}`}</span>
 					<span class="block truncate text-sm font-medium">{user.email} </span>
 				</DropdownHeader>
-				<DropdownItem><a href="/user/dashboard">Dashboard</a></DropdownItem>
+				<DropdownItem><a href="/dashboard" data-sveltekit-prefetch="">Dashboard</a></DropdownItem>
 				<DropdownDivider />
 				<DropdownItem on:click={handleLogout}>sign out</DropdownItem>
-			{:else if !is_login && !$TokenData.access_token}
-				<DropdownItem><a href="/login">login</a></DropdownItem>
+			{:else if is_login === false}
+				<DropdownItem><a href="/auth/login">login</a></DropdownItem>
 			{/if}
 		</Dropdown>
 		<Button href="/cart" id="cartbtn" size="sm" data-sveltekit-prefetch="">

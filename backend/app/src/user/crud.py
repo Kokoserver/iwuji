@@ -12,11 +12,14 @@ from app.lib.mail.mailer import Mailer
 from ormar import or_
 
 
-async def create_user(new_user_data: schemas.UserRegisterInput, background_task: BackgroundTasks) -> Message:
+async def create_user(
+    new_user_data: schemas.UserRegisterInput, background_task: BackgroundTasks
+) -> Message:
     check_user: User = await User.objects.get_or_none(email=new_user_data.email)
     if check_user:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
-                            detail="Account already exist")
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail="Account already exist"
+        )
     get_perm, _ = await Permission.objects.get_or_create(name="customer")
     new_user: User = User(**new_user_data.dict(), role=get_perm)
     new_user.hash_password()
@@ -24,7 +27,7 @@ async def create_user(new_user_data: schemas.UserRegisterInput, background_task:
     if new_user:
         token: str = security.JWTAUTH.DataEncoder(data={"id": str(new_user.id)})
         mail_template_context = {
-            "url": f"{config.settings.PROJECT_URL}/user/{token}",
+            "url": f"{config.settings.PROJECT_URL}/auth/activateAccount?activate_token={token}",
             "button_label": "confirm",
             "title": "user email confirmation link",
             "description": f"""Welcome to <b>{config.settings.PROJECT_URL}</b>, 
@@ -35,7 +38,8 @@ async def create_user(new_user_data: schemas.UserRegisterInput, background_task:
             website_name=config.settings.PROJECT_NAME,
             template_name="action.html",
             subject="Email confirmation",
-            context=mail_template_context)
+            context=mail_template_context,
+        )
         background_task.add_task(new_mail.send_mail, email=[new_user.email])
         return Message(
             message="Account was created successfully, an email confirmation link has been to your mail"
@@ -50,29 +54,33 @@ async def verify_user_email(user_token: schemas.UserAccountVerifyToken) -> Messa
         if user_obj and user_obj.is_active:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Account has been already verified")
+                detail="Account has been already verified",
+            )
         if user_obj:
             await user_obj.update(is_active=True)
             return Message(message="Account was verified successfully")
         raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Invalid token was provided")
+            status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid token was provided"
+        )
     raise HTTPException(
-        status_code=status.HTTP_400_BAD_REQUEST,
-        detail="Invalid token was provided")
+        status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid token was provided"
+    )
 
 
-async def reset_password_link(background_task: BackgroundTasks, user_data: schemas.GetPasswordResetLink)->Message:
+async def reset_password_link(
+    background_task: BackgroundTasks, user_data: schemas.GetPasswordResetLink
+) -> Message:
     user_obj: User = await User.objects.get_or_none(email=user_data.email)
     if not user_obj:
         raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Account does not exist")
+            status_code=status.HTTP_400_BAD_REQUEST, detail="Account does not exist"
+        )
     if user_obj:
         token = security.JWTAUTH.DataEncoder(
-            data={"id": user_obj.id}, duration=timedelta(days=1))
+            data={"id": user_obj.id}, duration=timedelta(days=1)
+        )
         mail_template_context = {
-            "url": f"{config.settings.PROJECT_URL}/passwordReset/{token}",
+            "url": f"{config.settings.PROJECT_URL}/auth/passwordReset?reset_token={token}",
             "button_label": "reset password",
             "title": "password reset link",
             "description": "You request for password reset link, if not you please contact admin",
@@ -92,8 +100,8 @@ async def reset_password_link(background_task: BackgroundTasks, user_data: schem
 async def update_user_password(user_data: schemas.PasswordResetInput) -> Message:
     if not user_data.password == user_data.confirm_password:
         raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Password do not match")
+            status_code=status.HTTP_400_BAD_REQUEST, detail="Password do not match"
+        )
     token_data: dict = security.JWTAUTH.data_decoder(encoded_data=user_data.token)
     id = token_data.get("id", None)
     if token_data and id:
@@ -101,7 +109,8 @@ async def update_user_password(user_data: schemas.PasswordResetInput) -> Message
         if user_obj.check_password(user_data.password):
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Try another password, password already used")
+                detail="Try another password, password already used",
+            )
         new_password: str = user_obj.generate_hash(user_data.password)
         user_obj.password = new_password
         await user_obj.upsert()
@@ -113,22 +122,30 @@ async def update_user_password(user_data: schemas.PasswordResetInput) -> Message
 
 
 async def get_current_user_data(userId: int) -> User:
-    user_data = await User.objects.select_related('role').get_or_none(id=userId)
+    user_data = await User.objects.select_related("role").get_or_none(id=userId)
     if not user_data:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="User does not exist")
+            status_code=status.HTTP_404_NOT_FOUND, detail="User does not exist"
+        )
     return user_data
 
 
 async def get_users(limit, offset, filter, id: int, is_active: bool) -> List[User]:
     if isinstance(filter, str):
-        all_user = await User.objects.filter(
-            or_(email__icontains=filter,
-                firstname__icontains=filter,
-                lastname__icontains=filter,
-                role__name__icontains=filter, id=id, is_active=is_active)
-        ).offset(offset).limit(limit)
+        all_user = (
+            await User.objects.filter(
+                or_(
+                    email__icontains=filter,
+                    firstname__icontains=filter,
+                    lastname__icontains=filter,
+                    role__name__icontains=filter,
+                    id=id,
+                    is_active=is_active,
+                )
+            )
+            .offset(offset)
+            .limit(limit)
+        )
     return all_user
 
 
@@ -144,7 +161,9 @@ async def remove_user_data(userId: int) -> None:
 
 
 async def get_user(userId: int) -> Message:
-    use_detail: User = await User.objects.select_related(["role"]).get_or_none(id=userId)
+    use_detail: User = await User.objects.select_related(["role"]).get_or_none(
+        id=userId
+    )
     if use_detail:
         return use_detail
     raise HTTPException(
@@ -154,7 +173,9 @@ async def get_user(userId: int) -> Message:
 
 
 async def add_user_role(data: schemas.UserPermissionUpdate) -> User:
-    user_to_update: User = await User.objects.select_related(["role"]).get_or_none(id=data.user_id)
+    user_to_update: User = await User.objects.select_related(["role"]).get_or_none(
+        id=data.user_id
+    )
     if not user_to_update:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -178,15 +199,20 @@ async def add_user_role(data: schemas.UserPermissionUpdate) -> User:
 
 
 async def get_user_role(userId: int) -> Permission:
-    check_user: User = await User.objects.select_related(["role"]).get_or_none(id=userId)
+    check_user: User = await User.objects.select_related(["role"]).get_or_none(
+        id=userId
+    )
     if check_user:
         return check_user.role
-    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                        detail="User role does not exist")
+    raise HTTPException(
+        status_code=status.HTTP_404_NOT_FOUND, detail="User role does not exist"
+    )
 
 
 async def remove_user_role(data: schemas.UserPermissionUpdate) -> None:
-    check_user: User = await User.objects.select_related(["role"]).get_or_none(id=data.user_id)
+    check_user: User = await User.objects.select_related(["role"]).get_or_none(
+        id=data.user_id
+    )
     if not check_user:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,

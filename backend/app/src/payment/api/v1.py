@@ -1,3 +1,4 @@
+from typing import List
 from fastapi import APIRouter, status, Depends
 from app.shared.dependency import UserWrite
 from app.src.user.models import User
@@ -15,6 +16,13 @@ async def create_payment_link(
     order: schemas.PaymentIn, user: User = Depends(UserWrite.current_user_with_data)
 ):
     return await crud.create_payment(orderIn=order, user=user)
+
+
+@pay.get(
+    "/", status_code=status.HTTP_200_OK, response_model=List[schemas.PaymentDataViewOut]
+)
+async def get_paymentList(user: User = Depends(UserWrite.current_user_with_data)):
+    return await crud.payment_list(user=user)
 
 
 @pay.post("/verify", status_code=status.HTTP_200_OK, response_model=Message)

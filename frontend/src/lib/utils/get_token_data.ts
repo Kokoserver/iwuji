@@ -5,18 +5,21 @@ import jwtDecode from 'jwt-decode';
 import { status } from '$root/lib/utils/status';
 import type { TokenDataIn, UserDataIn } from '$root/lib/interface/user.interface';
 import { deleteCookiesData, setCookies } from './getCookies';
-
+interface tokenData {
+	id: number;
+	firstname: string;
+	is_active: boolean;
+	exp: number;
+}
 export const get_jwt_data = (token: string) => {
 	if (token) {
 		const token_details = jwtDecode(token);
-		return token_details;
+		return token_details as tokenData;
 	}
-	return {};
+	return {} as tokenData;
 };
 
-type tokenData = { id: number; firstname: string; is_active: boolean; exp: number };
-
-export const refresh_token = async (event: RequestEvent): Promise<boolean> => {
+export const refresh_token = async (event: RequestEvent) => {
 	if (event.locals.token?.access_token) {
 		const token_detail = get_jwt_data(event.locals.token.access_token) as tokenData;
 		const isExpire: boolean = dayjs.unix(token_detail.exp).diff(dayjs()) < 1;
@@ -30,7 +33,6 @@ export const refresh_token = async (event: RequestEvent): Promise<boolean> => {
 			});
 			if (res.status === status.HTTP_200_OK) {
 				const token = (await res.json()) as TokenDataIn;
-
 				setCookies(token.refresh_token, token, 'session', event.cookies);
 				return true;
 			} else {
@@ -40,7 +42,6 @@ export const refresh_token = async (event: RequestEvent): Promise<boolean> => {
 				event.locals.user = {} as UserDataIn;
 				event.locals.is_login = false;
 				event.locals.token = {} as TokenDataIn;
-				return false;
 			}
 		}
 	}

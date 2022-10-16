@@ -15,7 +15,7 @@
     "**.idea": true
   },
   "python.linting.enabled": true,
-  "python.formatting.provider": "black",
+  "python.formatting.provider": "autopep8",
   "cSpell.words": ["condecimal", "redoc", "sqlmodel"],
   "python.analysis.extraPaths": [
     "${workspaceFolder}\\__pypackages__\\3.9\\lib"

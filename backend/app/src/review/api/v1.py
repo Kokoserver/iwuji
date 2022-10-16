@@ -1,5 +1,4 @@
 from typing import List
-from uuid import UUID
 from fastapi import APIRouter, status, Depends
 from ....shared.dependency import UserWrite
 from app.src._base.schemas import Message
@@ -17,12 +16,24 @@ async def create_review(review: schemas.ReviewIn, user: User = Depends(UserWrite
 
 @review.get("/", response_model=List[schemas.ReviewIn], status_code=status.HTTP_200_OK)
 async def get_reviews(filter: str = '', limit: int = 10, offset: int = 0):
-    return await crud.get_reviews(filter, limit, offset)
+    """
+
+    Parameters
+    ----------
+    filter : string
+    """
+    return await crud.get_reviews(filter=filter, limit=limit, offset=offset)
 
 
-@review.put("/{id}", response_model=Message, status_code=status.HTTP_200_OK)
-async def update_review(id: int, review: schemas.ReviewIn, user: User = Depends(UserWrite.current_user_with_data)):
-    return await crud.update_review(id, review, user)
+@review.put("/{reviewId}", response_model=Message, status_code=status.HTTP_200_OK)
+async def update_review(reviewId: int, review: schemas.ReviewIn, user: User = Depends(UserWrite.current_user_with_data)):
+    """
+
+    Parameters
+    ----------
+    reviewId : string
+    """
+    return await crud.update_review(reviewId, review, user)
 
 
 @review.get("/{id}", response_model=schemas.ReviewOut)

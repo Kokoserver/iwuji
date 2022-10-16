@@ -1,3 +1,4 @@
 export interface MessageIn {
-	message: string
+	message: string | null;
+	error: string | null;
 }
