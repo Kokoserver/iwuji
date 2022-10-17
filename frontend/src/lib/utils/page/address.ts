@@ -9,35 +9,30 @@ import { error, redirect } from '@sveltejs/kit';
 import { get } from 'svelte/store';
 import { AddressStore } from '../../../store/address';
 
-export const get_address = async (addressId: number) => {
-	const res = await api.get(`/address/${addressId}`);
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+
+export const get_address = async (addressId: number, Fetch: typeof fetch) => {
+	const res = await Fetch(`/api/user/address/?id=${addressId}`);
 	if (res.status === status.HTTP_200_OK) {
-		return res.data;
+		const data = await res.json();
+		return data as AddressIn;
 	}
-
-	if (res.status === 404) {
-		throw error(status.HTTP_404_NOT_FOUND, 'Address does not exist');
-	}
-
-	if (
-		res.status === status.HTTP_400_BAD_REQUEST ||
-		res.status === status.HTTP_422_UNPROCESSABLE_ENTITY
-	) {
-		throw error(status.HTTP_422_UNPROCESSABLE_ENTITY, 'Invalid data was provided');
-	}
+	const data = await res.json();
+	throw error(status.HTTP_400_BAD_REQUEST, data.error);
 };
 
-export const get_addressList = async () => {
-	const res = await api.get(`/address/`);
+export const get_addressList = async (Fetch: typeof fetch) => {
+	const res = await Fetch(`/api/user/address`);
 	if (res.status === status.HTTP_200_OK) {
-		return res.data as AddressIn[];
+		const data = await res.json();
+		return data as AddressIn[];
 	}
 	return [];
 };
 
 export const delete_address = async (addressId: number) => {
 	try {
-		let res = await fetch(`/address/api`, {
+		let res = await fetch(`/api/user/address/`, {
 			method: 'DELETE',
 			body: JSON.stringify({ addressId })
 		});

@@ -7,6 +7,7 @@
 	import ReviewCard from '$root/lib/components/card/ReviewCard.svelte';
 	import SectionTitle from '$root/lib/components/utilities/SectionTitle.svelte';
 	import type { PageServerData } from './$types';
+	export const hydrate = false;
 	export let data: PageServerData;
 	const { products, reviews, author } = data;
 	$: latest_product = products.slice(1, products.length);

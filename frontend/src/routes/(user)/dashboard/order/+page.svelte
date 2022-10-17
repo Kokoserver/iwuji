@@ -43,7 +43,7 @@
 					</TableBodyCell>
 					<TableBodyCell
 						><a
-							href="/order/{order.orderId}"
+							href="/dashboard/order/{order.orderId}"
 							class="font-medium text-blue-600 hover:underline dark:text-blue-500 pr-5"
 							data-sveltekit-prefecth=""
 						>

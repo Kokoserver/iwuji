@@ -9,7 +9,7 @@
 		SidebarWrapper
 	} from 'flowbite-svelte';
 	$: activeUrl = $page.url.pathname;
-	$: console.log($toggleSidebar);
+
 </script>
 
 <aside
@@ -26,7 +26,7 @@
 					<SidebarItem
 						label="Shipping Address"
 						active={activeUrl.includes('address') ? true : false}
-						href="/address"
+						href="/dashboard/address"
 					>
 						<svelte:fragment slot="icon">
 							<svg
@@ -53,7 +53,7 @@
 					<SidebarItem
 						label="Order"
 						active={activeUrl.includes('order') ? true : false}
-						href="/order"
+						href="/dashboard/order"
 					>
 						<svelte:fragment slot="icon">
 							<svg
@@ -75,7 +75,7 @@
 					<SidebarItem
 						label="Payment"
 						active={activeUrl.includes('payment') ? true : false}
-						href="/payment"
+						href="/dashboard/payment"
 					>
 						<svelte:fragment slot="icon">
 							<svg

@@ -5,9 +5,9 @@
 	import Grid from '$root/lib/components/layouts/Grid.svelte';
 	import NewReleaseCard from '$root/lib/components/card/NewReleaseCard.svelte';
 	import SectionTitle from '$root/lib/components/utilities/SectionTitle.svelte';
-	import type { PageData } from './$types';
-	export let data: PageData;
-	const { author, products } = data;
+	import { page } from '$app/stores';
+	export const hydrate = false;
+	const { author, products } = $page.data;
 </script>
 
 <Container divClass=" pt-10 pb-28 px-5">

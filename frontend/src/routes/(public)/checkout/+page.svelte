@@ -15,6 +15,7 @@
 	import { create_order } from '$root/lib/utils/page/order';
 	export let data: PageServerData;
 
+
 	onMount(() => {
 		$showStep = 1;
 	});
@@ -35,15 +36,13 @@
 	const handleCreateOrder = async (selected_add: number) => {
 		$Loading = true;
 		await create_order(selected_add);
-		// $Loading = false;
+		$Loading = false;
 	};
 </script>
 
-<Container
-	divClass="flex flex-wrap py-20 w-full content-center justify-center h-[30rem] overflow-y-scroll px-10 my-10 shadow-md p-20"
->
+<Container divClass="flex items-center py-20 w-full  content-center justify-center">
 	{#if $Cart[0]?.id}
-		<TabWrapper class="mb-4" activeTabValue={$showStep}>
+		<TabWrapper class="mb-4 h-[40rem] py-6 overflow-y-scroll shadow-md " activeTabValue={$showStep}>
 			<TabContentItem id={1} activeTabValue={$showStep}>
 				{#if addressList[0]?.id}
 					<div class=" flex flex-col items-center w-full rounded-lg  p-10 gap-10 mt-5">
@@ -62,7 +61,7 @@
 			</TabContentItem>
 			<TabContentItem id={2} activeTabValue={$showStep}>
 				<div>
-					<CartList cartStore={Cart} {data} />
+					<CartList cartStore={Cart} data={$page.data.carts} />
 				</div>
 			</TabContentItem>
 			<TabContentItem id={3} activeTabValue={$showStep}>
@@ -84,7 +83,7 @@
 		<DefaultMessage message="No items to checkout" />
 	{/if}
 </Container>
-{#if $Cart.length > 0}
+{#if $page.data.carts.length > 0}
 	<div class="flex items-center justify-center gap-5">
 		<Previous on:previous={previous} icon />
 		<Next on:next={next} icon />

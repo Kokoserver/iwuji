@@ -39,8 +39,14 @@ export const create_order = async (addressId: number) => {
 	throw error(status.HTTP_400_BAD_REQUEST, 'Error creating order');
 };
 
-export const get_order_list = async () => {
-	const res = await api.get('/orders/');
-	if (res.status === status.HTTP_200_OK) return res.data as OrderDetailsIn[];
-	return [];
+export const get_order_list = async (Fetch: typeof fetch) => {
+	const res = await Fetch('/api/user/order');
+	const data = (await res.json()) as OrderDetailsIn[];
+	return data;
+};
+
+export const get_order = async (id: number, Fetch: typeof fetch) => {
+	const res = await Fetch(`/api/user/order/?id=${id}`);
+	const data = (await res.json()) as OrderDetailsIn;
+	return data;
 };

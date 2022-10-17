@@ -1,13 +1,13 @@
 <script lang="ts">
 	import Container from '$root/lib/components/layouts/Container.svelte';
 	import { Badge, Button } from 'flowbite-svelte';
-	import type { PageData } from './$types';
+	import type { PageServerData } from './$types';
 	import { CartType } from '$root/store/toggleSeriesStore';
 	import { handleAddCart } from '$root/lib/utils/page/cart';
 	import DefaultMessage from '$root/lib/components/utilities/DefaultMessage.svelte';
 	import SectionTitle from '$root/lib/components/utilities/SectionTitle.svelte';
 	import type { VariationIn } from '$root/lib/interface/variation.interface';
-	export let data: PageData;
+	export let data: PageServerData;
 
 	$: product = data.product;
 	$: is_single_product = data.is_single_product;

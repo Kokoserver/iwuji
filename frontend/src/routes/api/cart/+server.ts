@@ -76,7 +76,7 @@ export const DELETE: RequestHandler = async (event) => {
 		});
 
 		if (res.status === status.HTTP_204_NO_CONTENT) {
-			return json({}, { status: status.HTTP_204_NO_CONTENT });
+			return json({}, { status: status.HTTP_200_OK });
 		}
 
 		if (res.status === status.HTTP_404_NOT_FOUND) {

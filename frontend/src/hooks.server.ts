@@ -1,26 +1,23 @@
 import { PUBLIC_BASE_URL } from '$env/static/public';
-import { status } from '$root/lib/utils/status';
 import { redirect } from '$root/lib/utils/redirect';
-import { getUserSession, updateCookies } from '$root/lib/utils/getCookies';
+import { getUserSession } from '$root/lib/utils/getCookies';
 import type { Handle, HandleFetch } from '@sveltejs/kit';
 import { refresh_token } from '$root/lib/utils/get_token_data';
-import { TokenData } from './store/tokenStore';
 
 export const handle: Handle = async ({ event, resolve }) => {
 	getUserSession(event, ['session', 'details', 'is_login']);
 	await refresh_token(event);
 	getUserSession(event, ['session', 'details', 'is_login']);
-	TokenData.set(event.locals.token);
 
 	if (event.url.pathname.startsWith('/admin')) {
-		if (!event.locals.user) return redirect('/auth/login?redirectTo=/admin');
+		if (!event.locals.user) return redirect(`/auth/login?redirectTo=${event.request.url}`);
 		if (event.locals.user.role.name.toLowerCase() !== 'super admin')
-			return redirect('/auth/login?redirectTo=/admin');
+			return redirect(`/auth/login?redirectTo=${event.request.url}`);
 		return await resolve(event);
 	}
 
 	if (event.url.pathname.startsWith('/dashboard')) {
-		if (!event.locals.user) return redirect('/auth/login?redirectTo=/dashboard');
+		if (!event.locals.user) return redirect(`/auth/login?redirectTo=${event.request.url}`);
 		return await resolve(event);
 	}
 	if (event.url.pathname.includes('login')) {
@@ -29,11 +26,11 @@ export const handle: Handle = async ({ event, resolve }) => {
 	}
 
 	if (event.url.pathname.startsWith('/cart')) {
-		if (!event.locals.user) return redirect('/auth/login?redirectTo=/cart');
+		if (!event.locals.user) return redirect(`/auth/login?redirectTo=${event.request.url}`);
 		return await resolve(event);
 	}
 	if (event.url.pathname.startsWith('/checkout')) {
-		if (!event.locals.user) return redirect('/auth/login?redirectTo=/checkout');
+		if (!event.locals.user) return redirect(`/auth/login?redirectTo=${event.request.url}`);
 		return await resolve(event);
 	}
 

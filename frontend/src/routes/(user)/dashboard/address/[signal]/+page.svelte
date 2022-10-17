@@ -1,20 +1,17 @@
 <script lang="ts">
 	import AddressForm from '$root/lib/components/form/AddressForm.svelte';
 	import Container from '$root/lib/components/layouts/Container.svelte';
-	import type { AddressIn } from '$root/lib/interface/address.interface';
 	import type { PageServerData } from './$types';
 	export let data: PageServerData;
-	$: signal = data.signal;
-	$: redirectTo = data.redirectTo;
-	$: address = data.address as AddressIn;
+	const { address, redirectTo, signal } = data;
 </script>
 
-<Container divClass="flex flex-wrap py-20 w-full content-center justify-center">
-	{#if signal === 'edit' && address?.id}
+<Container divClass="py-20 ">
+	{#if signal === 'edit' && address}
 		<AddressForm
 			method="PUT"
 			initial_data={address}
-			buttonValue="edit address"
+			buttonValue="update address"
 			redirectTo={String(redirectTo)}
 		/>
 	{:else}

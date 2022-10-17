@@ -1,7 +1,6 @@
 <script lang="ts">
-	import { Card } from 'flowbite-svelte';
-	import type { AddressIn } from '../interface/address.interface';
-	import type { UserDataIn } from '../interface/user.interface';
+	import type { AddressIn } from '$root/lib/interface/address.interface';
+	import type { UserDataIn } from '$root/lib/interface/user.interface';
 	export let address: AddressIn;
 	export let user: UserDataIn;
 	export let url_redirect: string = '';
@@ -15,7 +14,9 @@
 	</p>
 	<div>
 		<a
-			href="/user/address/edit/?id={address.id}{url_redirect ? '&redirectTo=' + url_redirect : ''}"
+			href="/dashboard/address/edit/?id={address.id}{url_redirect
+				? '&redirectTo=' + url_redirect
+				: ''}"
 			class="font-medium text-blue-600 hover:underline dark:text-blue-500 pr-5 pt-y">Edit</a
 		>
 	</div>

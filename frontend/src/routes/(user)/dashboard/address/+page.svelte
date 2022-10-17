@@ -9,12 +9,11 @@
 	} from 'flowbite-svelte';
 	import type { PageServerData } from './$types';
 	import { page } from '$app/stores';
-	import { delete_address } from '../../../../lib/utils/page/address';
-	import { AddressStore } from '../../../../store/address';
+	import { delete_address } from '$root/lib/utils/page/address';
+	import { AddressStore } from '$root/store/address';
 	import DefaultMessage from '$root/lib/components/utilities/DefaultMessage.svelte';
 	import Section from '$root/lib/components/animation/FadeInOut.svelte';
 	export let data: PageServerData;
-	$: $AddressStore = data.addressList;
 </script>
 
 <Section>
@@ -38,7 +37,7 @@
 			<TableHeadCell>ACTION</TableHeadCell>
 		</TableHead>
 		<TableBody class="divide-y">
-			{#each $AddressStore as address, index}
+			{#each data.addressList as address, index}
 				<TableBodyRow>
 					<TableBodyCell class="!p-4">
 						{index + 1}
@@ -56,7 +55,7 @@
 
 					<TableBodyCell
 						><a
-							href="/address/edit/?id={address.id}&redirectTo={$page.url}"
+							href="/dashboard/address/edit/?id={address.id}&redirectTo={$page.url}"
 							class="font-medium text-blue-600 hover:underline dark:text-blue-500 pr-5"
 							data-sveltekit-prefecth
 						>

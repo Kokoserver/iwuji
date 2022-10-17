@@ -18,7 +18,10 @@ export const handleAddCart = async (data: CartOut) => {
 		}
 		notification.danger(res_data.error);
 	}
+
 	const all_cart = get(Cart);
+	console.log(all_cart);
+
 	Cart.set([res_data, ...all_cart]);
 	CartType.set({
 		pdf: true,
@@ -78,6 +81,8 @@ export const handleRemoveFromCart = async (id: number) => {
 		}
 	});
 	const res_data = await res.json();
+
+
 	if (!res.ok) {
 		if (Array.isArray(res_data.detail)) {
 			notification.danger(res_data.detail.toString());

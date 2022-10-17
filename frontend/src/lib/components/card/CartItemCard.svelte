@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { get_total_price } from '$root/routes/cart/crud';
+	import { get_total_price } from '$root/lib/utils/page/cart';
 	import {
 		Table,
 		TableBody,
@@ -8,7 +8,7 @@
 		TableHead,
 		TableHeadCell
 	} from 'flowbite-svelte';
-	import type { CartIn } from '../interface/cart.interface';
+	import type { CartIn } from '$root/lib/interface/cart.interface';
 	export let item: CartIn;
 	export let handleRemoveFromCart: Function;
 	export let handleUpdate: Function;

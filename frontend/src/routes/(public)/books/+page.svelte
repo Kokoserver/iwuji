@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Container from '$root/lib/components/layouts/Container.svelte';
-	import type { PageData } from './$types';
+	import type { PageServerData } from './$types';
 	import { Iconinput } from 'flowbite-svelte';
 	import { bookType } from '$root/store/toggleSeriesStore';
 	import { onMount } from 'svelte';
@@ -9,7 +9,7 @@
 	import ProductCard from '$root/lib/components/card/ProductCard.svelte';
 	import ProductVariationCard from '$root/lib/components/card/ProductVariationCard.svelte';
 
-	export let data: PageData;
+	export let data: PageServerData;
 
 	onMount(() => {
 		$bookType.normal_book = true;
