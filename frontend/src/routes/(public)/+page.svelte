@@ -7,10 +7,18 @@
 	import ReviewCard from '$root/lib/components/card/ReviewCard.svelte';
 	import SectionTitle from '$root/lib/components/utilities/SectionTitle.svelte';
 	import type { PageServerData } from './$types';
+	import { page } from '$app/stores';
+	import type { ProductIn } from '$root/lib/interface/product.interface';
+	import type { ReviewIn } from '$root/lib/interface/ReviewIn.interface';
+	import type { AuthorIn } from '$root/lib/interface/author.interface';
 	export const hydrate = false;
-	export let data: PageServerData;
-	const { products, reviews, author } = data;
-	$: latest_product = products.slice(1, products.length);
+
+	const { products, reviews, author } = $page.data as {
+		products: ProductIn[] | [];
+		reviews: ReviewIn[] | [];
+		author: AuthorIn;
+	};
+	$: latest_product = products ? products.slice(1, products.length) : [];
 </script>
 
 <section class="relative pb-28">
@@ -25,7 +33,7 @@
 						{products[0].name}
 					</h1>
 					<p class="font-normal text-gray-700 text-center md:text-left text-clip">
-						{products[0].description.slice(1, 200)}...
+						{products[0]?.description.slice(1, 200)}...
 					</p>
 					<div
 						class="pt-6 space-x-4 flex items-start md:items-center justify-center md:justify-start"
@@ -62,7 +70,7 @@
 </Container>
 
 <Container divClass=" pt-10 pb-28 px-5">
-	{#if author !== undefined}
+	{#if author}
 		<AuthorDetailsCard {author} max_lenght={300} />
 	{:else}
 		<DefaultMessage message="Author's details not available" />

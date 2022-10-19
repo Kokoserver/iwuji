@@ -2,7 +2,6 @@
 	import { Next, Previous } from 'flowbite-svelte';
 	import { TabWrapper, TabContentItem } from 'flowbite-svelte';
 	import { Loading, showStep } from '$root/store/modalStore';
-	import type { PageServerData } from './$types';
 	import { Cart } from '$root/store/toggleSeriesStore';
 	import Container from '$root/lib/components/layouts/Container.svelte';
 	import CartList from '$root/lib/components/utilities/CartList.svelte';
@@ -13,14 +12,15 @@
 	import DefaultMessage from '$root/lib/components/utilities/DefaultMessage.svelte';
 	import { get_total_price } from '$root/lib/utils/page/cart';
 	import { create_order } from '$root/lib/utils/page/order';
-	export let data: PageServerData;
 
+
+	 
 
 	onMount(() => {
 		$showStep = 1;
 	});
-	$: addressList = data.address;
-	$: user = data.user;
+	$: addressList = $page.data.address;
+	$: user = $page.data.user;
 	$: selected_add = 0;
 
 	const previous = () => {

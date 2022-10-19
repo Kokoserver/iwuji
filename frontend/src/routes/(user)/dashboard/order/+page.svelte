@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { page } from '$app/stores';
 	import Section from '$root/lib/components/animation/FadeInOut.svelte';
 	import {
 		Badge,
@@ -9,11 +10,7 @@
 		TableHeadCell,
 		TableSearch
 	} from 'flowbite-svelte';
-	import type { PageServerData } from './$types';
-
-	export let data: PageServerData;
-	$: order_list = data.order_list;
-
+	$: order_list = $page.data.order_list;
 	$: searchTerm = '';
 </script>
 
@@ -43,6 +40,7 @@
 					</TableBodyCell>
 					<TableBodyCell
 						><a
+							data-sveltekit-prefetch=""
 							href="/dashboard/order/{order.orderId}"
 							class="font-medium text-blue-600 hover:underline dark:text-blue-500 pr-5"
 							data-sveltekit-prefecth=""

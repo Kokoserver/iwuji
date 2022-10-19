@@ -11,7 +11,7 @@ from app.src.user.models import User
 from starlette.responses import Response
 
 
-def check_quantity(carts: t.List[Cart])->t.List[str]:
+def check_quantity(carts: t.List[Cart]) -> t.List[str]:
     error_list: t.List[str] = []
     for cart in carts:
         if cart.hard_back_qty > cart.product.property.hard_back_qty:
@@ -25,7 +25,7 @@ def check_quantity(carts: t.List[Cart])->t.List[str]:
     return error_list
 
 
-async def create_order(data: OrderIn, user: User)->dict:
+async def create_order(data: OrderIn, user: User) -> dict:
     get_shipping_address = await ShippingAddress.objects.get_or_none(id=data.addressId, user=user)
     if not get_shipping_address:
         raise HTTPException(detail="Shipping address does not exist",
@@ -57,20 +57,20 @@ async def create_order(data: OrderIn, user: User)->dict:
         return {"orderId": create_order.orderId}
 
 
-async def get_all_orders(user: User, offset: int = 0, limit: int= 10, filter: str='')->t.List[Order]:
-    all_order = await Order.objects.filter(or_(orderId__icontains=filter),user=user, ).limit(limit).offset(offset).all()
+async def get_all_orders(user: User, offset: int = 0, limit: int = 10, filter: str = '') -> t.List[Order]:
+    all_order = await Order.objects.filter(or_(orderId__icontains=filter), user=user, ).limit(limit).offset(offset).all()
     return all_order
 
 
-async def get_order(user: User, orderId: str)->Order:
-    order = await Order.objects.get_or_none(orderId=orderId, user=user)
+async def get_order(user: User, orderId: str) -> Order:
+    order = await Order.objects.select_related(['order_payment', "order_item_order__product", "order_item_order__product__cover_img", "shipping_address"]).get_or_none(orderId=orderId, user=user)
     if order:
         return order
     raise HTTPException(
         detail=f"order with id {orderId} not found", status_code=status.HTTP_404_NOT_FOUND)
 
 
-async def delete_order(user: User, orderId: str)->None:
+async def delete_order(user: User, orderId: str) -> None:
     check_order = await Order.objects.get_or_none(orderId=orderId, user=user)
     if check_order:
         await check_order.delete()

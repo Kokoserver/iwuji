@@ -1,6 +1,5 @@
 <script lang="ts">
 	import Container from '$root/lib/components/layouts/Container.svelte';
-	import type { PageServerData } from './$types';
 	import { Iconinput } from 'flowbite-svelte';
 	import { bookType } from '$root/store/toggleSeriesStore';
 	import { onMount } from 'svelte';
@@ -8,14 +7,14 @@
 	import DefaultMessage from '$root/lib/components/utilities/DefaultMessage.svelte';
 	import ProductCard from '$root/lib/components/card/ProductCard.svelte';
 	import ProductVariationCard from '$root/lib/components/card/ProductVariationCard.svelte';
-
-	export let data: PageServerData;
+	import { page } from '$app/stores';
 
 	onMount(() => {
 		$bookType.normal_book = true;
 	});
-	$: products = data.products;
-	$: variations = data.variations;
+
+	$: products = $page.data.products;
+	$: variations = $page.data.variations;
 	$: is_series = $bookType.is_series;
 	$: mormal_book = $bookType.normal_book;
 

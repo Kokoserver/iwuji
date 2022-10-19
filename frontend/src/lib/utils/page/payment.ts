@@ -25,9 +25,9 @@ export const generate_payment_Link = async (orderId: number) => {
 	throw (status.HTTP_400_BAD_REQUEST, 'Error creating order');
 };
 
-export const get_payment_list = async () => {
-	const res = await api.get('/payments');
+export const get_payment_list = async (Fetch: typeof fetch) => {
+	const res = await Fetch('/api/user/payments');
 	if (res.status === status.HTTP_200_OK) {
-		return res.data as PaymentIn[] | [];
+		return (await res.json()) as PaymentIn[] | [];
 	}
 };

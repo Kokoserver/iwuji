@@ -4,6 +4,6 @@ import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ locals }) => {
 	if (!locals.user) {
-		throw redirect(status.HTTP_307_TEMPORARY_REDIRECT, '/auth/login?redirectTo=/checkout');
+		throw redirect(status.HTTP_307_TEMPORARY_REDIRECT, '/auth/login?redirectTo=/cart');
 	}
 };

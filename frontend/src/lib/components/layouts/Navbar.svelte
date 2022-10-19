@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import type { UserDataIn } from '$root/lib/interface/user.interface';
+	import { Cart } from '$root/store/toggleSeriesStore';
 	export let is_login: boolean = false;
 	export let user: UserDataIn;
 	export let url: string;
@@ -23,8 +24,8 @@
 		await fetch('/api/auth/logout', {
 			method: 'DELETE'
 		});
-		is_login = false;
-		await goto('/');
+
+		window.location.href = '/';
 	};
 </script>
 
@@ -45,11 +46,11 @@
 					<span class="block text-sm">{`${user.firstname} ${user.lastname}`}</span>
 					<span class="block truncate text-sm font-medium">{user.email} </span>
 				</DropdownHeader>
-				<DropdownItem><a href="/dashboard" data-sveltekit-prefetch="">Dashboard</a></DropdownItem>
+				<a href="/dashboard" data-sveltekit-prefetch=""><DropdownItem>Dashboard</DropdownItem></a>
 				<DropdownDivider />
 				<DropdownItem on:click={handleLogout}>sign out</DropdownItem>
 			{:else if is_login === false}
-				<DropdownItem><a href="/auth/login">login</a></DropdownItem>
+				<a href="/auth/login"><DropdownItem>login</DropdownItem></a>
 			{/if}
 		</Dropdown>
 		<Button href="/cart" id="cartbtn" size="sm" data-sveltekit-prefetch="">

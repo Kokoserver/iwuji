@@ -21,9 +21,9 @@
 			/>
 		</svg>
 	</div>
-	<div class="flex items-center justify-center space-x-10">
-		<span class="border p-2 font-bold cursor-pointer hover:bg-secondary rounded-full bg-primary">
-			<a href="/" data-sveltekit-prefetch="">
+	<a href="/" data-sveltekit-prefetch="">
+		<div class="flex items-center justify-center space-x-10">
+			<span class="border p-2 font-bold cursor-pointer hover:bg-secondary rounded-full bg-primary">
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					fill="none"
@@ -38,7 +38,7 @@
 						d="M11.25 4.5l7.5 7.5-7.5 7.5m-6-15l7.5 7.5-7.5 7.5"
 					/>
 				</svg>
-			</a>
-		</span>
-	</div>
+			</span>
+		</div>
+	</a>
 </div>

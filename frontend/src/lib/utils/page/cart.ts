@@ -82,7 +82,6 @@ export const handleRemoveFromCart = async (id: number) => {
 	});
 	const res_data = await res.json();
 
-
 	if (!res.ok) {
 		if (Array.isArray(res_data.detail)) {
 			notification.danger(res_data.detail.toString());
@@ -119,13 +118,8 @@ export const getCart = async (id: number) => {
 	}
 };
 
-export const getCarts = async () => {
-	const res = await fetch(`/api/cart/`, {
-		method: 'GET',
-		headers: {
-			'Content-Type': 'application/json'
-		}
-	});
+export const getCarts = async (Fetch: typeof fetch) => {
+	const res = await Fetch(`/api/cart/`);
 	const res_data = await res.json();
 	if (!res.ok) {
 		notification.danger('Error getting user carts');

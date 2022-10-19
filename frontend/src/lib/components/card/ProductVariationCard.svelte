@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { VariationIn } from '../interface/variation.interface';
+	import type { VariationIn } from '$root/lib/interface/variation.interface';
 
 	export let variation: VariationIn;
 </script>
@@ -19,6 +19,7 @@
 		</p>
 		<div class="pt-6 space-x-4 flex items-start md:items-center justify-center md:justify-start">
 			<a
+				data-sveltekit-prefetch=""
 				href="/books/{variation.id}/?is_series=true"
 				class="rounded-full font-semibold bg-primary px-4 py-3 text-center uppercase ">preview</a
 			>

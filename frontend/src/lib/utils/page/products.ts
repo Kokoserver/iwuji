@@ -41,6 +41,7 @@ export const get_VariationList = async (
 };
 
 export const get_singleProduct = async (productId: number): Promise<ProductIn> => {
+	if (!productId) return {} as ProductIn;
 	const res = await api.get(`/products/${productId}`);
 	if (res.status === status.HTTP_200_OK) {
 		return res.data as ProductIn;
@@ -49,6 +50,7 @@ export const get_singleProduct = async (productId: number): Promise<ProductIn> =
 };
 
 export const get_singleVariation = async (variationId: number): Promise<VariationIn> => {
+	if (!variationId) return {} as VariationIn;
 	const res = await api.get(`/variations/${variationId}`);
 	if (res.status === status.HTTP_200_OK) {
 		return res.data as VariationIn;

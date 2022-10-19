@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { page } from '$app/stores';
 	import Section from '$root/lib/components/animation/FadeInOut.svelte';
 	import type { PaymentIn } from '$root/lib/interface/payment.interface';
 	import {
@@ -10,10 +11,8 @@
 		TableHeadCell,
 		TableSearch
 	} from 'flowbite-svelte';
-	import type { PageServerData } from './$types';
 
-	export let data: PageServerData;
-	$: payment_list = data.payment_list as PaymentIn[];
+	$: payment_list = $page.data.payment_list as PaymentIn[];
 
 	$: searchTerm = '';
 </script>

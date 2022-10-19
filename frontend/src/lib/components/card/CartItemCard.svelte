@@ -18,7 +18,7 @@
 	class="flex flex-col md:flex-row items-center md:items-start justify-center  md:gap-20 border-b-2 border-b-secondary py-14"
 >
 	<img
-		src={item.product.cover_img?.url}
+		src={item.product?.cover_img?.url}
 		alt={item.product.name}
 		id={String(item.id)}
 		class="w-60"

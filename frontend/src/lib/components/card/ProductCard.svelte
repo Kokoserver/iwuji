@@ -17,6 +17,7 @@
 		</p>
 		<div class="pt-6 space-x-4 flex items-start md:items-center justify-center md:justify-start">
 			<a
+				data-sveltekit-prefetch=""
 				href="/books/{product.id}"
 				class="rounded-full font-semibold bg-primary px-4 py-3 text-center uppercase ">preview</a
 			>

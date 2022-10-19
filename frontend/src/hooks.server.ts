@@ -25,15 +25,6 @@ export const handle: Handle = async ({ event, resolve }) => {
 		return await resolve(event);
 	}
 
-	if (event.url.pathname.startsWith('/cart')) {
-		if (!event.locals.user) return redirect(`/auth/login?redirectTo=${event.request.url}`);
-		return await resolve(event);
-	}
-	if (event.url.pathname.startsWith('/checkout')) {
-		if (!event.locals.user) return redirect(`/auth/login?redirectTo=${event.request.url}`);
-		return await resolve(event);
-	}
-
 	return await resolve(event);
 };
 
