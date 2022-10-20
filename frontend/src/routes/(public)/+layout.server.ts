@@ -11,6 +11,6 @@ export const load: LayoutServerLoad = async ({ locals, fetch }) => {
 		variations: get_VariationList('', 10, 0, true),
 		products: get_ProductList('', 5, 0, false, false, true),
 		reviews: get_Reviews(4, 0),
-		author: get_authorData()
+		author: get_authorData(fetch, undefined, 1, 0, undefined, true)
 	};
 };
