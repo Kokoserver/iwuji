@@ -2,14 +2,13 @@ import { goto } from '$app/navigation';
 import type { OrderDetailsIn } from '$root/lib/interface/order.interface';
 import { notification } from '$root/lib/notification';
 import { Loading } from '$root/store/modalStore';
-import api from '$root/lib/utils/api';
 import { status } from '$root/lib/utils/status';
 import { error } from '@sveltejs/kit';
 import { generate_payment_Link } from './payment';
 
 export const create_order = async (addressId: number) => {
 	Loading.set(true);
-	const res = await fetch('/order/api', {
+	const res = await fetch('/api/user/order', {
 		method: 'POST',
 		body: JSON.stringify({ addressId })
 	});

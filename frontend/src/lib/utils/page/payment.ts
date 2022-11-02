@@ -2,11 +2,11 @@ import { browser } from '$app/environment';
 import { Cart } from '$root/store/toggleSeriesStore';
 import { status } from '$root/lib/utils/status';
 import { error } from '@sveltejs/kit';
-import api from '$root/lib/utils/api';
+
 import type { PaymentIn } from '$root/lib/interface/payment.interface';
 
 export const generate_payment_Link = async (orderId: number) => {
-	const res = await fetch('/payment/api', {
+	const res = await fetch('/api/user/payments/?signal=create', {
 		method: 'POST',
 		body: JSON.stringify({ orderId })
 	});
@@ -14,7 +14,7 @@ export const generate_payment_Link = async (orderId: number) => {
 	if (data.status === status.HTTP_201_CREATED) {
 		if (browser) {
 			Cart.set([]);
-			window.location.href = data.data.paymentLink;
+			window.open(data.data.paymentLink, 'paymentFrame');
 		}
 	}
 

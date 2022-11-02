@@ -60,6 +60,7 @@ class PaymentVerifyOut(BaseModel):
 
 
 class PaymentLinkData(BaseModel):
+    public_key: str
     amount: int
     tx_ref: str
     currency: enum.PaymentCurrency = enum.PaymentCurrency.NGN

@@ -1,12 +1,13 @@
-import { error, redirect, json } from '@sveltejs/kit';
+import { error, json } from '@sveltejs/kit';
 import type { RequestHandler } from '@sveltejs/kit';
 import api from '$root/lib/utils/api';
 import { get_token } from '$root/lib/utils/setAuthorization';
 import { status } from '$root/lib/utils/status';
 
-export const POST: RequestHandler = async ({ request }) => {
-	const data = await request.json();
+export const POST: RequestHandler = async (event) => {
+	const data = await event.request.json();
 	const res = await api.post('/orders/', data, {
+		...(await get_token(event)),
 		'Content-Type': 'application/json'
 	});
 	return json({ ...res });

@@ -15,11 +15,11 @@ from app.utils import os_operation
 
 class Settings(BaseSettings):
     PROJECT_NAME: str
-    BACKEND_CORS_ORIGINS: t.List[AnyHttpUrl] = []
+    BACKEND_CORS_ORIGINS: t.List[str] = ["*"]  # t.List[AnyHttpUrl] = []
     DEBUG: bool = False
     API_PREFIX: str
     PROJECT_DESCRIPTION: str
-    PROJECT_URL: AnyHttpUrl
+    PROJECT_URL: str = "http://127.0.0.1:5000"
     API_VERSION: str
     ENVIRONMENT: str
     # email settings

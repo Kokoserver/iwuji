@@ -2,6 +2,7 @@ import typing as t
 from app.src._base.schemas import Message
 from app.src.order.enum import OrderStatus
 from .enum import PaymentStatus
+from app.core.config import settings
 from app.src.payment.models import Payment
 from app.src.payment.schemas import (
     Customer,
@@ -56,6 +57,7 @@ async def create_payment(orderIn: PaymentIn, user: User):
             order_id=get_order.id,
         )
         payment_data: PaymentLinkData = PaymentLinkData(
+            public_key= settings.RAVE_PUBLIC_KEY,
             tx_ref=get_order.orderId,
             amount=total_price,
             meta=meta_data.dict(),

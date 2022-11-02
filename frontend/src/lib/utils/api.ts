@@ -1,4 +1,4 @@
-import { PUBLIC_BASE_URL } from '$env/static/public';
+export const PUBLIC_BASE_URL = 'http://127.0.0.1:8000/api/v1';
 
 type APIResponse = {
 	data?: object | undefined | null;
@@ -13,7 +13,7 @@ class API {
 		if (!endpoint) {
 			return this.baseurl;
 		}
-		return `${this.baseurl}${endpoint}`;
+		return `${PUBLIC_BASE_URL}${endpoint}`;
 	}
 
 	async handleResponse(response: Response): Promise<APIResponse> {
@@ -51,7 +51,7 @@ class API {
 	async get(endpoint: string, config: object = {}, fromAPI = true) {
 		const requestOptions = {
 			method: 'GET',
-			headers: { ...config, accept: 'application/json' }
+			headers: { ...config, accept: 'application/json', 'Content-Type': 'text/plain' }
 		};
 		if (fromAPI) {
 			const response = await fetch(this.get_url(endpoint), requestOptions);

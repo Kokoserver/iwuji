@@ -1,10 +1,10 @@
 import type { RequestEvent } from '@sveltejs/kit';
 import dayjs from 'dayjs';
-import { PUBLIC_BASE_URL } from '$env/static/public';
 import jwtDecode from 'jwt-decode';
 import { status } from '$root/lib/utils/status';
 import type { TokenDataIn, UserDataIn } from '$root/lib/interface/user.interface';
 import { deleteCookiesData, setCookies } from './getCookies';
+import { PUBLIC_BASE_URL } from '$root/lib/utils/api';
 interface tokenData {
 	id: number;
 	firstname: string;

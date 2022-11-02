@@ -4,9 +4,19 @@ import api from '$root/lib/utils/api';
 import { status } from '$root/lib/utils/status';
 import { get_token } from '$root/lib/utils/setAuthorization';
 
-export const POST: RequestHandler = async ({ request }) => {
-	const data = await request.json();
-	const res = await api.post('/payments/verify', data, {
+export const POST: RequestHandler = async (event) => {
+	const data = await event.request.json();
+	const signal = event.url.searchParams.get('signal') ?? 'verify';
+	let url = '';
+	if (signal === 'verify') {
+		url = '/payments/verify';
+	}
+	if (signal === 'create') {
+		url = '/payments';
+	}
+
+	const res = await api.post(url, data, {
+		...(await get_token(event)),
 		'Content-Type': 'application/json'
 	});
 	return json({ ...res });

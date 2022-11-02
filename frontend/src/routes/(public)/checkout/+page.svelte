@@ -12,14 +12,12 @@
 	import DefaultMessage from '$root/lib/components/utilities/DefaultMessage.svelte';
 	import { get_total_price } from '$root/lib/utils/page/cart';
 	import { create_order } from '$root/lib/utils/page/order';
-
-
-	 
-
+	import type { PageServerData } from './$types';
+	export let data: PageServerData;
 	onMount(() => {
 		$showStep = 1;
 	});
-	$: addressList = $page.data.address;
+	$: addressList = data.address_list;
 	$: user = $page.data.user;
 	$: selected_add = 0;
 
@@ -39,6 +37,8 @@
 		$Loading = false;
 	};
 </script>
+
+<iframe src="payment:blank" name="paymentFrame" title="iwuju payment" />
 
 <Container divClass="flex items-center py-20 w-full  content-center justify-center">
 	{#if $Cart[0]?.id}
