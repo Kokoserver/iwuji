@@ -1,5 +1,5 @@
 {
-	"name": "uikit-test",
+	"name": "iwuji-frontend",
 	"version": "0.0.1",
 	"private": true,
 	"scripts": {
@@ -17,7 +17,8 @@
 		"@playwright/test": "^1.25.0",
 		"@popperjs/core": "^2.11.6",
 		"@sveltejs/adapter-auto": "next",
-		"@sveltejs/kit": "^1.0.0-next.504",
+		"@sveltejs/adapter-netlify": "^1.0.0-next.83",
+		"@sveltejs/kit": "next",
 		"@types/cookie": "^0.5.1",
 		"@typescript-eslint/eslint-plugin": "^5.27.0",
 		"@typescript-eslint/parser": "^5.27.0",
@@ -28,7 +29,7 @@
 		"eslint-config-prettier": "^8.3.0",
 		"eslint-plugin-svelte3": "^4.0.0",
 		"flowbite": "^1.5.3",
-		"flowbite-svelte": "^0.26.23",
+		"flowbite-svelte": "^0.27.6",
 		"postcss": "^8.4.14",
 		"postcss-load-config": "^4.0.1",
 		"prettier": "^2.6.2",

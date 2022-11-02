@@ -17,7 +17,7 @@ async def create_order(
 
 
 @order.get(
-    "/", response_model=List[schemas.OrderDetailsOut], status_code=status.HTTP_200_OK
+    "/", response_model=List[schemas.OrderListOut], status_code=status.HTTP_200_OK
 )
 async def get_all_orders(
     filter: str = "",
@@ -30,7 +30,7 @@ async def get_all_orders(
     )
 
 
-@order.get("/{orderId}")
+@order.get("/{orderId}", response_model=schemas.OrderDetailsOut)
 async def get_order(
     orderId: str, user: User = Depends(UserWrite.current_user_with_data)
 ):

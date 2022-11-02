@@ -76,7 +76,7 @@ class ProductOut(ProductToVariationBase):
     # author: Optional[AuthorOut]
     # pdf_file: Optional[MediaBase]
     cover_img: Optional[MediaBase]
-    # categories : List[CategoryIn]
+    categories : Optional[List[CategoryIn]]
     property  : ProductPropertyOut
     attribute : ProductAttributeOut
     cover_img : Optional[MediaBase]
@@ -89,3 +89,8 @@ class VariationOut(ProductToVariationBase):
     cover_img: Optional[MediaBase]
     items : List[ProductOut]
     created_at : datetime
+
+
+class OrderProductOut(ProductToVariationBase):
+    id: int
+    cover_img: Optional[MediaBase]

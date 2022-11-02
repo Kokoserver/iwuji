@@ -15,6 +15,16 @@ export const deleteCookiesData = (event: RequestEvent, name: string) => {
 	});
 };
 
+export const clearCookies = (event: RequestEvent) => {
+	const cookiesData = ['session', 'details', 'is_login'];
+	for (let index = 0; index < cookiesData.length; index++) {
+		deleteCookiesData(event, cookiesData[index]);
+	}
+	event.locals.user = {} as UserDataIn;
+	event.locals.token = {} as TokenDataIn;
+	event.locals.is_login = false;
+};
+
 export const getUserSession = (event: RequestEvent, names: string[]) => {
 	const cookies_string = cookiesData(event, names[0]);
 	const details_string = cookiesData(event, names[1]);
@@ -41,6 +51,8 @@ export const getUserSession = (event: RequestEvent, names: string[]) => {
 export const updateCookies = (event: RequestEvent, name: string, toUpdate: string) => {
 	const cookies_string = cookiesData(event, name);
 	const cookies_data = JSON.parse(String(cookies_string));
+	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+	// @ts-ignore
 	event.locals[String(toUpdate)] = cookies_data;
 };
 
