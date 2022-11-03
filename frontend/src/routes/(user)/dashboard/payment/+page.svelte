@@ -2,6 +2,7 @@
 	import { page } from '$app/stores';
 	import Section from '$root/lib/components/animation/FadeInOut.svelte';
 	import type { PaymentIn } from '$root/lib/interface/payment.interface';
+	import type { PageServerData } from './$types';
 	import {
 		Badge,
 		TableBody,
@@ -11,8 +12,8 @@
 		TableHeadCell,
 		TableSearch
 	} from 'flowbite-svelte';
-
-	$: payment_list = $page.data.payment_list as PaymentIn[];
+	export let data: PageServerData;
+	const payment_list = data.payment_list as PaymentIn[];
 
 	$: searchTerm = '';
 </script>
@@ -46,7 +47,7 @@
 					{#if payment.status === 'pending'}
 						<TableBodyCell
 							><a
-								href="/payment/verify/?tx_ref={payment.pay_ref}"
+								href="/dashboard/payment/verify/?tx_ref={payment.pay_ref}"
 								class="font-medium text-blue-600 hover:underline dark:text-blue-500 pr-5"
 								data-sveltekit-prefecth=""
 							>

@@ -20,6 +20,7 @@ def generate_link(dataIn: PaymentLinkData) -> PaymentResponse:
         headers={"Authorization": f"Bearer {settings.RAVE_SECRET_KEY}"},
         json=dataIn.dict(),
     )
+    print(response.json())
     return PaymentResponse(**response.json())
 
 

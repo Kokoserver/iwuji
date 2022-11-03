@@ -15,8 +15,8 @@ export const create_order = async (addressId: number) => {
 
 	const data = await res.json();
 	if (data.status === status.HTTP_201_CREATED) {
-		await generate_payment_Link(data.data.orderId);
-		await goto('/');
+		const payment_link = await generate_payment_Link(data.data.orderId);
+		return payment_link;
 	}
 	if (data.status === status.HTTP_404_NOT_FOUND) {
 		notification.danger('address details that was provided does not exist');

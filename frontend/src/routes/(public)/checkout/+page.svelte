@@ -33,12 +33,11 @@
 	};
 	const handleCreateOrder = async (selected_add: number) => {
 		$Loading = true;
-		await create_order(selected_add);
+		const payment_link = await create_order(selected_add);
+		window.open(payment_link, '_blank');
 		$Loading = false;
 	};
 </script>
-
-<iframe src="payment:blank" name="paymentFrame" title="iwuju payment" />
 
 <Container divClass="flex items-center py-20 w-full  content-center justify-center">
 	{#if $Cart[0]?.id}

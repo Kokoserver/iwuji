@@ -73,7 +73,6 @@ export const setCookies = (
 	cookies.set(name, to_be_store, {
 		path: '/',
 		httpOnly: true,
-		sameSite: 'strict',
 		secure: true,
 		maxAge: token_data.exp
 	});

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import Section from '$root/lib/components/animation/FadeInOut.svelte';
+	import type { PageServerData } from './$types';
 	import {
 		Badge,
 		TableBody,
@@ -10,7 +11,8 @@
 		TableHeadCell,
 		TableSearch
 	} from 'flowbite-svelte';
-	$: order_list = $page.data.order_list;
+	export let data: PageServerData;
+	const order_list = data.order_list;
 	$: searchTerm = '';
 </script>
 
