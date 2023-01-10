@@ -1,5 +1,9 @@
 import uvicorn
-from app.core.config import settings
+from backend.core.config import settings
 
 if __name__ == '__main__':
-    uvicorn.run("app.main:app", reload=settings.DEBUG, debug=settings.DEBUG)
+    uvicorn.run("backend.main:app", reload=settings.DEBUG, debug=settings.DEBUG)
+
+
+def run_server():
+    uvicorn.run("backend.main:app", reload=settings.DEBUG, debug=settings.DEBUG)

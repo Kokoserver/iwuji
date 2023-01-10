@@ -10,7 +10,8 @@
     "**/.DS_Store": true,
     "**/**/Thumbs.db": true,
     "**/**/__pycache__": true,
-    "**/__pytest__cache": true,
+    "__pycache__": true,
+    "**/**/.pytest__cache": true,
     "**.pytest_cache": true,
     "**.idea": true
   },
