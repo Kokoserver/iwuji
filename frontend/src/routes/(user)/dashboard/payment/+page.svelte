@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { page } from '$app/stores';
 	import Section from '$root/lib/components/animation/FadeInOut.svelte';
 	import type { PaymentIn } from '$root/lib/interface/payment.interface';
 	import type { PageServerData } from './$types';
@@ -22,7 +21,7 @@
 	<TableSearch placeholder="Search by orderId " hoverable={true} bind:inputValue={searchTerm}>
 		<TableHead>
 			<TableHeadCell>ID</TableHeadCell>
-			<TableHeadCell>tx_ref</TableHeadCell>
+			<TableHeadCell>payment ID</TableHeadCell>
 			<TableHeadCell>status</TableHeadCell>
 			<TableHeadCell>currency</TableHeadCell>
 			<TableHeadCell>amount</TableHeadCell>

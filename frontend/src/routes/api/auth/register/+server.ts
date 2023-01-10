@@ -8,7 +8,7 @@ export const POST: RequestHandler = async (event) => {
 	try {
 		clearCookies(event);
 		const userData = event.request.json();
-		const res = await api.post('/users/auth/register', userData, {
+		const res = await api.post('/users/register', userData, {
 			'Content-type': 'application/json'
 		});
 		if (res.status === status.HTTP_422_UNPROCESSABLE_ENTITY) {

@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { page } from '$app/stores';
 	import Section from '$root/lib/components/animation/FadeInOut.svelte';
 	import type { PageServerData } from './$types';
 	import {

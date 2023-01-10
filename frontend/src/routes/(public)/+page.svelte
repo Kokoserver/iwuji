@@ -55,7 +55,7 @@
 			<DefaultMessage message="No books yet" />
 		{/if}
 	</Container>
-	<img src="/homepage design.svg" alt="design" class="absolute top-90 left-0 right-0" />
+	<img src="/homepage design.svg" alt="design" class="absolute top-90 left-0 right-0 w-screen" />
 </section>
 
 <Container divClass="pb-28 px-5">
