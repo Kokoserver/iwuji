@@ -1,6 +1,6 @@
 from typing import List
 from fastapi import HTTPException, status, Response
-from starlette.responses import Response
+
 
 from backend.src.address.models import ShippingAddress
 from backend.src.address import schemas

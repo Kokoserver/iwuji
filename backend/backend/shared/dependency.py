@@ -15,7 +15,7 @@ async def get_user_permission(user_id: int, name: str) -> typing.Union[User, Non
 
 
 async def get_user_data(user_id: int) -> typing.Union[User, None]:
-    get_user: User = await User.objects.get_or_none(id=user_id)
+    get_user: User = await User.objects.filter(id=user_id).first()
     if get_user.is_active:
         return get_user
     return None
