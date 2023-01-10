@@ -32,11 +32,12 @@ export const get_addressList = async (Fetch: typeof fetch) => {
 
 export const delete_address = async (addressId: number) => {
 	try {
-		let res = await fetch(`/api/user/address/`, {
+		const res = await fetch(`/api/user/address/`, {
 			method: 'DELETE',
 			body: JSON.stringify({ addressId })
 		});
-		res = await res.json();
+		const data = await res.json();
+
 		if (res.status === status.HTTP_204_NO_CONTENT) {
 			await goto('/address');
 			const currentState = get(AddressStore);
@@ -46,7 +47,9 @@ export const delete_address = async (addressId: number) => {
 		if (res.status === status.HTTP_404_NOT_FOUND) {
 			notification.danger('Address does not exist');
 		}
-		throw error(status.HTTP_422_UNPROCESSABLE_ENTITY, 'Invalid data was provided');
+		if (res.status === status.HTTP_400_BAD_REQUEST) {
+			notification.danger(data.error);
+		}
 	} catch (error) {
 		console.error(error);
 	}

@@ -17,7 +17,7 @@
 	url={$page.url.pathname}
 	cart_count={$Cart.length}
 />
-<div class="relative px-8">
+<div class="">
 	<main class="overflow-x-hidden">
 		<Transition url={$page.url}>
 			<slot />

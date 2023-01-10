@@ -77,9 +77,15 @@ export const DELETE: RequestHandler = async (event) => {
 		const res = await api.delete(`/address/${data.addressId ?? 23535}`, {
 			...(await get_token(event))
 		});
-		if (res.status === status.HTTP_400_BAD_REQUEST || res.status === status.HTTP_404_NOT_FOUND) {
+		if (res.status === status.HTTP_404_NOT_FOUND) {
 			return json(
 				{ error: 'Address with details is not found ' },
+				{ status: status.HTTP_400_BAD_REQUEST }
+			);
+		}
+		if (res.status === status.HTTP_400_BAD_REQUEST) {
+			return json(
+				{ error: 'you can not delete address that is in use' },
 				{ status: status.HTTP_400_BAD_REQUEST }
 			);
 		}

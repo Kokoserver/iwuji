@@ -14,7 +14,7 @@ export const generate_payment_Link = async (orderId: number) => {
 	if (data.status === status.HTTP_201_CREATED) {
 		if (browser) {
 			Cart.set([]);
-			window.open(data.data.paymentLink, 'paymentFrame');
+			return data.data.paymentLink;
 		}
 	}
 

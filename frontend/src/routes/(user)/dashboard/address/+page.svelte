@@ -11,6 +11,9 @@
 	import { delete_address } from '$root/lib/utils/page/address';
 	import DefaultMessage from '$root/lib/components/utilities/DefaultMessage.svelte';
 	import Section from '$root/lib/components/animation/FadeInOut.svelte';
+	import type { PageServerData } from './$types';
+	export let data: PageServerData;
+	const address_list = data.address_list;
 </script>
 
 <Section>
@@ -34,7 +37,7 @@
 			<TableHeadCell>ACTION</TableHeadCell>
 		</TableHead>
 		<TableBody class="divide-y">
-			{#each $page.data.address_list as address, index}
+			{#each address_list as address, index}
 				<TableBodyRow>
 					<TableBodyCell class="!p-4">
 						{index + 1}
