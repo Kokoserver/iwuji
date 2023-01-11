@@ -31,9 +31,9 @@ async def connect_database(app: FastAPI) -> None:
         try:
             if not database_.is_connected:
                 await database_.connect()
-                if settings.DEBUG:
-                    print("database connected")
-                    break
+                # if settings.DEBUG:
+                print("database connected")
+                break
         except Exception as _:
             time.sleep(5)
 
