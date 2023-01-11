@@ -11,14 +11,14 @@ class BaseService:
             return None
 
     @staticmethod
-    def get_or_none(model, *args, **kwargs) -> object:
+    async def get_or_none(model, *args, **kwargs) -> object:
         obj = await model.objects.get_or_none(*args, **kwargs)
         if obj:
             return obj
         return None
 
     @staticmethod
-    def create(model, *args, **kwargs) -> object:
+    async def create(model, *args, **kwargs) -> object:
         obj = await model.objects.create(*args, **kwargs)
         if obj:
             return obj
@@ -33,7 +33,7 @@ class BaseService:
 
 
     @staticmethod
-    def get_or_update(model, *args, **kwargs) -> object:
+    async def get_or_update(model, *args, **kwargs) -> object:
         obj = await model.objects.get_or_update(*args, **kwargs)
         if obj:
             return obj
