@@ -1,7 +1,6 @@
 from typing import List
 from fastapi import HTTPException, status, Response
-
-
+from backend.src.address.service import AddressService
 from backend.src.address.models import ShippingAddress
 from backend.src.address import schemas
 from backend.src._base.schemas import Message
@@ -10,14 +9,14 @@ from backend.src.order.models import Order
 
 
 async def create_address(address: schemas.AddressIn, user: User) -> ShippingAddress:
-    (address_obj, created) = await ShippingAddress.objects.get_or_create(**address.dict(), user=user)
+    (address_obj, created) = await AddressService.get_or_create(**address.dict(), user=user)
     if created:
         return address_obj
     raise HTTPException(status_code=400, detail='Address already exists')
 
 
 async def update_address(addressId: int, address: schemas.AddressIn, user: User) -> Message:
-    user_address = await ShippingAddress.objects.get_or_none(id=addressId, user=user)
+    user_address = await AddressService.get(id=addressId, user=user)
     if not user_address:
         raise HTTPException(status_code=404, detail='Address does not exist')
     if user_address.street == address.street and \
@@ -31,18 +30,18 @@ async def update_address(addressId: int, address: schemas.AddressIn, user: User)
 
 
 async def delete_address(addressId: int, user: User) -> Response:
-    user_address = await ShippingAddress.objects.get_or_none(id=addressId, user=user)
+    user_address = await AddressService.get(id=addressId, user=user)
     check_address_in_order = await Order.objects.filter(shipping_address=user_address).exists()
     if check_address_in_order:
         raise HTTPException(status_code=400, detail='address already in order')
     if not user_address:
         raise HTTPException(status_code=404, detail='Address does not exist')
-    await user_address.delete()
+    await AddressService.delete(id=addressId, user=user)
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
 async def get_address(addressId: int, user: User) -> ShippingAddress:
-    get_add = await ShippingAddress.objects.get_or_none(id=addressId, user=user)
+    get_add = await AddressService.get(id=addressId, user=user)
     if not get_add:
         raise HTTPException(status_code=404, detail='Address does not exist')
     return get_add
