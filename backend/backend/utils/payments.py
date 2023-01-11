@@ -11,7 +11,8 @@ logging.disable(logging.NOTSET)
 rave = Rave(
     publicKey=settings.RAVE_PUBLIC_KEY,
     secretKey=settings.RAVE_SECRET_KEY,
-    usingEnv=settings.DEBUG,
+    usingEnv=False,
+    production=settings.DEBUG
 )
 payment_init_url: str = "https://api.flutterwave.com/v3/payments"
 
