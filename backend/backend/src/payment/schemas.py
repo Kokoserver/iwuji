@@ -12,6 +12,10 @@ class PaymentIn(BaseModel):
 class DataIn(BaseModel):
     link: str
 
+class PaymentResponse(BaseModel):
+    status: str
+    message: str
+    data: Optional[DataIn]
 
 class PaymentDataViewOut(BaseModel):
     id: int
@@ -21,10 +25,7 @@ class PaymentDataViewOut(BaseModel):
     status: enum.PaymentStatus = enum.PaymentStatus.PENDING
 
 
-class PaymentResponse(BaseModel):
-    status: str
-    message: str
-    data: Optional[DataIn]
+
 
 
 class Customer(BaseModel):

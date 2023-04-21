@@ -32,7 +32,7 @@ class UserLoginInput(pydantic.BaseModel):
 
 
 class UserDataOut(BaseModel):
-    id: int
+    id: UUID
     email: pydantic.EmailStr
     firstname: str
     lastname: str
@@ -44,15 +44,15 @@ class UserDataOut(BaseModel):
 
 
 class UserDataOutForPost(pydantic.BaseModel):
-    id: int
+    id: UUID
     email: pydantic.EmailStr
     firstname: str
     lastname: str
 
 
 class UserPermissionUpdate(BaseModel):
-    user_id: int
-    role: str
+    user_id: UUID
+    role_id: UUID
 
 
 class UserAccountVerifyToken(pydantic.BaseModel):

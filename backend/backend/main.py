@@ -25,7 +25,8 @@ def get_application():
         allow_methods=["*"],
         allow_headers=["*"],
     )
-    _app.middleware("http")(catch_exceptions_middleware)
+
+    # _app.middleware("http")(catch_exceptions_middleware)
 
     return _app
 

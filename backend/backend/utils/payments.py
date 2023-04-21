@@ -1,24 +1,23 @@
-import logging
 import typing as t
 from backend.src.order.models import OrderItem
 from backend.src.payment.schemas import PaymentLinkData, PaymentResponse, PaymentVerifyOut
-import requests
+import httpx
 from rave_python import Rave
 from backend.core.config import settings
-
-logging.disable(logging.NOTSET)
-
+import warnings
+warnings.filterwarnings('ignore')
 rave = Rave(
     publicKey=settings.RAVE_PUBLIC_KEY,
     secretKey=settings.RAVE_SECRET_KEY,
     usingEnv=False,
-    production=settings.DEBUG
+    production=True
 )
+
 payment_init_url: str = "https://api.flutterwave.com/v3/payments"
 
 
 def generate_link(dataIn: PaymentLinkData) -> PaymentResponse:
-    response = requests.post(
+    response = httpx.post(
         url=f"{payment_init_url}",
         headers={"Authorization": f"Bearer {settings.RAVE_SECRET_KEY}"},
         json=dataIn.dict(),

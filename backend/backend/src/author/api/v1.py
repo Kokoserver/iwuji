@@ -16,9 +16,9 @@ async def create_author(request: Request, author: schemas.AuthorIn = Depends(sch
     return await crud.create_author(author, request, profile_img)
 
 
-@author.get("/", response_model=List[schemas.AuthorOut], status_code=status.HTTP_200_OK)
-async def get_authors(limit: int = 10, offset: int = 0, filter: str = '') -> list[Author]:
-    return await crud.get_authors(limit, offset, filter)
+@author.get("/", status_code=status.HTTP_200_OK)
+async def get_authors(limit: int = 10, offset: int = 0, filter: str = '', select: str = '', order_by: str = 'id'):
+    return await crud.get_authors(limit=limit, offset=offset, filter=filter, select=select, order_by=order_by)
 
 
 @author.get("/{author_id}", response_model=schemas.AuthorOut, status_code=status.HTTP_200_OK)
@@ -28,7 +28,8 @@ async def get_author_data(author_id: int) -> Author:
 
 @author.put("/", status_code=status.HTTP_200_OK)
 async def update_author_data(request: Request,
-                             author: schemas.AuthorIn = Depends(schemas.AuthorIn.as_form),
+                             author: schemas.AuthorIn = Depends(
+                                 schemas.AuthorIn.as_form),
                              profile_img: UploadFile = File(None),
                              _: int = Depends(UserWrite.super_or_admin)) -> Message:
     return await crud.update_author(author, request, profile_img)

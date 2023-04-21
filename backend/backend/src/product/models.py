@@ -82,7 +82,6 @@ class Product(Model, DateMixin):
         ProductAttribute,
         related_name="product_to_attribute",
         ondelete="SET NULL",
-
         nullable=True
     )
     cover_img: t.Optional[t.Union[Media, t.Dict]] = f.ForeignKey(

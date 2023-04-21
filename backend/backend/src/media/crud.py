@@ -32,8 +32,8 @@ async def remove_media_from_db(media_obj: Media) -> bool:
     await old_media.delete()
     return True
 
-
-def convert_image_name_to_url(image_url: str, request: Request) -> str:
+@property
+def convert_image_name_to_url(self, image_url: str, request: Request) -> str:
     image_full_url = f"{request.url_for(settings.URL_STATIC_PATH, uri=image_url)}"
     return image_full_url
 

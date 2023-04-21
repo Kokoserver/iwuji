@@ -6,6 +6,7 @@ from backend.src.media import crud as mediaCrud
 from backend.src.author import schemas
 from backend.src.author.models import Author
 from backend.src._base.schemas import Message
+from backend.utils import make_filter
 from ormar import or_
 
 
@@ -22,19 +23,21 @@ async def create_author(new_author_data: schemas.AuthorIn, request: Request, pro
     return Message(message="Author was created successfully")
 
 
-async def get_authors(limit, offset, filter) -> List[Author]:
-    all_author = await Author.objects.select_related('profile_img').filter(
-        or_(email__icontains=filter,
-            firstname__icontains=filter,
-            title__icontains=filter,
-            lastname__icontains=filter)
-    ).offset(offset).limit(limit).all()
-    return all_author
+async def get_authors(filter: str = '', limit: str = '', offset: str = '', select: str = '', order_by: str = '') -> List[Author]:
+    req_filter: make_filter.Params = make_filter.make_filter(
+        filter=filter, select=select, order_by=order_by)
+    all_author = await Author.objects.fields(['email', "lastname"]).filter(
+        or_(**req_filter.filter_obj)
+    ).offset(offset).limit(limit).order_by(req_filter.order_by).first()
+    print(all_author)
+    return []
+    # return all_author
 
 
 async def update_author(new_author_data: schemas.AuthorIn,
                         request: Request, profile_img: UploadFile = None,) -> Message:
-    check_author: Author = await Author.objects.select_related('profile_img').get_or_none(email=new_author_data.email)
+    check_author: Author = await Author.objects.select_related(
+        'profile_img').get_or_none(email=new_author_data.email)
     if not check_author:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
                             detail="incorrect data provided")

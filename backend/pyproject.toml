@@ -2,28 +2,19 @@
 name = "backend"
 version = "0.1.0"
 description = ""
-authors = ["Owonikoko Olaoluwa <owonikokoolaoluwa@gmail.com>"]
+authors = ["kokoserver <kokoserver20@hotmail.com>"]
 readme = "README.md"
 
-[tool.poetry.scripts]
-server = "run:run_server"
-
 [tool.poetry.dependencies]
- 
-python = "^3.9"
-fastapi = {extras = ["all"], version = "^0.88.0"}
-ormar = {extras = ["postgresql"], version = "^0.12.0"}
-python-slugify = "^7.0.0"
-aiosqlite = "^0.17.0"
+python = "^3.11"
+fastapi = {extras = ["all"], version = "^0.95.1"}
+uvicorn = {extras = ["standard"], version = "^0.21.1"}
+ormar = {extras = ["postgresql"], version = "^0.12.1"}
 python-jose = {extras = ["cryptography"], version = "^3.3.0"}
 passlib = {extras = ["bcrypt"], version = "^1.7.4"}
-requests = "^2.28.1"
+python-slugify = "^8.0.1"
 rave-python = "^1.2.16"
 
-
-[tool.poetry.group.test.dependencies]
-pytest = "^7.2.0"
-pytest-asyncio = "^0.20.3"
 
 [build-system]
 requires = ["poetry-core"]
