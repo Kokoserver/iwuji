@@ -1,0 +1,24 @@
+    # if data_in.hard_back_qty > 0:
+    #     if (
+    #         data_in.hard_back_qty > get_product.property.hard_back_qty
+    #         and get_product.property.hard_back_qty != 0
+    #     ):
+    #         raise error.BadDataError(
+    #             f"Only {get_product.property.hard_back_qty} of `{get_product.name}`left"
+    #         )
+    #     elif get_product.property.hard_back_qty == 0:
+    #         raise error.BadDataError(
+    #             f"Hard back of `{get_product.name}` is out of stock , please check later"
+    #         )
+    # if data_in.paper_back_qty > 0:
+    #     if (
+    #         data_in.paper_back_qty > get_product.property.paper_back_qty
+    #         and get_product.property.paper_back_qty != 0
+    #     ):
+    #         raise error.BadDataError(
+    #             f"Only {get_product.property.paper_back_qty} of `{get_product.name}`left"
+    #         )
+    #     if get_product.property.paper_back_qty == 0:
+    #         raise error.BadDataError(
+    #             f"paper back of `{get_product.name}` is out of stock , please check later"
+    #         )

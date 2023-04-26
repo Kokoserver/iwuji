@@ -5,9 +5,10 @@
     "**/.hg": true,
     "**/CVS": true,
     "**/.DS_Store": true,
-    "**/**/.pytest_cache": true,
+    "**/Thumbs.db": true,
     "**/**/__pycache__": true,
-    "**/**/.idea": true,
-    "**/Thumbs.db": true
-  }
+    "**/**/.pytest_cache": true
+  },
+  "python.formatting.provider": "black",
+  "cSpell.words": ["ilike", "redoc", "selectinload"]
 }

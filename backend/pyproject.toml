@@ -1,21 +1,29 @@
-[tool.poetry]
-name = "backend"
+[tool.pdm]
+[tool.pdm.dev-dependencies]
+
+
+dependencies = []
+
+[project]
+name = "Iwuji2.0"
 version = "0.1.0"
-description = ""
-authors = ["kokoserver <kokoserver20@hotmail.com>"]
+description = "A backend for book selling website"
+authors = [
+    {name = "kokoserver", email = "kokoserver20@hotmail.com"},
+]
+
+
+
+
+[tool.pdm.scripts]
+server = {call = "bootstrap:run_server"}
+check = "flake8 ."
+format = "black --line-length 80 ."
+
+requires-python = ">=3.9"
 readme = "README.md"
-
-[tool.poetry.dependencies]
-python = "^3.11"
-fastapi = {extras = ["all"], version = "^0.95.1"}
-uvicorn = {extras = ["standard"], version = "^0.21.1"}
-ormar = {extras = ["postgresql"], version = "^0.12.1"}
-python-jose = {extras = ["cryptography"], version = "^3.3.0"}
-passlib = {extras = ["bcrypt"], version = "^1.7.4"}
-python-slugify = "^8.0.1"
-rave-python = "^1.2.16"
-
+license = {text = "MIT"}
 
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"

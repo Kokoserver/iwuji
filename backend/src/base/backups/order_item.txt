@@ -1,0 +1,30 @@
+
+# async def update_order_item_status(
+#     user: User,
+#     data_in: schema.IOrderItemUpdate,
+# ) -> ResponseMessage:
+#     get_user_order_item = await order_item_repo.get_by_attr(
+#         attr=dict(user=user, tracking_id=data_in.tracking_id),
+#         first=True,
+#         load_related=True,
+#     )
+#     if get_user_order_item is None:
+#         raise error.NotFoundError("product is not found in your order")
+#     if data_in.delivered == True:
+#         create_review = await review_repo.create(
+#             obj=dict(
+#                 product_id=data_in.product_id,
+#                 user_id=get_user_order_item.order.user_id,
+#             )
+#         )
+#         if create_review:
+#             return ResponseMessage(message="Item delivered successfully")
+#         raise error.ServerError("Error moving product to review")
+#     else:
+#         result = await order_repo.update(
+#             id=get_user_order_item.id, obj=dict(delivered=data_in.delivered)
+#         )
+#         if result:
+#             return ResponseMessage(message="order item updated successfully")
+#         return ResponseMessage(message="Item delivered successfully")
+

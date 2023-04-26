@@ -1,0 +1,133 @@
+# async def upload_product_media(
+#     request: Request,
+#     product_id: uuid.UUID,
+#     pdf: t.Optional[UploadFile] = None,
+#     cover_img: t.Optional[UploadFile] = None,
+#     gallery: t.Optional[t.List[UploadFile]] = None,
+#     clear_gallery: t.Optional[bool] = True,
+# ) -> ResponseMessage:
+#     if not pdf and not cover_img and not gallery:
+#         raise error.BadDataError("Either pdf, cover_img or gallery_img is required")
+#     get_product = await product_repo.get(id=product_id, load_related=True)
+#     if not get_product:
+#         raise error.NotFoundError(f"Product with id `{product_id}` not found")
+#     product_pdf = None
+#     product_cover_img = None
+#     gallery_imgs = None
+
+#     if pdf:
+#         bad_types = media_repo.check_file_type(
+#             media_objs=[pdf], file_type=media_repo.allowed_document_extensions
+#         )
+#         if len(bad_types) > 0:
+#             raise error.BadDataError(
+#                 f"Invalid file type, expected pdf, got `{','.join(bad_types)}`"
+#             )
+#         if get_product.medias.pdf:
+#             await media_repo.delete([get_product.medias.pdf])
+#         product_pdf = await media_repo.create(media_objs=[pdf], request=request)
+#     elif cover_img:
+#         bad_types = media_repo.check_file_type(
+#             media_objs=[cover_img],
+#             file_type=media_repo.allowed_image_extensions,
+#         )
+#         if len(bad_types) > 0:
+#             raise error.BadDataError(
+#                 f"Invalid file type expected image, got `{','.join(bad_types)}`"
+#             )
+#         if get_product.medias.cover_img:
+#             await media_repo.delete([get_product.medias.cover_img])
+#         product_cover_img = await media_repo.create(
+#             media_objs=[cover_img], request=request
+#         )
+#     elif gallery:
+#         bad_types = media_repo.check_file_type(
+#             media_objs=gallery,
+#             file_type=media_repo.allowed_image_extensions,
+#         )
+#         if len(bad_types) > 0:
+#             raise error.BadDataError(
+#                 f"Invalid file type expected image, got `{','.join(bad_types)}`"
+#             )
+#         if clear_gallery:
+#             if get_product.medias.gallery:
+#                 await media_repo.delete(media_obj=get_product.medias.gallery)
+#     #     gallery_imgs = await media_repo.create(media_objs=gallery, request=request)
+#     # product_media = await product_media_repo.create_or_update(
+#     #     gallery=gallery_imgs if gallery else None,
+#     #     pdf=product_pdf[0] if product_pdf else None,
+#     #     cover_img=product_cover_img[0] if product_cover_img else None,
+#     #     product_id=get_product.id,
+#     # )
+#     # if product_media:
+#     #     return ResponseMessage(message="Product media uploaded successfully")
+
+
+# async def upload_product_media_from_storage(
+#     product_id: uuid.UUID,
+#     pdf: t.Optional[uuid.UUID] = None,
+#     cover_img: t.Optional[uuid.UUID] = None,
+#     gallery: t.Optional[t.List[uuid.UUID]] = None,
+#     clear_gallery: t.Optional[bool] = False,
+#     delete_existing: t.Optional[bool] = False,
+# ):
+#     if not pdf and not cover_img and not gallery:
+#         raise error.BadDataError(
+#             "Either pdf, cover image or gallery images or video is required"
+#         )
+#     get_product = await product_repo.get(id=product_id, load_related=True)
+#     if not get_product:
+#         raise error.NotFoundError("Product with is not found")
+#     product_pdf = None
+#     product_cover_img = None
+#     gallery_imgs = None
+#     if pdf:
+#         get_pdf = await media_repo.get(id=pdf)
+#         if (
+#             get_pdf
+#             and get_pdf.alt.split(".")[-1] not in media_repo.allowed_document_extensions
+#         ):
+#             raise error.BadDataError(
+#                 f"Invalid file type, expected pdf, got `{get_pdf.alt.split('.')[-1]}`"
+#             )
+#         if delete_existing and get_product.medias.pdf:
+#             await media_repo.delete([get_product.medias.pdf])
+#         product_pdf = get_pdf
+#     elif cover_img:
+#         get_cover_img = await media_repo.get(id=pdf)
+#         if (
+#             get_cover_img
+#             and get_cover_img.alt.split(".")[-1]
+#             not in media_repo.allowed_image_extensions
+#         ):
+#             raise error.BadDataError(
+#                 f"Invalid file type expected image, got `{get_cover_img.alt.split('.')[-1]}`"
+#             )
+#         if delete_existing:
+#             if get_product.medias.cover_img:
+#                 await media_repo.delete([get_product.medias.cover_img])
+#         product_cover_img = get_cover_img
+#     elif gallery:
+#         get_gallery_img = await media_repo.get_by_ids(gallery)
+#         if get_gallery_img:
+#             bad_types = media_repo.check_file_type(
+#                 media_objs=get_gallery_img,
+#                 file_type=media_repo.allowed_image_extensions,
+#             )
+#             if len(bad_types) > 0:
+#                 raise error.BadDataError(
+#                     f"Invalid file type expected `{','.join(media_repo.allowed_image_extensions)}`, got `{','.join(bad_types)}`"
+#                 )
+#         if clear_gallery or delete_existing:
+#             if get_product.medias.gallery:
+#                 await media_repo.delete([*get_product.medias.gallery])
+#         gallery_imgs = get_gallery_img
+#     updated_media = await product_media_repo.create_or_update(
+#         clear_gallery=clear_gallery,
+#         gallery=gallery_imgs if gallery_imgs else None,
+#         pdf=product_pdf if product_pdf else None,
+#         cover_img=product_cover_img if product_cover_img else None,
+#         product_id=get_product.id,
+#     )
+#     if updated_media:
+#         return ResponseMessage(message="Product media uploaded successfully")

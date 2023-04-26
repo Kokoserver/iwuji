@@ -1,4 +1,3 @@
-# iwaju
+# Iwuji2.0
 
-This project was generated via [manage-fastapi](https://ycd.github.io/manage-fastapi/)! :tada:
-
+A backend for book selling website
